@@ -1,6 +1,6 @@
 @import './base.css';
-a,
-.green {
+
+a,.green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
@@ -14,10 +14,25 @@ a,
 }
 
 @media (min-width: 1024px) {
+  html{
+    overflow-y: inherit !important;
+  }
   body {
     display: block;
     /*display: flex;*/
     /*place-items: center;*/
   }
 
+}
+.btn{
+  border-radius: 60px !important;
+  color: white !important;
+  border: transparent;
+  font-weight: 600 !important;
+  align-items: flex-end;
+}
+.btn_start{
+  width: 25%;
+  padding: 1% 5%;
+  font-weight: 600 !important;
 }

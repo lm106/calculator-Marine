@@ -51,7 +51,8 @@ watch(() => props.showModal, (newValue) => {
             <v-text-field  v-model="textos[index - 1]" :label="'Name dataset ' + index"></v-text-field>
           </div>
         </div>
-        <button @click="navigateToNewPage">Form</button>
+      <v-btn @click="navigateToNewPage" class="text-none btn btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
+
   </div>
   </div>
 </template>

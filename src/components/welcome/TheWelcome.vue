@@ -52,7 +52,7 @@ const navigateToNewPage = () => {
          duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc dignissim.
          Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra turpis.
          Non feugiat duis pharetra.</p>
-      <v-btn class="text-none"  id="btn_start" @click="show">Start<v-icon icon="mdi-arrow-right" end></v-icon></v-btn>
+      <v-btn @click="show" class="text-none btn btn_start" base-color="#023139" append-icon="mdi-arrow-right">Start</v-btn>
       <alert-welcome :showModal="showModal" @hide-modal="hideModal"/>
     </div>
   </div>
@@ -88,17 +88,5 @@ const navigateToNewPage = () => {
 #description_content{
   text-align: center;
   width: 80%;
-}
-#btn_start{
-  width: 25%;
-  padding: 1% 5%;
-  border-radius: 60px;
-  color: white;
-  background-color: #023139;
-  border: transparent;
-  font-weight: 600 !important;
-  /* display: flex; */
-  align-items: flex-end;
-  /* flex-direction: row; */
 }
 </style>
