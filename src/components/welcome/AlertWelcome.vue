@@ -45,10 +45,10 @@ watch(() => props.showModal, (newValue) => {
       <span class="close" @click="$emit('hide-modal')">&times;</span>
         <div>
           <label for="cantidad"></label>
-          <v-number-input id="cantidad" v-model="cantidad" label="Nº Dataset:" :min="1" :max="4" @input="updateInputs"></v-number-input>
+          <v-number-input id="cantidad" v-model="cantidad" label="Nº Colection:" :min="1" :max="4" @input="updateInputs"></v-number-input>
           <!-- Mostrar inputs de texto dinámicos -->
           <div v-for="index in cantidad" :key="index">
-            <v-text-field  v-model="textos[index - 1]" :label="'Name dataset ' + index"></v-text-field>
+            <v-text-field  v-model="textos[index - 1]" :label="'Name colection ' + index"></v-text-field>
           </div>
         </div>
       <v-btn @click="navigateToNewPage" class="text-none btn btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
