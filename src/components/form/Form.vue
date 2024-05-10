@@ -21,27 +21,47 @@ const updateInputs = () => {
     textos.value.push('');
   }
 };
-const content=(stepNow)=>{
+const handleClick=(name)=>{
+  router.push({name:name})
+}
+
+const handleClickStep=(step)=>{
+  let now = (step.name!=undefined)?
+      steps.value.findIndex((item)=>item.name==step.name):
+      steps.value.findIndex((item)=>item.status=='active') +1;
   let before=steps.value.findIndex((item)=>item.status=='active');
   if(before!= -1) steps.value[before].status='pending';
-  let now=steps.value.findIndex((item)=>item.name==stepNow.name);
   steps.value[now].status='active';
-  router.push({name:steps.value[now].route})
+  handleClick(steps.value[now].route);
 }
-const handleClickNextStep=()=>{
-  let now=  steps.value.findIndex((item)=>item.status=='active') +1;
-  content(steps.value[now]);
+const checkStepNow=()=>{
+  return (steps.value.findIndex((item)=>item.name == 'Results' && item.status=='active') != -1)? false: true;
 }
+const checkPageReports=()=>{
+  // return
+  return true
+};
 </script>
 <template>
   <div>
     <Header></Header>
-    <Steps :steps="steps" @contentName="content"></Steps>
+    <Steps :steps="steps" @contentName="handleClickStep"></Steps>
     <router-view></router-view>
-    <button @click="handleClickNextStep">Next Step</button>
+    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn" id="btn_next" base-color="#023139" append-icon="mdi-arrow-right">Next Step</v-btn>
+    <v-btn v-if="checkPageReports()" @click="handleClick('Help')" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
   </div>
 </template>
 
 <style scoped>
-
+#btn_next{
+  padding-inline: 2.5%;
+  right: 1%;
+}
+#btn_help{
+  left: 1%;
+}
+#btn_help, #btn_next{
+  position: absolute;
+  bottom: 1%;
+}
 </style>

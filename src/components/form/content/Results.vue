@@ -4,14 +4,28 @@
 
 <template>
   <div class="content_results">
-    <div class="card">
-      Reports
-      <button>Reports</button>
-    </div>
-    <div class="card">
-      Download
-      <button>Download</button>
-    </div>
+    <v-card class="mx-auto card" max-width="400">
+      <v-img class="align-end text-white" height="200" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover>
+        <v-card-title>Reports</v-card-title>
+      </v-img>
+      <v-card-text>
+        <div>lorsnsjfnjsdnfs</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn>Reports</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-card class="mx-auto card" max-width="400">
+      <v-img class="align-end text-white" height="200" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover>
+        <v-card-title>Download</v-card-title>
+      </v-img>
+      <v-card-text>
+        <div>lorsnsjfnjsdnfs</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn>Download</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
@@ -29,7 +43,8 @@
   border-radius: 5px ;
   height: 300px;
   width: 25%;
-  margin: 0% 5%auto;
+  margin-left: 2.5% !important;
+  margin-right: 2.5% !important;
 }
 
 </style>

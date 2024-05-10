@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TheWelcome from "@/components/welcome/TheWelcome.vue";
 import ContentForm from "@/components/form/content/ContentForm.vue";
+import Help from "@/components/help/Help.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +45,13 @@ const router = createRouter({
           name: 'Results',
           component:ContentForm
         }
+
       ]
+    },
+    {
+      path: '/help',
+      name: 'Help',
+      component: Help
     }
   ]
 })
