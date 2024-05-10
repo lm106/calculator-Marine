@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import AlertWelcome from "@/components/welcome/AlertWelcome.vue";
-
 const showRouterLink = ref(false);
 
 // const showAlert = () => {
@@ -30,37 +29,76 @@ const navigateToNewPage = () => {
 };
 </script>
 <template>
-  (<header>
-    <img alt="Vue logo" class="logo" src="../../assets/logo.svg" width="125" height="125" />
-  </header>)
- <div>
-   <button @click="show">Start</button>
-    <alert-welcome :showModal="showModal" @hide-modal="hideModal"/>
+  <div class="welcome">
+    <div class="img_welcome">
+      <img alt="Vue logo" class="logo" src="../../assets/logo.svg" width="125" height="125" />
+    </div>
+    <div class="content">
+      <p id="description_content">Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc dignissim.
+         Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra turpis.
+         Non feugiat duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc
+         dignissim. Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra
+         turpis. Non feugiat duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam
+         lorem nunc dignissim. Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante
+         non viverra turpis. Non feugiat duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing
+         aliquam lorem nunc dignissim. Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante
+         non viverra turpis. Non feugiat duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing
+         aliquam lorem nunc dignissim. Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante
+         non viverra turpis. Non feugiat duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing
+         aliquam lorem nunc dignissim. Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante
+         non viverra turpis. Non feugiat duis pharetra.Non feugiat duis pharetra.Lorem ipsum dolor sit
+         amet consectetur. Adipiscing aliquam lorem nunc dignissim. Vivamus odio rhoncus id morbi at
+         euismod elit nisi. Venenatis ante non viverra turpis. Non feugiat duis pharetra.Non feugiat
+         duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc dignissim.
+         Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra turpis.
+         Non feugiat duis pharetra.</p>
+      <v-btn class="text-none"  id="btn_start" @click="show">Start<v-icon icon="mdi-arrow-right" end></v-icon></v-btn>
+      <alert-welcome :showModal="showModal" @hide-modal="hideModal"/>
+    </div>
   </div>
 </template>
 <style scoped>
-/* Estilos para el modal */
-
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* Centra el modal verticalmente */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%; /* Ancho del modal */
+.img_welcome{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+.welcome{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
 }
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+.welcome >*{
+  width:50%;
+  height: 100vh;
+  margin: 0%;
+  padding: 2.5%;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#description_content{
+  text-align: center;
+  width: 80%;
+}
+#btn_start{
+  width: 25%;
+  padding: 1% 5%;
+  border-radius: 60px;
+  color: white;
+  background-color: #023139;
+  border: transparent;
+  font-weight: 600 !important;
+  /* display: flex; */
+  align-items: flex-end;
+  /* flex-direction: row; */
 }
 </style>
