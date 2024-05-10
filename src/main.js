@@ -3,10 +3,17 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import * as vuetify from 'vuetify'
-import '@mdi/font/css/materialdesignicons.css'
-
+import { createVuetify } from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 const app = createApp(App)
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+import { VNumberInput } from 'vuetify/labs/VNumberInput'
+const vuetify = createVuetify({
+    components:{ VNumberInput,}
+})
+
 
 app.use(router)
 app.use(vuetify)
