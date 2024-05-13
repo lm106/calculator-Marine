@@ -3,8 +3,10 @@ import { ref } from 'vue';
 import Steps from "@/components/form/steps/Steps.vue";
 import Header from "@/components/header/Header.vue";
 import {useRouter} from "vue-router";
+import AlertHelp from "@/components/help/AlertHelp.vue";
 
 const cantidad = ref(0);
+const showAlert =ref(false);
 const textos = ref([]);
 const router=useRouter();
 const steps = ref([
@@ -41,6 +43,12 @@ const checkPageReports=()=>{
   // return
   return true
 };
+const handleClickHelp=()=>{
+  showAlert.value=!showAlert.value
+}
+const handleCloseHelp=()=>{
+  showAlert.value=false
+}
 </script>
 <template>
   <div>
@@ -48,7 +56,8 @@ const checkPageReports=()=>{
     <Steps :steps="steps" @contentName="handleClickStep"></Steps>
     <router-view></router-view>
     <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn" id="btn_next" base-color="#023139" append-icon="mdi-arrow-right">Next Step</v-btn>
-    <v-btn v-if="checkPageReports()" @click="handleClick('Help')" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
+    <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
+    <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
   </div>
 </template>
 

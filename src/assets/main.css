@@ -36,3 +36,7 @@ a,.green {
   padding: 1% 5% !important;
   font-weight: 600 !important;
 }
+.alert_help .v-alert__content {
+  align-self: initial;
+}
+
