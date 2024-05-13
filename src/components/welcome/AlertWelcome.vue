@@ -42,7 +42,8 @@ watch(() => props.showModal, (newValue) => {
 <template>
   <div class="modal" v-show="showModal">
     <div class="modal-content">
-      <span class="close" @click="$emit('hide-modal')">&times;</span>
+      <v-btn @click="$emit('hide-modal')" class="close"  density="comfortable" icon="$close" variant="plain"></v-btn>
+    <div class="content_alert">
         <div>
           <label for="cantidad"></label>
           <v-number-input id="cantidad" v-model="cantidad" label="Nº Colection:" :min="1" :max="4" @input="updateInputs"></v-number-input>
@@ -51,7 +52,8 @@ watch(() => props.showModal, (newValue) => {
             <v-text-field  v-model="textos[index - 1]" :label="'Name colection ' + index"></v-text-field>
           </div>
         </div>
-      <v-btn @click="navigateToNewPage" class="text-none btn btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
+      <v-btn @click="navigateToNewPage" id="btn_alert_start" class="text-none btn btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
+    </div>
 
   </div>
   </div>
@@ -59,7 +61,6 @@ watch(() => props.showModal, (newValue) => {
 
 <style scoped>
 .modal {
-  /*display: none; /* Oculta el modal inicialmente */
   position: fixed;
   z-index: 1;
   left: 0;
@@ -71,19 +72,25 @@ watch(() => props.showModal, (newValue) => {
 }
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* Centra el modal verticalmente */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%; /* Ancho del modal */
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  border-radius: 10px;
+  border: 1px solid transparent;
 }
+.content_alert{
+  margin: 5% auto;
+  width: 75%;
 
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
 }
-
+#btn_alert_start{
+  margin: 5% 30% auto;
+  width: 40%;
+}
 .close:hover,
 .close:focus {
   color: black;

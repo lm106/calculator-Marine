@@ -33,6 +33,6 @@ a,.green {
 }
 .btn_start{
   width: 25%;
-  padding: 1% 5%;
+  padding: 1% 5% !important;
   font-weight: 600 !important;
 }
