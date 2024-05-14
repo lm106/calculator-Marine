@@ -69,8 +69,9 @@ const handleCloseHelp=()=>{
 #btn_help{
   left: 1%;
 }
-#btn_help, #btn_next{
-  position: absolute;
+#btn_help, #btn_next {
+  position: fixed;
   bottom: 1%;
+  z-index: 1;
 }
 </style>
