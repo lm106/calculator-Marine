@@ -45,6 +45,7 @@ watch(() => props.showModal, (newValue) => {
       <v-btn @click="$emit('hide-modal')" class="close"  density="comfortable" icon="$close" variant="plain"></v-btn>
     <div class="content_alert">
         <div>
+          <h2 id="title_alert_welcome">What collection do you want to use?</h2>
           <label for="cantidad"></label>
           <v-number-input id="cantidad" v-model="cantidad" label="Nº Colection:" :min="1" :max="4" @input="updateInputs"></v-number-input>
           <!-- Mostrar inputs de texto dinámicos -->
@@ -82,10 +83,14 @@ watch(() => props.showModal, (newValue) => {
   border-radius: 10px;
   border: 1px solid transparent;
 }
+#title_alert_welcome{
+  margin: 2.5% auto;
+  width: 50%;
+  text-align: center;
+}
 .content_alert{
   margin: 5% auto;
   width: 75%;
-
 }
 #btn_alert_start{
   margin: 5% 30% auto;
