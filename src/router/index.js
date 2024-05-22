@@ -23,27 +23,27 @@ const router = createRouter({
         {
           path: '/form',
           name: 'Relevance',
-          component:ContentForm
+          component:() => import('../components/form/content/ContentForm.vue'),
         },
         {
           path: '/form',
           name: 'Fair',
-          component:ContentForm
+          component:() => import('../components/form/content/ContentForm.vue'),
         },
         {
           path: '/form',
-          name: 'Resolution and temporal coverage',
-          component:ContentForm
+          name: 'Resolution and temporal',
+          component:() => import('../components/form/content/ContentForm.vue'),
         },
         {
           path: '/form',
           name: 'SDQF',
-          component:ContentForm
+          component:() => import('../components/form/content/ContentForm.vue'),
         },
         {
           path: '/form',
           name: 'Results',
-          component:ContentForm
+          component:() => import('../components/form/content/ContentForm.vue'),
         }
 
       ]
@@ -51,7 +51,7 @@ const router = createRouter({
     {
       path: '/help',
       name: 'Help',
-      component: Help
+      component: () => import('../components/help/Help.vue'),
     }
   ]
 })

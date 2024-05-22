@@ -12,7 +12,7 @@ const router=useRouter();
 const steps = ref([
   { number: 1, name: 'Relevance for MSP', route:'Relevance', status: 'active' },
   { number: 2, name: 'FAIR',  route:'Fair', status: 'pending' },
-  { number: 3, name: 'Resolution and temporal coverage', route:'Resolution and temporal coverage', status: 'pending' },
+  { number: 3, name: 'Resolution and temporal coverage & resolution', route:'Resolution and temporal', status: 'pending' },
   { number: 4, name: 'SDQF',  route:'SDQF',status: 'pending' },
   { number: 5, name: 'Results', route:'Results', status: 'pending' }
 ]);
