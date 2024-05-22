@@ -68,6 +68,6 @@ a,.green {
 }
 .selected .v-input__control .v-field .v-field__overlay,
 .selected .v-input__control .v-field  .v-field__append-inner,
-.selected .v-input__control .v-field .v-field__field,{
+.selected .v-input__control .v-field .v-field__field{
   height: 80% !important;
 }
