@@ -19,11 +19,10 @@ a,.green {
   }
   body {
     display: block;
-    /*display: flex;*/
-    /*place-items: center;*/
   }
 
 }
+
 .btn{
   border-radius: 60px !important;
   color: white !important;
@@ -39,4 +38,36 @@ a,.green {
 .alert_help .v-alert__content {
   align-self: initial;
 }
+.v-expansion-panel__shadow {
+   box-shadow: none !important;
 
+}
+.v-expansion-panel:not(:first-child)::after {
+   border-top-style: none;
+   border-top-width: initial;
+
+}
+.v-expansion-panel:not(:first-child)::after {
+   border-color: transparent !important;
+}
+.selected .v-input__control {
+  display: flex;
+  grid-area: control;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+.selected .v-input__control .v-field__outline:before {
+  content: none !important;
+}
+.selected .v-field {
+  border-radius: 10px !important;
+}
+.selected .v-input__details {
+   display: none !important;
+}
+.selected .v-input__control .v-field .v-field__overlay,
+.selected .v-input__control .v-field  .v-field__append-inner,
+.selected .v-input__control .v-field .v-field__field,{
+  height: 80% !important;
+}

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 // import Step from '@/components/form/steps/step/Step.vue';
 import router from "@/router/index.js";
 const emit = defineEmits({
-    click:null
+    contentName:null
 });
 
 const props = defineProps({
