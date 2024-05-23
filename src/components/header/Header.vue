@@ -11,6 +11,7 @@
 <style scoped>
 .header_form{
   width: 100%;
-  border-bottom: 5px solid #181818;
+  border-bottom: 5px solid var(--color-header-border);
+  height: var(--header-heigth);
 }
 </style>

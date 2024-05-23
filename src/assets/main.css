@@ -6,6 +6,11 @@ a,.green {
   transition: 0.4s;
   padding: 3px;
 }
+#app{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 @media (hover: hover) {
   a:hover {
@@ -70,4 +75,8 @@ a,.green {
 .selected .v-input__control .v-field  .v-field__append-inner,
 .selected .v-input__control .v-field .v-field__field{
   height: 80% !important;
+}
+
+.v-navigation-drawer__scrim {
+  position: inherit !important;
 }

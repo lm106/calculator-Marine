@@ -34,6 +34,10 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+
+  --color-header-border:#DD6D45;
+  --header-heigth: 60px;
 }
 
 /* @media (prefers-color-scheme: dark) {
