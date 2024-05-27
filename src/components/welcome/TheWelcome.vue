@@ -52,7 +52,7 @@ const navigateToNewPage = () => {
          duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc dignissim.
          Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra turpis.
          Non feugiat duis pharetra.</p>
-      <v-btn @click="show" class="text-none btn btn_start" base-color="#023139" append-icon="mdi-arrow-right">Start</v-btn>
+      <v-btn @click="show" class="text-none btn btn_start" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Start</v-btn>
       <alert-welcome :showModal="showModal" @hide-modal="hideModal"/>
     </div>
   </div>

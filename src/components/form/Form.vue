@@ -55,7 +55,7 @@ const handleCloseHelp=()=>{
     <Header></Header>
     <Steps :steps="steps" @contentName="handleClickStep"></Steps>
     <router-view></router-view>
-    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn" id="btn_next" base-color="#023139" append-icon="mdi-arrow-right">Next Step</v-btn>
+    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
     <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
     <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
   </div>

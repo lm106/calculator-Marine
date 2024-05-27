@@ -1,5 +1,12 @@
 <script setup>
 
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const generateReport =()=>{
+  router.push({name:'Reports'});
+}
+
 </script>
 
 <template>
@@ -12,7 +19,7 @@
         <div>lorsnsjfnjsdnfs</div>
       </v-card-text>
       <v-card-actions>
-        <v-btn>Reports</v-btn>
+        <v-btn @click="generateReport" class="text-none btn btn_start" base-color="#023139">Reports</v-btn>
       </v-card-actions>
     </v-card>
     <v-card class="mx-auto card" max-width="400">
@@ -45,6 +52,9 @@
   width: 25%;
   margin-left: 2.5% !important;
   margin-right: 2.5% !important;
+}
+#btn_report{
+  background-color: var(--color-btn-dark-blue);
 }
 
 </style>

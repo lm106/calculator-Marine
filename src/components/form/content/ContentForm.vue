@@ -68,7 +68,7 @@ watch([()=>router.name], ()=>{
   margin-top: 1.5%;
 }
 .tab[aria-selected="true"] {
-  background-color: #023139;
+  background-color: var(--color-btn-dark-blue);
 }
 .tab {
   text-transform: initial !important;
