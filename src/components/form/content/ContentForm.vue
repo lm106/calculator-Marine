@@ -1,7 +1,6 @@
 <script setup>
 import {ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
-import Results from "@/components/form/content/Results.vue";
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
 import { values } from './store.js'
@@ -16,7 +15,7 @@ const clusters= ref([
     'Socio-economic information',
     'Governance information'
   ]);
-const router=useRoute();
+const route=useRoute();
 const active_cluster=ref(clusters.value[0]);
 const handleClickCluster=(i)=>{
   active_cluster.value=clusters.value[i];
@@ -47,15 +46,15 @@ const setCluster=(cluster)=>{
     processing(index,cluster);
   }
 }
-watch([()=>router.name], ()=>{
-  if(router.name=='Results'){
+watch([()=>route.name], ()=>{
+  if(route.name=='Results'){
     active_cluster.value=clusters.value[0];
   }
 }, {immediate:true})
 </script>
 
 <template>
-    <v-card class="nav_cluster" v-if="router.name != 'Results'">
+    <v-card class="nav_cluster" v-if="route.name != 'Results'">
       <v-tabs center-active active-class="tab_active">
         <v-tab @click="handleClickCluster(index)" v-for="(cluster, index) in clusters" class="tab"  :key="index" color="white" >{{ cluster }}</v-tab>
       </v-tabs>

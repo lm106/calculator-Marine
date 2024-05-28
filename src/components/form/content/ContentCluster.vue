@@ -1,7 +1,7 @@
 <script setup>
 import { clusters, questions } from "@/components/form/content/clusters.js";
 import { ref, watch } from 'vue'
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import {getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance} from "@/rules/rules.js";
 import {checkValuesStep, getValuesCluster,getValueCluster} from "./utils.js";
@@ -9,7 +9,7 @@ import {inputValues} from "./store.js";
 const props=defineProps({
   active:String
 })
-const router = useRoute();
+const route = useRoute();
 const emit = defineEmits(['updateCluster']);
 
 const activePanel = ref([]);
@@ -17,28 +17,28 @@ const cluster=ref([]);
 
 
 const initForm=()=>{
-  inputValues.value[router.name]= [];
-  if (questions[router.name] && !checkValuesStep(router.name, props.active)) {
-    inputValues.value[router.name].push({[props.active]:{}});
+  inputValues.value[route.name]= [];
+  if (questions[route.name] && !checkValuesStep(route.name, props.active)) {
+    inputValues.value[route.name].push({[props.active]:{}});
     clusters[props.active].forEach(block => {
-      inputValues.value[router.name][0][props.active][block.title] = {};
+      inputValues.value[route.name][0][props.active][block.title] = {};
       block.activities.forEach(activity => {
-        inputValues.value[router.name][0][props.active][block.title][activity] = {};
-        questions[router.name].forEach(column => {
-          inputValues.value[router.name][0][props.active][block.title][activity][column] = 0;  // Initial value
+        inputValues.value[route.name][0][props.active][block.title][activity] = {};
+        questions[route.name].forEach(column => {
+          inputValues.value[route.name][0][props.active][block.title][activity][column] = 0;  // Initial value
         });
       });
     });
   } else{
-    inputValues.value[router.name].push(getValuesCluster(router.name, props.active));
+    inputValues.value[route.name].push(getValuesCluster(route.name, props.active));
   }
 }
 
 const checkDisable=(index, column, activity,blockTitle)=>{
-  if(index>0 && router.name=='Relevance'){
-    let firstColumnValue=inputValues.value[router.name][0][props.active][blockTitle][activity][questions[router.name][0]]
+  if(index>0 && route.name=='Relevance'){
+    let firstColumnValue=inputValues.value[route.name][0][props.active][blockTitle][activity][questions[route.name][0]]
     return firstColumnValue<=1;
-  }else if(router.name !='Relevance'){
+  }else if(route.name !='Relevance'){
     return getValueRelevance(props.active, blockTitle,activity, questions['Relevance'][0]);
   } else{
     return false;
@@ -69,24 +69,24 @@ const checkInput=(indexColumn, step)=>{
 }
 
 const calculateMean = () => {
-  if(router.name == 'Fair') {
+  if(route.name == 'Fair') {
     // console.log( 'Calcute meas',inputValues.value)
 
     clusters[props.active].forEach(block => {
       block.activities.forEach(activity => {
-        // console.log(inputValues.value[router.name][0][props.active][block.title][activity][questions[router.name][3]])
+        // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][3]])
         let res=getCalculateFairReusable(props.active, block.title,activity);
-        inputValues.value[router.name][0][props.active][block.title][activity][questions[router.name][3]]=res;
+        inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][3]]=res;
       });
     });
-  } else if (router.name == 'SDQF'){
+  } else if (route.name == 'SDQF'){
     clusters[props.active].forEach(block => {
       block.activities.forEach(activity => {
-        // console.log(inputValues.value[router.name][0][props.active][block.title][activity][questions[router.name][0]])
+        // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]])
         let res=getCalculateSDQFCompleteness(props.active, block.title,activity);
         // console.log(res)
-        inputValues.value[router.name][0][props.active][block.title][activity][questions[router.name][0]]=res;
-        // console.log(inputValues.value[router.name][0][props.active][block.title][activity][questions[router.name][0]])
+        inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]]=res;
+        // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]])
 
       });
     });
@@ -97,12 +97,12 @@ const sendCluster=(cluster)=>{
   emit('updateCluster', inputValues.value);
 }
 
-watch([() => router.name, () => props.active], () => {
+watch([() => route.name, () => props.active], () => {
   console.log('Pase por aquí')
   if(Object.keys(inputValues.value).length>0){
     sendCluster('updateCluster', inputValues.value);
   }
-  if(router.name != 'Results') {
+  if(route.name != 'Results') {
     inputValues.value = {};
     initForm();
   }
@@ -113,10 +113,10 @@ watch(inputValues, calculateMean, { deep: true });
 </script>
 
 <template>
-  <Results v-if="router.name =='Results'"></Results>
+  <Results v-if="route.name =='Results'"></Results>
   <div v-else>
   <div>
-    {{ router.name }}
+    {{ route.name }}
     <div v-if="clusters[active].length > 2" class="text-center d-flex pb-4 ">
       <v-btn class="ma-2" @click="all">All</v-btn>
       <v-btn class="ma-2" @click="none">None</v-btn>
@@ -144,7 +144,7 @@ watch(inputValues, calculateMean, { deep: true });
               <v-col cols="4">
                 <label class="pa-2 ma-2 label_name"></label>
               </v-col>
-              <v-col v-for="(column, index) in questions[router.name]" class="names_activities" cols="2">
+              <v-col v-for="(column, index) in questions[route.name]" class="names_activities" cols="2">
                 <label class="pa-2 ma-2 label_name">{{ column }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
               </v-col>
             </v-row>
@@ -152,17 +152,17 @@ watch(inputValues, calculateMean, { deep: true });
               <v-col cols="4" class="names_activities names">
                   <label class="pa-2 ma-2 label_name">{{ activity }}  </label><v-icon color="grey" icon="mdi-information"></v-icon>
               </v-col>
-                <v-col v-for="(column, indexColumn) in questions[router.name]" cols="2">
-                  <v-number-input v-if="checkInput(indexColumn, router.name)"
+                <v-col v-for="(column, indexColumn) in questions[route.name]" cols="2">
+                  <v-number-input v-if="checkInput(indexColumn, route.name)"
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset :min="0" :max="3"
-                      v-model="inputValues[router.name][0][active][block.title][activity][column]"
+                      v-model="inputValues[route.name][0][active][block.title][activity][column]"
                       :disabled="checkDisable(indexColumn, column, activity,block.title)"
                   ></v-number-input>
                   <v-number-input v-else
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset hide-details
-                      v-model="inputValues[router.name][0][active][block.title][activity][column]"
+                      v-model="inputValues[route.name][0][active][block.title][activity][column]"
                       disabled
                   ></v-number-input>
                 </v-col>

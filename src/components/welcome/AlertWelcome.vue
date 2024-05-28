@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   showModal: Boolean
@@ -53,7 +53,7 @@ watch(() => props.showModal, (newValue) => {
             <v-text-field  v-model="textos[index - 1]" :label="'Name colection ' + index"></v-text-field>
           </div>
         </div>
-      <v-btn @click="navigateToNewPage" id="btn_alert_start" class="text-none btn btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
+      <v-btn @click="navigateToNewPage" id="btn_alert_start" class="text-none btn btn_padding btn_weight btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>
     </div>
 
   </div>

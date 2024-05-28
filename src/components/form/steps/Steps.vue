@@ -1,7 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-// import Step from '@/components/form/steps/step/Step.vue';
-import router from "@/router/index.js";
 const emit = defineEmits({
     contentName:null
 });
@@ -20,9 +18,6 @@ const handleClickStep= (step)=>{
   <div class="Steps">
     <div class="container">
       <ul class="progressbar">
-<!--        <Step v-for="(step, index) in steps" :key="index" -->
-<!--              :step="step" -->
-<!--              :isActive="currentStep === index" />-->
         <li v-for="(step, index) in steps" :key="index"
             :class="{ 'active': step.status=='active' }"
             @click="handleClickStep(step)">

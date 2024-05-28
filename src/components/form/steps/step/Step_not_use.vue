@@ -1,11 +1,12 @@
 <script setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import router from "@/router/index.js";
 
 const props = defineProps({
   step: Object,
   isActive: Boolean
 });
+const router=useRouter();
 const clickStep=(name)=>{
   router.push({name:name})
 }

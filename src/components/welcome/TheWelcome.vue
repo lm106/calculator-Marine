@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import { RouterLink, RouterView, useRouter } from 'vue-router'
 import AlertWelcome from "@/components/welcome/AlertWelcome.vue";
 const showRouterLink = ref(false);
 
@@ -20,13 +19,13 @@ const show =()=>{
 const hideModal = () => {
   showModal.value = false;
 };
-const navigateToNewPage = () => {
-  // Utiliza router.push para navegar a una nueva página
-  router.push('/form');
-
-  // O utiliza router.replace para reemplazar la página actual en el historial de navegación
-  // router.replace('/nueva-pagina');
-};
+// const navigateToNewPage = () => {
+//   // Utiliza router.push para navegar a una nueva página
+//   router.push('/form');
+//
+//   // O utiliza router.replace para reemplazar la página actual en el historial de navegación
+//   // router.replace('/nueva-pagina');
+// };
 </script>
 <template>
   <div class="welcome">
@@ -52,7 +51,7 @@ const navigateToNewPage = () => {
          duis pharetra.Lorem ipsum dolor sit amet consectetur. Adipiscing aliquam lorem nunc dignissim.
          Vivamus odio rhoncus id morbi at euismod elit nisi. Venenatis ante non viverra turpis.
          Non feugiat duis pharetra.</p>
-      <v-btn @click="show" class="text-none btn btn_start" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Start</v-btn>
+      <v-btn @click="show" class="text-none btn btn_padding btn_weight btn_start" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Start</v-btn>
       <alert-welcome :showModal="showModal" @hide-modal="hideModal"/>
     </div>
   </div>
