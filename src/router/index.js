@@ -41,7 +41,7 @@ const router = createRouter({
           component:() => import('../components/form/content/ContentForm.vue'),
         },
         {
-          path: '/form',
+          path: 'results',
           name: 'Results',
           component:() => import('../components/form/content/ContentForm.vue'),
         }
@@ -49,9 +49,36 @@ const router = createRouter({
       ]
     },
     {
-      path: '/help',
-      name: 'Help',
-      component: () => import('../components/help/Help.vue'),
+      path: '/report',
+      component: () => import('../components/reports/Report.vue'),
+      children: [
+        {
+          path: 'category',
+          name: 'Category',
+          component:() => import('../components/reports/content/Category.vue'),
+        },
+        {
+          path: 'cluster',
+          name: 'Cluster',
+          component:() => import('../components/reports/content/Cluster.vue'),
+        },
+        {
+          path: 'filterCollections',
+          name: 'Collections',
+          component:() => import('../components/reports/content/Collections.vue'),
+        },
+        {
+          path: '/help',
+          name: 'Help',
+          component: () => import('../components/help/Help.vue'),
+        }
+        // {
+        //   path: 'delete',
+        //   name: 'Delete',
+        // //   component:() => import('../components/form/content/ContentForm.vue'),
+        // }
+      ]
+
     }
   ]
 })

@@ -32,13 +32,16 @@ a,.green {
   border-radius: 60px !important;
   color: white !important;
   border: transparent;
-  font-weight: 600 !important;
   align-items: flex-end;
+}
+.btn_padding{
+  padding: 1% 5% !important;
+}
+.btn_weight{
+  font-weight: 600 !important;
 }
 .btn_start{
   width: 25%;
-  padding: 1% 5% !important;
-  font-weight: 600 !important;
 }
 .alert_help .v-alert__content {
   align-self: initial;
@@ -79,4 +82,12 @@ a,.green {
 
 .v-navigation-drawer__scrim {
   position: inherit !important;
+  display: none;
+}
+.v-card-actions{
+  justify-content: center;
+  margin-bottom: 10px !important;
+}
+.navbar .v-navigation-drawer__content {
+  display: contents;
 }

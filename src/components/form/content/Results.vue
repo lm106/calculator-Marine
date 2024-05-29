@@ -1,10 +1,9 @@
 <script setup>
-
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const generateReport =()=>{
-  router.push({name:'Reports'});
+  router.push({name:'Category'});
 }
 
 </script>
@@ -18,9 +17,9 @@ const generateReport =()=>{
       <v-card-text>
         <div>lorsnsjfnjsdnfs</div>
       </v-card-text>
-      <v-card-actions>
-        <v-btn @click="generateReport" class="text-none btn btn_start" base-color="#023139">Reports</v-btn>
-      </v-card-actions>
+      <template v-slot:actions class="align-content-center">
+        <v-btn  @click="generateReport" class="text-none btn btn_padding btn_results" base-color="var(--color-btn-dark-blue)" variant="flat">See Reports</v-btn>
+      </template>
     </v-card>
     <v-card class="mx-auto card" max-width="400">
       <v-img class="align-end text-white" height="200" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover>
@@ -29,9 +28,9 @@ const generateReport =()=>{
       <v-card-text>
         <div>lorsnsjfnjsdnfs</div>
       </v-card-text>
-      <v-card-actions>
-        <v-btn>Download</v-btn>
-      </v-card-actions>
+      <template v-slot:actions>
+        <v-btn  @click="" append-icon="mdi-tray-arrow-down" class="text-none btn btn_padding btn_results" base-color="var(--color-orange)" variant="flat">Download</v-btn>
+      </template>
     </v-card>
   </div>
 </template>
@@ -46,15 +45,14 @@ const generateReport =()=>{
   align-items: center;
 }
 .card{
-  border: 1px solid gray;
   border-radius: 5px ;
-  height: 300px;
+  height: 310px;
   width: 25%;
   margin-left: 2.5% !important;
   margin-right: 2.5% !important;
 }
-#btn_report{
-  background-color: var(--color-btn-dark-blue);
+.btn_results{
+  margin-bottom: 10px;
 }
 
 </style>
