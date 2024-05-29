@@ -1,0 +1,22 @@
+
+.selected .v-input__control {
+    display: flex;
+    grid-area: control;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+.selected .v-input__control .v-field__outline:before {
+    content: none !important;
+}
+.selected .v-field {
+    border-radius: 10px !important;
+}
+.selected .v-input__details {
+    display: none !important;
+}
+.selected .v-input__control .v-field .v-field__overlay,
+.selected .v-input__control .v-field  .v-field__append-inner,
+.selected .v-input__control .v-field .v-field__field{
+    height: 80% !important;
+}

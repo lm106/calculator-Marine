@@ -64,7 +64,7 @@ watch([()=>route.name], ()=>{
 
 <style scoped>
 .nav_cluster{
-  margin-top: 1.5%;
+  margin: 1.5% 0%;
 }
 .tab[aria-selected="true"] {
   background-color: var(--color-btn-dark-blue);

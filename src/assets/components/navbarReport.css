@@ -1,0 +1,12 @@
+
+.v-navigation-drawer__scrim {
+    position: inherit !important;
+    display: none;
+}
+.v-card-actions{
+    justify-content: center;
+    margin-bottom: 10px !important;
+}
+.navbar .v-navigation-drawer__content {
+    display: contents;
+}

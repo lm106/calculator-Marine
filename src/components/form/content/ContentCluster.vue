@@ -116,14 +116,12 @@ watch(inputValues, calculateMean, { deep: true });
   <Results v-if="route.name =='Results'"></Results>
   <div v-else>
   <div>
-    {{ route.name }}
-    <div v-if="clusters[active].length > 2" class="text-center d-flex pb-4 ">
-      <v-btn class="ma-2" @click="all">All</v-btn>
-      <v-btn class="ma-2" @click="none">None</v-btn>
+    <div v-if="clusters[active].length > 2" class="text-center d-flex pb-4 justify-end ma-2">
+      <v-btn class="btn ma-2" @click="all" :base-color="'var(--color-orange)'">All</v-btn>
+      <v-btn class="btn ma-2" @click="none" :base-color="'var(--color-btn-grey)'">None</v-btn>
     </div>
 
-    <div class="pb-4">v-model {{ activePanel }}</div>
-
+<!--    <div class="pb-4">v-model {{ activePanel }}</div>-->
     <v-expansion-panels class="panels" v-model="activePanel" multiple>
       <v-expansion-panel v-for="(block, index) in clusters[active]"
           :key="index" :value="block.title"
@@ -179,37 +177,6 @@ watch(inputValues, calculateMean, { deep: true });
 </template>
 
 <style scoped>
-.panels{
-  flex-wrap: nowrap !important;
-  justify-content: center;
-  flex-direction: column !important;
-  max-width: 80% !important;
-  margin: auto;
-}
-.panel_block {
-  background-color: #ededed !important;
-  margin-bottom: 1% !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-  border: 1px solid #00000019;
-}
-.title_block{
-  width: 100%;
-}
-.title{
-  margin-bottom: 0.5%;
-}
-.content_block {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-content: center;
-  align-items: center;
-  margin: auto;
-}
-.item_activity{
-  width: 100%;
-}
 .names_activities{
   margin-top: 1.25%;
   text-align: end;

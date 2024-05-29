@@ -263,7 +263,7 @@ export const clusters={
         }
     ],
     'Socio-economic information': [{
-        title:'',
+        title:'Socio-economic information',
         activities:[ 'population characteristics', 'coastal sectors job', 'coastal sectors icome',
             'Maritime sectors job', 'Maritime sectors icome'
         ]

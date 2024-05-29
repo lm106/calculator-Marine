@@ -1,0 +1,15 @@
+.btn{
+    border-radius: 60px !important;
+    color: white !important;
+    border: transparent;
+    align-items: flex-end;
+}
+.btn_padding{
+    padding: 1% 5% !important;
+}
+.btn_weight{
+    font-weight: 600 !important;
+}
+.btn_start{
+    width: 25%;
+}

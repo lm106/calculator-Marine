@@ -40,6 +40,9 @@
   --color-orange:#D76B42;
   --color-btn-dark-blue:#023139;
   --header-heigth: 60px;
+  --color-block:#FAFAFA;
+  --color-btn-grey: rgba(195, 195, 195, 0.64);
+
 }
 
 /* @media (prefers-color-scheme: dark) {
