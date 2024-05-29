@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import {computed, ref, watch} from 'vue';
 import Steps from "@/components/form/steps/Steps.vue";
 import Header from "@/components/header/Header.vue";
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 import AlertHelp from "@/components/help/AlertHelp.vue";
 
 const cantidad = ref(0);
@@ -26,7 +26,6 @@ const updateInputs = () => {
 const handleClick=(name)=>{
   router.push({name:name})
 }
-
 const handleClickStep=(step)=>{
   let now = (step.name!=undefined)?
       steps.value.findIndex((item)=>item.name==step.name):
@@ -49,13 +48,19 @@ const handleClickHelp=()=>{
 const handleCloseHelp=()=>{
   showAlert.value=false
 }
+watch([()=>router.currentRoute.value.name], ()=>{
+  if(router.currentRoute.value.name=='Results'){
+    handleClickStep(steps.value[4])
+  }
+}, {immediate:true})
+
 </script>
 <template>
   <div>
     <Header></Header>
     <Steps :steps="steps" @contentName="handleClickStep"></Steps>
     <router-view></router-view>
-    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
+    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn btn_weight" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
     <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
     <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
   </div>
