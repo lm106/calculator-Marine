@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
 import { values } from './store.js'
-import {checkCluster, checkQuestionsStep} from "./utils.js";
+import {checkCluster, checkQuestionsStep, getCopy, getKey} from "./utils.js";
 
 const clusters= ref([
     'MSFD GES','WFD GES',
@@ -21,27 +21,25 @@ const handleClickCluster=(i)=>{
   active_cluster.value=clusters.value[i];
 }
 
-const processing=(indexStep,cluster)=>{
-  let nameStep=Object.keys(cluster)[0];
-  let nameCluster=Object.keys(cluster[nameStep][0])[0];
-  console.log(nameCluster);
-  console.log('Cluster: -----', cluster);
+const processing=(indexStep,data)=>{
+  console.log('Cluster: -----', data);
   console.log('Values: -----', values.value);
-  let indexCluster=checkCluster(indexStep,nameStep, nameCluster);
-  // console.log(indexCluster)
+  let nameStep=getKey(data)
+  let indexCluster=checkCluster(indexStep,nameStep, getKey(data[nameStep][0]));
   if(indexCluster ==-1){
-    values.value[indexStep][nameStep].push(cluster[nameStep][0])
+    values.value={...getCopy(values.value), ...getCopy(data)}
   }else{
-    values.value[indexStep][nameStep][indexCluster]=cluster[nameStep][0];
+    values.value[nameStep][indexCluster]=data[nameStep][0];
   }
 }
 
 const setCluster=(cluster)=>{
   console.log('formform')
-  let key=Object.keys(cluster)[0];
-  let index=checkQuestionsStep(key);
+  // let key=Object.keys(cluster)[0];
+  console.log(cluster)
+  let index=checkQuestionsStep(getKey(cluster));
   if(index == -1) {
-    values.value.push(cluster);
+    values.value={...getCopy(values.value),...getCopy(data)};
   }else{
     processing(index,cluster);
   }

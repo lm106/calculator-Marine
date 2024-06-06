@@ -47,10 +47,10 @@ watch(() => props.showModal, (newValue) => {
         <div>
           <h2 id="title_alert_welcome">What collection do you want to use?</h2>
           <label for="cantidad"></label>
-          <v-number-input id="cantidad" v-model="cantidad" label="Nº Colection:" :min="1" :max="4" @input="updateInputs"></v-number-input>
+          <v-number-input id="cantidad" v-model="cantidad" label="Nº Collection:" :min="1" :max="4" @input="updateInputs"></v-number-input>
           <!-- Mostrar inputs de texto dinámicos -->
           <div v-for="index in cantidad" :key="index">
-            <v-text-field  v-model="textos[index - 1]" :label="'Name colection ' + index"></v-text-field>
+            <v-text-field  v-model="textos[index - 1]" :label="'Name collection ' + index"></v-text-field>
           </div>
         </div>
       <v-btn @click="navigateToNewPage" id="btn_alert_start" class="text-none btn btn_padding btn_weight btn_start" base-color="#D76B42" append-icon="mdi-arrow-right">Start</v-btn>

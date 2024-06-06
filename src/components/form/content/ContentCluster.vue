@@ -13,6 +13,7 @@ const route = useRoute();
 const emit = defineEmits(['updateCluster']);
 
 const activePanel = ref([]);
+const tokenInit = ref(false);
 const cluster=ref([]);
 
 
@@ -99,16 +100,19 @@ const sendCluster=(cluster)=>{
 
 watch([() => route.name, () => props.active], () => {
   console.log('Pase por aquí')
-  if(Object.keys(inputValues.value).length>0){
+  console.log('P', inputValues.value)
+  if(tokenInit.value && Object.values(inputValues.value).length>0){
     sendCluster('updateCluster', inputValues.value);
   }
   if(route.name != 'Results') {
     inputValues.value = {};
     initForm();
   }
+  tokenInit.value=true;
   // calculateMean()
 
 }, { immediate: true });
+
 watch(inputValues, calculateMean, { deep: true });
 </script>
 
