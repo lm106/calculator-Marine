@@ -21,16 +21,18 @@ const handleClickCluster=(i)=>{
   active_cluster.value=clusters.value[i];
 }
 
-const processing=(indexStep,data)=>{
+const processing=(tokenStep,data)=>{
   console.log('Cluster: -----', data);
   console.log('Values: -----', values.value);
-  let nameStep=getKey(data)
-  let nameCluster=getKey(data[nameStep]);
-  let indexCluster=checkCluster(nameStep, nameCluster);
-  if(!indexCluster){
-    values.value={...getCopy(values.value), ...getCopy(data)}
-  }else{
-    values.value[nameStep][nameCluster]=data[nameStep];
+  let nameStep=getKey(data)[0]
+  let nameCluster=getKey(data[nameStep])[0];
+  let tokenCluster=checkCluster(nameStep, nameCluster);
+  let copy=getCopy(data)
+  if(tokenStep && !tokenCluster){
+    values.value[nameStep]={...getCopy(values.value[nameStep]), ...copy[nameStep]};
+    // values.value={...getCopy(values.value), ...copy}
+  }else if(tokenCluster){
+    values.value[nameStep][nameCluster]=copy[nameStep][nameCluster];
   }
 }
 
@@ -38,11 +40,11 @@ const setCluster=(data)=>{
   console.log('formform')
   // let key=Object.keys(cluster)[0];
   console.log(data)
-  let index=checkQuestionsStep(getKey(data));
-  if(!index) {
+  let tokenStep=checkQuestionsStep(getKey(data));
+  if(!tokenStep) {
     values.value={...getCopy(values.value),...getCopy(data)};
   }else{
-    processing(index,data);
+    processing(tokenStep,data);
   }
 }
 watch([()=>route.name], ()=>{

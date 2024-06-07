@@ -26,10 +26,22 @@ export function getCopy(obj) {
 }
 
 /***************************Values***********************/
+/**
+ * Comprueba si el Step está
+ * @param keyStep
+ * @returns {boolean}
+ */
 export function checkQuestionsStep(keyStep){
     // console.log('check',keyStep)
     return (values.value[keyStep]!=undefined)? true: false;
 }
+
+/**
+ * Comprueba si el cluster está
+ * @param keyStep
+ * @param keyCluster
+ * @returns {boolean|boolean}
+ */
 export function checkCluster(keyStep, keyCluster){
     // console.log(values.value[keyStep])
     if(values.value[keyStep] == undefined){
@@ -39,9 +51,24 @@ export function checkCluster(keyStep, keyCluster){
     }
     // return values.value[keyStep].findIndex((item)=> Object.keys(item)==keyCluster);
 }
+
+/**
+ * Comprueba si el cluster y el step está
+ * @param nameStep
+ * @param nameCluster
+ * @returns {boolean}
+ */
 export function checkValuesStep(nameStep, nameCluster){
-    let indexStep=checkQuestionsStep(nameStep);
-    return ( !indexStep && !checkCluster(nameStep,nameCluster))? false:true;
+    let tokenStep=checkQuestionsStep(nameStep);
+    let tokenCluster=checkCluster(nameStep,nameCluster)
+    // return ( !tokenStep && !tokenCluster)? false:true;
+    if(!tokenStep){
+        return false;
+    }else if(tokenStep && !tokenCluster){
+        return false;
+    }else{
+        return true;
+    }
 }
 export function getValuesCluster(nameStep, nameCluster){
     // let indexStep= checkQuestionsStep(nameStep);
