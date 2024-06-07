@@ -18,26 +18,26 @@ const cluster=ref([]);
 
 
 const initForm=()=>{
-  inputValues.value[route.name]= [];
+  inputValues.value[route.name]= {};
   if (questions[route.name] && !checkValuesStep(route.name, props.active)) {
-    inputValues.value[route.name].push({[props.active]:{}});
+    inputValues.value[route.name][props.active]={};
     clusters[props.active].forEach(block => {
-      inputValues.value[route.name][0][props.active][block.title] = {};
+      inputValues.value[route.name][props.active][block.title] = {};
       block.activities.forEach(activity => {
-        inputValues.value[route.name][0][props.active][block.title][activity] = {};
+        inputValues.value[route.name][props.active][block.title][activity] = {};
         questions[route.name].forEach(column => {
-          inputValues.value[route.name][0][props.active][block.title][activity][column] = 0;  // Initial value
+          inputValues.value[route.name][props.active][block.title][activity][column] = 0;  // Initial value
         });
       });
     });
   } else{
-    inputValues.value[route.name].push(getValuesCluster(route.name, props.active));
+    inputValues.value[route.name]=getValuesCluster(route.name, props.active);
   }
 }
 
 const checkDisable=(index, column, activity,blockTitle)=>{
   if(index>0 && route.name=='Relevance'){
-    let firstColumnValue=inputValues.value[route.name][0][props.active][blockTitle][activity][questions[route.name][0]]
+    let firstColumnValue=inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][0]]
     return firstColumnValue<=1;
   }else if(route.name !='Relevance'){
     return getValueRelevance(props.active, blockTitle,activity, questions['Relevance'][0]);
@@ -77,7 +77,7 @@ const calculateMean = () => {
       block.activities.forEach(activity => {
         // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][3]])
         let res=getCalculateFairReusable(props.active, block.title,activity);
-        inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][3]]=res;
+        inputValues.value[route.name][props.active][block.title][activity][questions[route.name][3]]=res;
       });
     });
   } else if (route.name == 'SDQF'){
@@ -86,7 +86,7 @@ const calculateMean = () => {
         // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]])
         let res=getCalculateSDQFCompleteness(props.active, block.title,activity);
         // console.log(res)
-        inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]]=res;
+        inputValues.value[route.name][props.active][block.title][activity][questions[route.name][0]]=res;
         // console.log(inputValues.value[route.name][0][props.active][block.title][activity][questions[route.name][0]])
 
       });
@@ -158,13 +158,13 @@ watch(inputValues, calculateMean, { deep: true });
                   <v-number-input v-if="checkInput(indexColumn, route.name)"
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset :min="0" :max="3"
-                      v-model="inputValues[route.name][0][active][block.title][activity][column]"
+                      v-model="inputValues[route.name][active][block.title][activity][column]"
                       :disabled="checkDisable(indexColumn, column, activity,block.title)"
                   ></v-number-input>
                   <v-number-input v-else
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset hide-details
-                      v-model="inputValues[route.name][0][active][block.title][activity][column]"
+                      v-model="inputValues[route.name][active][block.title][activity][column]"
                       disabled
                   ></v-number-input>
                 </v-col>

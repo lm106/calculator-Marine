@@ -25,23 +25,24 @@ const processing=(indexStep,data)=>{
   console.log('Cluster: -----', data);
   console.log('Values: -----', values.value);
   let nameStep=getKey(data)
-  let indexCluster=checkCluster(indexStep,nameStep, getKey(data[nameStep][0]));
-  if(indexCluster ==-1){
+  let nameCluster=getKey(data[nameStep]);
+  let indexCluster=checkCluster(nameStep, nameCluster);
+  if(!indexCluster){
     values.value={...getCopy(values.value), ...getCopy(data)}
   }else{
-    values.value[nameStep][indexCluster]=data[nameStep][0];
+    values.value[nameStep][nameCluster]=data[nameStep];
   }
 }
 
-const setCluster=(cluster)=>{
+const setCluster=(data)=>{
   console.log('formform')
   // let key=Object.keys(cluster)[0];
-  console.log(cluster)
-  let index=checkQuestionsStep(getKey(cluster));
-  if(index == -1) {
+  console.log(data)
+  let index=checkQuestionsStep(getKey(data));
+  if(!index) {
     values.value={...getCopy(values.value),...getCopy(data)};
   }else{
-    processing(index,cluster);
+    processing(index,data);
   }
 }
 watch([()=>route.name], ()=>{

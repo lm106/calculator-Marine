@@ -1,37 +1,48 @@
-import {inputValues, values} from "@/components/form/content/store.js";
+import {inputValues, values, outputValues, transformValues} from "@/components/form/content/store.js";
+import {clusters, questions} from "@/components/form/content/clusters.js";
 
-
-export function checkQuestionsStep(key){
-    return values.value.findIndex((item)=> Object.keys(item)==key);
+export function getKey(obj){
+    return Object.keys(obj);
+    // return (key.length>0)? true: false;
 }
-export function checkCluster(indexStep, nameStep, key){
-    return values.value[indexStep][nameStep].findIndex((item)=> Object.keys(item)==key);
+export function checkQuestionsStep(keyStep){
+    // console.log('check',keyStep)
+    return (values.value[keyStep]!=undefined)? true: false;
+}
+export function checkCluster(keyStep, keyCluster){
+    // console.log(values.value[keyStep])
+    if(values.value[keyStep] == undefined){
+        return false;
+    }else {
+        return (values.value[keyStep][keyCluster] != undefined)? true: false;
+    }
+    // return values.value[keyStep].findIndex((item)=> Object.keys(item)==keyCluster);
 }
 export function checkValuesStep(nameStep, nameCluster){
     let indexStep=checkQuestionsStep(nameStep);
-    return ( indexStep!= -1 && checkCluster(indexStep, nameStep,nameCluster) != -1)? true: false;
+    return ( !indexStep && !checkCluster(nameStep,nameCluster))? false:true;
 }
 export function getValuesCluster(nameStep, nameCluster){
-    let indexStep= checkQuestionsStep(nameStep);
-    let indexCluster= checkCluster(indexStep, nameStep, nameCluster);
-    return values.value[indexStep][nameStep][indexCluster] || {};
+    // let indexStep= checkQuestionsStep(nameStep);
+    let indexCluster= checkCluster(nameStep, nameCluster);
+    return (indexCluster)? {[nameCluster]:values.value[nameStep][nameCluster]}: {};
 }
 export function getValueCluster(nameStep,nameCluster, blockTitle, activity, question){
-    return values.value[indexStep][nameStep][indexCluster][nameCluster][blockTitle][activity][question] || {};
+
+    return values.value[nameStep][nameCluster][blockTitle][activity][question] || {};
 }
 
 /************************InputValues****************/
 export function getValueOtherStep (nameStep, nameCluster, blockTitle, activity, question){
     // console.log('value---->',values.value)
-    let indexStep= checkQuestionsStep(nameStep);
-    let indexCluster= checkCluster(indexStep, nameStep, nameCluster);
-    if (values.value[indexStep][nameStep] &&
-        values.value[indexStep][nameStep][indexCluster] &&
-        values.value[indexStep][nameStep][indexCluster][nameCluster] &&
-        values.value[indexStep][nameStep][indexCluster][nameCluster][blockTitle] &&
-        values.value[indexStep][nameStep][indexCluster][nameCluster][blockTitle][activity]) {
+    // let indexStep= checkQuestionsStep(nameStep);
+    let indexCluster= checkCluster(nameStep, nameCluster);
+    if (values.value[nameStep] &&
+        values.value[nameStep][nameCluster] &&
+        values.value[nameStep][nameCluster][blockTitle] &&
+        values.value[nameStep][nameCluster][blockTitle][activity]) {
         // console.log('value_celd---->',values.value[indexStep][nameStep][indexCluster][nameCluster][blockTitle][activity][question]);
-        return values.value[indexStep][nameStep][indexCluster][nameCluster][blockTitle][activity][question];
+        return values.value[nameStep][nameCluster][blockTitle][activity][question];
     }
     return 0;
 }
@@ -39,12 +50,211 @@ export function getValueOtherStep (nameStep, nameCluster, blockTitle, activity, 
 export function getValue (nameStep, nameCluster, blockTitle, activity, question){
     // console.log('value---->',inputValues.value)
     if (inputValues.value[nameStep] &&
-        inputValues.value[nameStep][0] &&
-        inputValues.value[nameStep][0][nameCluster] &&
-        inputValues.value[nameStep][0][nameCluster][blockTitle] &&
-        inputValues.value[nameStep][0][nameCluster][blockTitle][activity]) {
+        inputValues.value[nameStep][nameCluster] &&
+        inputValues.value[nameStep][nameCluster][blockTitle] &&
+        inputValues.value[nameStep][nameCluster][blockTitle][activity]) {
 
-        return inputValues.value[nameStep][0][nameCluster][blockTitle][activity][question] || 0;
+        return inputValues.value[nameStep][nameCluster][blockTitle][activity][question] || 0;
     }
     return 0;
+}
+
+/************************OutputValues****************/
+
+export function getOutputValues(){
+    outputValues.value={};
+    // console.log(outputValues.value)
+    // console.log('----------------------------------')
+    Object.entries(values.value).forEach(([keyStep, clusterObject])=>{
+    //     let key=Object.keys(step)[0]
+    const output = convertToOutput(clusterObject);
+    // console.log(output)
+    outputValues.value={...getCopy(outputValues.value), ...{[keyStep]: output}};
+    // console.log(outputValues.value)
+    })
+    // console.log(values.value)
+}
+function convertToOutput(item) {
+    // console.log(item)
+    let obj= {...item};
+    const hasOnlyPrimitives = Object.values(obj).every(value => typeof value !== 'object' || value === null);
+
+    if (hasOnlyPrimitives) {
+        // Si el objeto tiene solo propiedades primitivas, lo convertimos en un array
+        return Object.values(obj);
+    } else {
+        // Si no, convertimos recursivamente los hijos más profundos en arrays de valores primitivos
+        const newObj = {};
+        for (let key in obj) {
+            newObj[key] = convertToOutput(obj[key]);
+        }
+        return newObj;
+    }
+}
+
+
+/************************************/
+
+export function getCopy(obj) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map(getCopy);
+    }
+
+    const clonedObj = {};
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            clonedObj[key] = getCopy(obj[key]);
+        }
+    }
+
+    return clonedObj;
+}
+/******************TransformValues*******************/
+export function setFilterValues(){
+    transformValues.value ={};
+    // console.log(outputValues.value)
+    let data_relevance={...getCopy(outputValues.value)};
+    const filteredRelevance = filterRelevance(data_relevance.Relevance);
+
+    Object.entries(outputValues.value).forEach(([keyStep, cluster_content]) => {
+        // let key=Object.keys(step);
+        let newStep = {};
+        if (keyStep!='Relevance') {
+            newStep[keyStep] = filterOtherSections(cluster_content || [], filteredRelevance);
+        }else{
+            newStep.Relevance = filteredRelevance;
+        }
+        transformValues.value={...transformValues.value, ...newStep};
+
+    });
+    console.log(transformValues.value)
+
+}
+
+// Función recursiva para filtrar los valores en Relevance
+function filterRelevance(relevance) {
+    console.log(relevance)
+    let res= Object.entries(relevance).reduce((acc,[key, item]) => {
+        // const mainKey = Object.keys(item)[0];
+        // console.log(item)
+        // console.log(key)
+        // const descriptors = item[key];
+
+        const filteredDescriptors = filterDescriptors(item);
+
+        if (Object.keys(filteredDescriptors).length > 0) {
+            acc[key] = filteredDescriptors;
+            return acc;
+        }
+    },{});
+    // console.log(res)
+    return res;
+        // .filter(item => item !== null);
+}
+
+function filterDescriptors(descriptors) {
+    const filteredDescriptors = {};
+console.log(descriptors)
+    Object.entries(descriptors).forEach(([descriptor, activities]) => {
+        const filteredActivities = filterActivities(activities);
+
+        if (Object.keys(filteredActivities).length > 0) {
+            filteredDescriptors[descriptor] = filteredActivities;
+        }
+    });
+
+    return filteredDescriptors;
+}
+
+function filterActivities(activities) {
+    const filteredActivities = {};
+
+    Object.entries(activities).forEach(([activity, values]) => {
+        if (values[0] > 1) {
+            filteredActivities[activity] = values;
+        }
+    });
+
+    return filteredActivities;
+}
+
+// Función para filtrar las secciones 'Fair', 'Resolution and temporal' y 'SDQF' basadas en 'Relevance'
+function filterOtherSections(cluster, filteredRelevance) {
+    // return section.map(item => {
+    //     const mainKey = Object.keys(item)[0];
+    //     const descriptors = item[mainKey];
+    //
+    //     const filteredDescriptors = filterDescriptorsBasedOnRelevance(descriptors, filteredRelevance);
+    //
+    //     if (Object.keys(filteredDescriptors).length > 0) {
+    //         return { [mainKey]: filteredDescriptors };
+    //     }
+    //     return null;
+    // }).filter(item => item !== null);
+
+    let res= Object.entries(cluster).reduce((acc,[key, item]) => {
+        // const mainKey = Object.keys(item)[0];
+        console.log(item)
+        console.log(key)
+        const filteredDescriptors = filterDescriptorsBasedOnRelevance(item, filteredRelevance);
+
+        if (Object.keys(filteredDescriptors).length > 0) {
+            acc[key] = filteredDescriptors;
+            return acc;
+        }
+    },{});
+    console.log(res)
+    return res;
+}
+
+function filterDescriptorsBasedOnRelevance(descriptors, filteredRelevance) {
+    const filteredDescriptors = {};
+
+    const relevanceDescriptors = extractDescriptorsFromRelevance(filteredRelevance);
+
+    Object.entries(descriptors).forEach(([descriptor, activities]) => {
+        const relevantActivities = relevanceDescriptors[descriptor] || {};
+        const filteredActivities = filterActivitiesBasedOnRelevance(activities, relevantActivities);
+
+        if (Object.keys(filteredActivities).length > 0) {
+            filteredDescriptors[descriptor] = filteredActivities;
+        }
+    });
+
+    return filteredDescriptors;
+}
+
+function filterActivitiesBasedOnRelevance(activities, relevantActivities) {
+    const filteredActivities = {};
+
+    Object.entries(activities).forEach(([activity, values]) => {
+        if (relevantActivities[activity]) {
+            filteredActivities[activity] = values;
+        }
+    });
+
+    return filteredActivities;
+}
+
+function extractDescriptorsFromRelevance(filteredRelevance) {
+    const descriptors = {};
+
+    Object.entries(filteredRelevance).forEach(([keyCluster,list_blocks]) => {
+        // const mainKey = Object.keys(item)[0];
+        // const subDescriptors = item[mainKey];
+        Object.entries(list_blocks).forEach(([keyBlock, activities]) => {
+            if (!descriptors[keyBlock]) {
+                descriptors[keyBlock] = {};
+            }
+            Object.keys(activities).forEach(activity => {
+                descriptors[keyBlock][activity] = true;
+            });
+        });
+    });
+
+    return descriptors;
 }
