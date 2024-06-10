@@ -1,11 +1,11 @@
 <script setup>
-import { clusters, questions } from "@/components/form/content/clusters.js";
+import { clusters, questions } from "@/variables/clusters.js";
 import { ref, watch } from 'vue'
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import {getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance} from "@/rules/rules.js";
-import {checkValuesStep, getValuesCluster,getValueCluster} from "./utils.js";
-import {inputValues} from "./store.js";
+import {checkValuesStep, getValuesCluster,getValueCluster} from "../../../modules/utils.js";
+import {inputValues} from "../../../variables/store.js";
 const props=defineProps({
   active:String
 })

@@ -3,8 +3,8 @@ import {ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values } from './store.js'
-import {checkCluster, checkQuestionsStep, getCopy, getKey} from "./utils.js";
+import { values } from '../../../variables/store.js'
+import {checkCluster, checkQuestionsStep, getCopy, getKey} from "../../../modules/utils.js";
 
 const clusters= ref([
     'MSFD GES','WFD GES',

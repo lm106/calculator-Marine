@@ -3,9 +3,9 @@ import { ref, onBeforeMount, onUnmounted } from 'vue';
 import NavReport from "@/components/reports/NavReport.vue";
 import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
-import {outputValues, countRow, transformValues, scoreGlobal} from "@/components/form/content/store.js";
+import {outputValues, countRow, transformValues, scoreGlobal} from "@/variables/store.js";
 import {getLengthFilterRelevance, getScoreRow} from "@/rules/rules.js";
-import {getNamesCluster, getOutputValues, setFilterValues} from "@/components/form/content/utils.js";
+import {getNamesCluster, getOutputValues, setFilterValues} from "@/modules/utils.js";
 
 onBeforeMount(() => {
   countRow.value=[];

@@ -1,5 +1,5 @@
-import {inputValues, values, outputValues, transformValues} from "@/components/form/content/store.js";
-import {clusters, questions} from "@/components/form/content/clusters.js";
+import {inputValues, values, outputValues, transformValues} from "@/variables/store.js";
+import {clusters, questions} from "@/variables/clusters.js";
 
 export function getKey(obj){
     return Object.keys(obj);

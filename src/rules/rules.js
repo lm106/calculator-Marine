@@ -1,12 +1,12 @@
-import {outputValues, scoreGlobal, transformValues, values} from "@/components/form/content/store.js";
+import {outputValues, scoreGlobal, transformValues, values} from "@/variables/store.js";
 import {
     checkCluster,
     checkQuestionsStep,
     getValue,
     getValueCluster,
     getValueOtherStep
-} from "@/components/form/content/utils.js";
-import {questions} from "@/components/form/content/clusters.js";
+} from "@/modules/utils.js";
+import {questions} from "@/variables/clusters.js";
 import {get} from "jsdom/lib/jsdom/named-properties-tracker.js";
 
 export function getCalculateFairReusable(name_cluster, blockTitle,name_activity){
