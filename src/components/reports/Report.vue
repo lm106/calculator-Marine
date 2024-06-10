@@ -5,7 +5,8 @@ import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
 import {outputValues, countRow, transformValues, scoreGlobal} from "@/variables/store.js";
 import {getLengthFilterRelevance, getScoreRow} from "@/rules/rules.js";
-import {getNamesCluster, getOutputValues, setFilterValues} from "@/modules/utils.js";
+import {getOutputValues} from "@/modules/utils.js";
+import {setFilterValues, getNamesClusterTransformValues} from "@/modules/transformValuesModule.js";
 
 onBeforeMount(() => {
   countRow.value=[];
@@ -36,7 +37,7 @@ const countParameter=()=>{
   });
   scoreGlobal.value={...resScoreList};
   console.log('score',scoreGlobal.value);
-  let namesCluster=getNamesCluster();
+  let namesCluster=getNamesClusterTransformValues();
   // Object.entries(outputValues.value).forEach(([keyStep, list_clusters])=> {
     let resFilter=[];
     // const name_step = Object.keys(step)[0];
