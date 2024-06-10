@@ -3,14 +3,16 @@ import {getCopy} from "@/modules/utils.js";
 
 export function getNamesClusterTransformValues(){
     let list_names=[];
-    Object.entries(transformValues.value).forEach(([key, list_cluster])=>{
-        let names=Object.keys(list_cluster);
-        names.forEach((name)=>{
-            if(list_names.findIndex((item)=>item==name)==-1){
-                list_names.push(name);
-            }
+    if (Object.entries(transformValues.value).length>0) {
+        Object.entries(transformValues.value).forEach(([key, list_cluster]) => {
+            let names = Object.keys(list_cluster);
+            names.forEach((name) => {
+                if (list_names.findIndex((item) => item == name) == -1) {
+                    list_names.push(name);
+                }
+            })
         })
-    })
+    }
     return list_names;
 }
 
