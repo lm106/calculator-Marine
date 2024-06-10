@@ -130,7 +130,7 @@ export function getScoreRow(list_blocks, cluster, step){
             return acc;
         }, {});
 
-    return {[step]:{[cluster]: res_cluster_score}};
+    return {[cluster]: res_cluster_score};
 }
 
 export function getPercentColumn(count, cluster, step){
@@ -139,7 +139,8 @@ export function getPercentColumn(count, cluster, step){
 
     let resScore= {}, resOtherColumn, resRelevance;
 
-    // console.log('score', scoreGlobal.value)
+    console.log('score', scoreGlobal.value[step][cluster])
+    console.log('score', transformValues.value[step][cluster])
     let sum = getSumTotalColumn(scoreGlobal.value[step][cluster], 'Score');
     resScore={[step + ' scores']: getPercentScore(sum,count)};
     let sumQuestions = getSumTotalColumn(transformValues.value[step][cluster], 'Transform');
@@ -147,7 +148,7 @@ export function getPercentColumn(count, cluster, step){
     sumQuestions.forEach((e, i)=>{
         resScore={...resScore, [questions[step][i]]: getPercentColumns(e,count)};
     })
-    // console.log(resScore);
+    console.log(resScore);
     return resScore;
 }
 function getPercentScore(sum, length){

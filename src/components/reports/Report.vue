@@ -28,9 +28,9 @@ const countParameter=()=>{
       // Object.entries(cluster).forEach(([keyCluster, blocks])=>{
       // const name_cluster = Object.keys(item)[0];
       if(!resScoreList[keyStep]){
-        resScoreList = {...resScoreList, ...getScoreRow(list_blocks, keycluster, keyStep)};
+        resScoreList[keyStep] = getScoreRow(list_blocks, keycluster, keyStep);
       } else {
-        resScoreList[keyStep]={...resScoreList, ...getScoreRow(list_blocks, keycluster, keyStep)[keyStep]}
+        resScoreList[keyStep]={...resScoreList[keyStep], ...getScoreRow(list_blocks, keycluster, keyStep)}
       }
     })
   });
