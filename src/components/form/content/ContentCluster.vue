@@ -99,8 +99,8 @@ const sendCluster=(cluster)=>{
 }
 
 watch([() => route.name, () => props.active], () => {
-  console.log('Pase por aquí')
-  console.log('P', inputValues.value)
+  // console.log('Pase por aquí')
+  // console.log('P', inputValues.value)
   if(tokenInit.value && Object.values(inputValues.value).length>0){
     sendCluster('updateCluster', inputValues.value);
   }

@@ -22,8 +22,8 @@ const handleClickCluster=(i)=>{
 }
 
 const processing=(tokenStep,data)=>{
-  console.log('Cluster: -----', data);
-  console.log('Values: -----', values.value);
+  // console.log('Cluster: -----', data);
+  // console.log('Values: -----', values.value);
   let nameStep=getKey(data)[0]
   let nameCluster=getKey(data[nameStep])[0];
   let tokenCluster=checkCluster(nameStep, nameCluster);
@@ -37,7 +37,7 @@ const processing=(tokenStep,data)=>{
 }
 
 const setCluster=(data)=>{
-  console.log('formform')
+  // console.log('formform')
   // let key=Object.keys(cluster)[0];
   console.log(data)
   let tokenStep=checkQuestionsStep(getKey(data));
