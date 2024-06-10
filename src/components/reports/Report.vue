@@ -5,8 +5,8 @@ import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
 import {outputValues, countRow, transformValues, scoreGlobal} from "@/variables/store.js";
 import {getLengthFilterRelevance, getScoreRow} from "@/rules/rules.js";
-import {getOutputValues} from "@/modules/utils.js";
-import {setFilterValues, getNamesClusterTransformValues} from "@/modules/transformValuesModule.js";
+import {getOutputValues} from "@/modules/OutputValue.js";
+import {setFilterValues, getNamesClusterTransformValues} from "@/modules/TransformValuesModule.js";
 
 onBeforeMount(() => {
   countRow.value=[];

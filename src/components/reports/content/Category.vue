@@ -2,7 +2,7 @@
 import { useRoute } from "vue-router";
 import {ref, watch} from 'vue';
 import { questions } from "@/variables/clusters.js";
-import {getOutputValues} from "@/modules/utils.js";
+// import {getOutputValues} from "@/modules/utils.js";
 import {outputValues} from "../../../variables/store.js";
 
 const route= useRoute();

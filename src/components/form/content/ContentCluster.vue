@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import {getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance} from "@/rules/rules.js";
-import {checkValuesStep, getValuesCluster,getValueCluster} from "../../../modules/utils.js";
+import {checkStepValues, getValuesClusterValues,getValueQuestionValues} from "../../../modules/ValuesValue.js";
 import {inputValues} from "../../../variables/store.js";
 const props=defineProps({
   active:String
@@ -19,7 +19,7 @@ const cluster=ref([]);
 
 const initForm=()=>{
   inputValues.value[route.name]= {};
-  if (questions[route.name] && !checkValuesStep(route.name, props.active)) {
+  if (questions[route.name] && !checkStepValues(route.name, props.active)) {
     inputValues.value[route.name][props.active]={};
     clusters[props.active].forEach(block => {
       inputValues.value[route.name][props.active][block.title] = {};
@@ -31,7 +31,7 @@ const initForm=()=>{
       });
     });
   } else{
-    inputValues.value[route.name]=getValuesCluster(route.name, props.active);
+    inputValues.value[route.name]=getValuesClusterValues(route.name, props.active);
   }
 }
 

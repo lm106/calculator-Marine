@@ -4,7 +4,8 @@ import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
 import { values } from '../../../variables/store.js'
-import {checkCluster, checkQuestionsStep, getCopy, getKey} from "../../../modules/utils.js";
+import {getCopy, getKey} from "../../../modules/utils.js";
+import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
 
 const clusters= ref([
     'MSFD GES','WFD GES',
@@ -26,7 +27,7 @@ const processing=(tokenStep,data)=>{
   // console.log('Values: -----', values.value);
   let nameStep=getKey(data)[0]
   let nameCluster=getKey(data[nameStep])[0];
-  let tokenCluster=checkCluster(nameStep, nameCluster);
+  let tokenCluster=checkClusterValues(nameStep, nameCluster);
   let copy=getCopy(data)
   if(tokenStep && !tokenCluster){
     values.value[nameStep]={...getCopy(values.value[nameStep]), ...copy[nameStep]};
@@ -40,7 +41,7 @@ const setCluster=(data)=>{
   // console.log('formform')
   // let key=Object.keys(cluster)[0];
   console.log(data)
-  let tokenStep=checkQuestionsStep(getKey(data));
+  let tokenStep=checkQuestionsStepValues(getKey(data));
   if(!tokenStep) {
     values.value={...getCopy(values.value),...getCopy(data)};
   }else{

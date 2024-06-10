@@ -1,11 +1,7 @@
 import {outputValues, scoreGlobal, transformValues, values} from "@/variables/store.js";
-import {
-    checkCluster,
-    checkQuestionsStep,
-    getValue,
-    getValueCluster,
-    getValueOtherStep
-} from "@/modules/utils.js";
+import { checkClusterValues,checkQuestionsStepValues,getValueQuestionValues } from "@/modules/ValuesValue.js";
+import {getValue, getValueOtherStep} from "@/modules/InputValues.js";
+
 import {questions} from "@/variables/clusters.js";
 import {get} from "jsdom/lib/jsdom/named-properties-tracker.js";
 
@@ -31,8 +27,8 @@ export function getCalculateSDQFCompleteness(name_cluster, blockTitle,name_activ
 }
 
 export function getValueRelevance(name_cluster, blockTitle,activity, questions){
-    // let indexRelevance = checkQuestionsStep('Relevance');
-    // let indexCluster= checkCluster('Relevance',name_cluster);
+    // let indexRelevance = checkQuestionsStepValues('Relevance');
+    // let indexCluster= checkClusterValues('Relevance',name_cluster);
     let cluster=values.value['Relevance'][name_cluster];
     if(cluster) {
         return cluster[blockTitle][activity][questions] <= 1;
