@@ -5,7 +5,7 @@ import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
 import {outputValues, countRow, transformValues, scoreGlobal} from "@/components/form/content/store.js";
 import {getLengthFilterRelevance, getScoreRow} from "@/rules/rules.js";
-import {getOutputValues, setFilterValues} from "@/components/form/content/utils.js";
+import {getNamesCluster, getOutputValues, setFilterValues} from "@/components/form/content/utils.js";
 
 onBeforeMount(() => {
   countRow.value=[];
@@ -27,25 +27,29 @@ const countParameter=()=>{
     Object.entries(list_clusters).forEach(([keycluster, list_blocks])=> {
       // Object.entries(cluster).forEach(([keyCluster, blocks])=>{
       // const name_cluster = Object.keys(item)[0];
-      resScoreList = {...resScoreList, ...getScoreRow(list_blocks, keycluster, keyStep)};
-      // })
+      if(!resScoreList[keyStep]){
+        resScoreList = {...resScoreList, ...getScoreRow(list_blocks, keycluster, keyStep)};
+      } else {
+        resScoreList[keyStep]={...resScoreList, ...getScoreRow(list_blocks, keycluster, keyStep)[keyStep]}
+      }
     })
   });
   scoreGlobal.value={...resScoreList};
-  console.log(scoreGlobal.value);
-
-  Object.entries(outputValues.value).forEach(([keyStep, list_clusters])=> {
-    let resFilter=[], resScoreList=[];
+  console.log('score',scoreGlobal.value);
+  let namesCluster=getNamesCluster();
+  // Object.entries(outputValues.value).forEach(([keyStep, list_clusters])=> {
+    let resFilter=[];
     // const name_step = Object.keys(step)[0];
     // list_clusters.forEach((cluster)=>
-        Object.entries(list_clusters).forEach(([keyCluster, blocks])=>{
+    // Object.entries(list_clusters).forEach(([keyCluster, blocks])=>{
+      namesCluster.forEach((nameCluster)=>{
 
-        resFilter.push(getLengthFilterRelevance(blocks, keyCluster, keyStep));
+        resFilter.push(getLengthFilterRelevance(nameCluster));
       });
     // );
     countRow.value={...countRow.value, ...resFilter};
     // countRow.value.push({[name_step]: resRow});
-  });
+  // });
 }
 
 const handleActiveSection = (value) => {

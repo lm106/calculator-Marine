@@ -70,6 +70,7 @@ export function checkValuesStep(nameStep, nameCluster){
         return true;
     }
 }
+
 export function getValuesCluster(nameStep, nameCluster){
     // let indexStep= checkQuestionsStep(nameStep);
     let indexCluster= checkCluster(nameStep, nameCluster);
@@ -141,6 +142,19 @@ function convertToOutput(item) {
 }
 
 /******************TransformValues*******************/
+export function getNamesCluster(){
+    let list_names=[];
+    Object.entries(transformValues.value).forEach(([key, list_cluster])=>{
+        let names=Object.keys(list_cluster);
+        names.forEach((name)=>{
+            if(list_names.findIndex((item)=>item==name)==-1){
+                list_names.push(name);
+            }
+        })
+    })
+    return list_names;
+}
+
 export function setFilterValues(){
     transformValues.value ={};
     // console.log(outputValues.value)
@@ -165,6 +179,7 @@ export function setFilterValues(){
 // Función recursiva para filtrar los valores en Relevance
 function filterRelevance(relevance) {
     console.log(relevance)
+    if(relevance ==undefined || relevance==null) return {};
     let res= Object.entries(relevance).reduce((acc,[key, item]) => {
         // const mainKey = Object.keys(item)[0];
         // console.log(item)
