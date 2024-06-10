@@ -19,12 +19,18 @@
     max-width: 80% !important;
     margin: auto;
 }
+.panels_report{
+    /*margin: 2.5% auto !important;*/
+}
 .panel_block {
     background-color: var(--color-block) !important;
     margin-bottom: 1% !important;
     border-radius: 10px !important;
     box-shadow: none !important;
     border: 1px solid #00000019;
+}
+.panel_report{
+    max-width: 90% !important;
 }
 .title_block{
     width: 100%;
@@ -39,6 +45,9 @@
     align-content: center;
     align-items: center;
     margin: auto;
+}
+.content_report{
+    background: white;
 }
 .item_activity{
     width: 100%;
