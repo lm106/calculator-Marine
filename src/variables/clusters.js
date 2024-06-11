@@ -283,7 +283,7 @@ export const clusters={
  }
 export const questions={
 'Relevance': ['Relevance for national MSP process', 'Considered/used within MSP process'],
-'Fair': ['Data is Findable', ' Data is Accesible', 'Data is Interoperable', 'Data is Reusable'],
+'Fair': ['Data is Findable', 'Data is Accesible', 'Data is Interoperable', 'Data is Reusable'],
 'Resolution and temporal':[ 'Spatial coverage (extension) of the data set',
     'Spatial resolution of the data (level of details)', 'Temporal coverage', 'Temporal resolution'],
 'SDQF':['Completeness and timeliness', 'Data accuracy and possible margin of error', 'Data consistency with MSP input data']
