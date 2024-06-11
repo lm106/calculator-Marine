@@ -42,6 +42,7 @@ export function getValueRelevance(name_cluster, blockTitle,activity, questions){
  * Devuelve el número de filas que hay en transformValues que tiene los valores que cumple
  * condición (filtrado antes)
  * @param cluster
+ * @param step
  * @returns {{}}
  */
 export function getLength(cluster, step){
@@ -73,22 +74,24 @@ export function getLengthFilterRelevance(cluster){
         return {[keyStep]:Object.entries(list_cluster[cluster]).flatMap(([keyBlock, block]) =>
             Object.values(block))};
     });
-    console.log(list_steps_cluster)
+    // console.log(list_steps_cluster)
     let res={};
     let countRelevance=getLength(cluster, 'Relevance')[cluster], countRest=getLength(cluster, 'Fair')[cluster];
-        list_steps_cluster.forEach((itemStep)=> {
-        Object.entries(itemStep).forEach(([keyStep, list_blocks])=>{
+    // console.log(countRest, countRelevance);
+    list_steps_cluster.forEach((itemStep)=> {
+    Object.entries(itemStep).forEach(([keyStep, list_blocks])=>{
 
         // console.log(itemStep)
-            let percent = getPercentColumn((keyStep=='Relevance')? countRelevance : countRest, cluster, keyStep)
-            res={...res, ...percent};
-        // let sumTotalFilter = array.reduce((acc, curr) => {
-        //     return acc.map((value, index) => value + curr[index]);
-        // })
+        // console.log(list_blocks)
+        let percent = getPercentColumn( countRest, countRelevance, cluster, keyStep)
+        res={...res, ...percent};
+    // let sumTotalFilter = array.reduce((acc, curr) => {
+    //     return acc.map((value, index) => value + curr[index]);
+    // })
 
-        })
     })
-    console.log(res);
+    })
+    // console.log(res);
     return {
         [cluster]: {
             lengthColumnRelevance: countRelevance, lengthColumn:countRest,
@@ -129,7 +132,7 @@ export function getScoreRow(list_blocks, cluster, step){
     return {[cluster]: res_cluster_score};
 }
 
-export function getPercentColumn(count, cluster, step){
+export function getPercentColumn(countRest,countRelevance, cluster, step){
     // let indexStep=transformValues.value.findIndex(item=> Object.keys(item)[0]==step);
     // let indexcluster=transformValues.value[indexStep][step].findIndex(item=> Object.keys(item)[0]==cluster);
 
@@ -138,39 +141,43 @@ export function getPercentColumn(count, cluster, step){
     console.log('score', scoreGlobal.value[step][cluster])
     console.log('score', transformValues.value[step][cluster])
     let sum = getSumTotalColumn(scoreGlobal.value[step][cluster], 'Score');
-    resScore={[step + ' scores']: getPercentScore(sum,count)};
+    resScore={[step + ' scores']: getPercentScore(sum,(step=='Relevance')?countRelevance:countRest)};
     let sumQuestions = getSumTotalColumn(transformValues.value[step][cluster], 'Transform');
+
+    let sumRelevanceNational = getSumTotalColumnRelevance(outputValues.value.Relevance[cluster]);
     // console.log('tsum', sumQuestions)
-    sumQuestions.forEach((e, i)=>{
-        resScore={...resScore, [questions[step][i]]: getPercentColumns(e,count)};
-    })
-    console.log(resScore);
+    // if(step!='Relevance') {
+        sumQuestions.forEach((e, i) => {
+            let ask = questions[step][i];
+            let res;
+            if(step=='Relevance'&& i ==0){
+                resScore = {...resScore, [ask]: getPercentColumns(sumRelevanceNational, countRelevance)};
+            }else{
+                resScore = {...resScore, [ask]: getPercentColumns(e, countRest)};
+            }
+        })
+    // console.log(resScore);
     return resScore;
 }
 function getPercentScore(sum, length){
-    return parseFloat((sum/length).toFixed(3));
+    let res=(sum/length)*100;
+    return parseFloat(res.toFixed(3));
 }
 function getPercentColumns(sum, length){
-    return parseFloat((sum/(length*3)).toFixed(3));
+    let res=sum/(length*3)*100;
+    return parseFloat(res.toFixed(3));
 }
 function getSumTotalColumn(list_blocks, type){
     let res=0;
         // console.log('sum --------',list_blocks)
     if(type=='Score') {
         Object.entries(list_blocks).forEach(([block_key, block]) => {
-            // console.log(block)
             Object.entries(block).forEach(([key, activity]) => {
-                // console.log(activity)
-                // Object.entries(activity).forEach(([key, value])=> {
-                // console.log(value)
                 res += activity;
-                // });
             });
         });
         // console.log(res)
         return parseFloat(res.toFixed(3));
-
-
     }else{
         let resColums=[]
         Object.entries(list_blocks).forEach(([block_key, block]) => {
@@ -188,5 +195,16 @@ function getSumTotalColumn(list_blocks, type){
     }
 }
 
-
-
+function getSumTotalColumnRelevance(list_blocks){
+    let resColums=0
+    Object.entries(list_blocks).forEach(([block_key, block]) => {
+        Object.entries(block).forEach(([key, activity]) => {
+            activity.forEach((value, index) => {
+                if(index!=0) return;
+                resColums += value;
+            });
+        });
+    });
+    resColums=parseFloat(resColums.toFixed(3));
+    return resColums;
+}
