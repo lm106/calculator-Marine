@@ -288,3 +288,4 @@ export const questions={
     'Spatial resolution of the data (level of details)', 'Temporal coverage', 'Temporal resolution'],
 'SDQF':['Completeness and timeliness', 'Data accuracy and possible margin of error', 'Data consistency with MSP input data']
 }
+export const nameAllQuestions=['Relevance for MSP','FAIR', 'Spatial and temporal coverage & resolution', 'SDQF']
