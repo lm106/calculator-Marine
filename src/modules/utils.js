@@ -1,3 +1,5 @@
+import {clusters} from "@/variables/clusters.js";
+
 export function getKey(obj){
     return Object.keys(obj);
     // return (key.length>0)? true: false;
@@ -20,4 +22,9 @@ export function getCopy(obj) {
     }
 
     return clonedObj;
+}
+
+export function getAllClusters(){
+    // return Object.keys(clusters);
+    return ['MSFD GES','WFD GES', 'MPAs', 'Oceanographic', 'Coastal Land Use', 'Activities marine', 'Socio-economic', 'Governance'];
 }
