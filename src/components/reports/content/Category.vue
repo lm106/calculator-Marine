@@ -187,22 +187,20 @@ const chartOptionsScore = {
   colors: ['#fb4300'],
 };
 const series = ref({});
-const seriesScores = ref({});
+const seriesScores = ref([]);
 
 const setSeries=()=>{
-  // namesScore.forEach((e)=> {
-  //   let values=getValuesScore(e);
-  //   console.log(values)
-  //   series.value.push({name: e,  data: values})
-  // });
   let namesSeries=getNamesAskStep(namesSteps[0]);
-  console.log(namesSteps)
+  // console.log(namesSteps)
   let res=[];
-  namesSeries.forEach((e)=>{
-    console.log(e);
-    res.push({name: e, data: getValuesAsk(e) })
-  })
-  series.value={[namesSteps[0]]: res};
+  namesSteps.forEach((step)=>{
+    namesSeries.forEach((e)=>{
+      // console.log(e);
+      res.push({name: e, data: getValuesAsk(e) })
+    });
+    series.value={[step]: res};
+
+  });
   // [
   //   {
   //     name: 'series-1',
@@ -222,28 +220,28 @@ const setSeries=()=>{
   // ]
 };
 const setSeriesScores=()=>{
-  // namesScore.forEach((e)=> {
-    let values=getValuesScore('Relevance scores');
-    seriesScores.value= { [namesSteps[0]]: [{name: 'Relevance & Aplication Score', data:values}]};
-  // });
-    console.log(seriesScores.value)
+  namesScore.forEach((e)=> {
+    let values = getValuesScore(e);
+    seriesScores.value={...seriesScores.value, [namesSteps[0]]: [{name: 'Relevance & Aplication Score', data: values}]};
+  });
 };
 
 const getSeries=(i)=>{
   if(namesSteps[i]){
+    // return ;
     return series.value[namesSteps[i]];
+    // return {name:'dd', data:[]}
   }else{
     return [{name: undefined, data: []}]
   }
-  // return 'Relevance & Application Score';
 }
 const getSeriesScores=(i)=>{
   if(namesSteps[i]){
+    console.log(seriesScores.value[namesSteps[i]])
     return seriesScores.value[namesSteps[i]];
   }else{
     return [{name: undefined, data: []}]
   }
-  // return 'Relevance & Application Score';
 }
 const getChartOptionsScore =(i)=>{
   chartOptionsScore.title.text=title[i];
