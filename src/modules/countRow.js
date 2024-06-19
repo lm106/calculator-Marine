@@ -9,10 +9,13 @@ export function getNamesScore(){
     // console.log(r);
     return r;
 }
+export function getValueScore(nameCluster, nameStep){
+    return (countRow.value[nameCluster])?countRow.value[nameCluster].percent[nameStep]: 0.0;
+}
 export function getValuesScore(nameStep){
     let valuesCluster=[];
     Object.entries(countRow.value).forEach(([keyCluster, content_cluster]) => {
-        console.log(nameStep);
+        // console.log(nameStep);
         valuesCluster.push(content_cluster.percent[nameStep])
 
     })
@@ -29,6 +32,6 @@ export function getValuesAsk(nameAsk){
         // })
 
     })
-    console.log(values)
+    // console.log(values)
     return values
 }

@@ -254,13 +254,13 @@ const getChartOptionsScore =(i)=>{
 
 <template>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" multiple>
-    <v-expansion-panel v-for="(step, i) in list_Clusters"
+    <v-expansion-panel v-for="(cluster, i) in list_Clusters" :key="i" :value="cluster"
                        class="panel_block panel_report" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
           border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
     >
       <template #title>
         <div class="title_block">
-          <h3 class="title">{{ step }}</h3>
+          <h3 class="title">{{ cluster }}</h3>
           <v-divider></v-divider>
         </div>
       </template>
@@ -268,7 +268,7 @@ const getChartOptionsScore =(i)=>{
         <div class="content_block">
           <v-container class="item_activity">
 <!--            <v-row  no-gutters>-->
-              <DashboardCluster></DashboardCluster>
+              <DashboardCluster :activeCluster="cluster"></DashboardCluster>
 <!--              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="chartOptions" :series="getSeries(i)"></apexchart>-->
 <!--              <apexchart :width="width.widthCharScore" :height="height.heightCharScore" type="bar" :options="getChartOptionsScore(i)" :series="getSeriesScores(i)"></apexchart>-->
 <!--            </v-row>-->
