@@ -161,11 +161,11 @@ export function getPercentColumn(countRest,countRelevance, cluster, step){
 }
 function getPercentScore(sum, length){
     let res=(sum/length)*100;
-    return parseFloat(res.toFixed(3));
+    return parseFloat(res.toFixed(2));
 }
 function getPercentColumns(sum, length){
     let res=sum/(length*3)*100;
-    return parseFloat(res.toFixed(3));
+    return parseFloat(res.toFixed(2));
 }
 function getSumTotalColumn(list_blocks, type){
     let res=0;
