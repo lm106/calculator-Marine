@@ -190,15 +190,17 @@ const series = ref({});
 const seriesScores = ref([]);
 
 const setSeries=()=>{
-  let namesSeries=getNamesAskStep(namesSteps[0]);
+  // let namesSeries=getNamesAskStep(namesSteps[0]);
   // console.log(namesSteps)
-  let res=[];
   namesSteps.forEach((step)=>{
+    let namesSeries=getNamesAskStep(step);
+    let res=[];
+
     namesSeries.forEach((e)=>{
       // console.log(e);
       res.push({name: e, data: getValuesAsk(e) })
     });
-    series.value={[step]: res};
+    series.value={...series.value,[step]: res};
 
   });
   // [
@@ -222,7 +224,7 @@ const setSeries=()=>{
 const setSeriesScores=()=>{
   namesScore.forEach((e)=> {
     let values = getValuesScore(e);
-    seriesScores.value={...seriesScores.value, [namesSteps[0]]: [{name: 'Relevance & Aplication Score', data: values}]};
+    seriesScores.value={...seriesScores.value, [e]: values};
   });
 };
 
@@ -237,8 +239,8 @@ const getSeries=(i)=>{
 }
 const getSeriesScores=(i)=>{
   if(namesSteps[i]){
-    console.log(seriesScores.value[namesSteps[i]])
-    return seriesScores.value[namesSteps[i]];
+    // console.log(seriesScores.value[namesSteps[i]])
+    return [{name: namesScore[i],data:seriesScores.value[namesScore[i]]}];
   }else{
     return [{name: undefined, data: []}]
   }
@@ -250,7 +252,7 @@ const getChartOptionsScore =(i)=>{
 </script>
 
 <template>
-  <v-expansion-panels class="panels panels_report" v-model="activePanel" multiple>
+  <v-expansion-panels class="panels panels_report" multiple>
     <v-expansion-panel v-for="(step, i) in nameAllQuestions"
                        class="panel_block panel_report" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
           border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
