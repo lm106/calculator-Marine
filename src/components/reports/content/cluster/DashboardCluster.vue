@@ -1,140 +1,37 @@
 <script setup>
 import {onBeforeMount, ref} from 'vue';
-import ApexCharts from 'apexcharts';
-import {getNamesScore, getValueScore} from "@/modules/countRow.js";
+import {getNamesScore, getValueScore, getValuesPercent} from "@/modules/countRow.js";
+import {nameAllQuestions} from "@/variables/clusters.js";
 
 
 const props = defineProps({
   activeCluster:String
 })
+
+onBeforeMount(()=>{
+  setScore();
+  setSeries();
+})
+
+const list_score=ref([]);
+
+const series = ref([
+  // { name: 'PRODUCT A', data: [14, 25, 21, 17, 12, 13, 11, 19] },
+  // { name: 'PRODUCT B', data: [13, 23, 20, 8, 13, 27, 33, 12] },
+  // { name: 'PRODUCT C', data: [11, 17, 15, 15, 21, 14, 15, 13] }
+]);
+const labelsSeries=ref([]);
+const barSeries = ref([
+  { name: 'PRODUCT A', data: [14, 25 /*, 21, 17, 12, 13, 11, 19*/] },
+  { name: 'PRODUCT B', data: [13, 23/*, 20, 8, 13, 27, 33, 12*/] },
+  { name: 'PRODUCT C', data: [11, 17/*, 15, 15, 21, 14, 15, 13*/] }
+]);
+
 const width={score: 450, rest: 650};
 const heigth={score: 450, rest: 450};
-const colorLine='#127583';
-const sparkData = {
-  spark1: 1213,
-  spark2: 422,
-  spark3: 311,
-  spark4: 22
-};
-
-// Sparkline charts data and options
-const spark1Series = ref([{ data: [25, 66, 41, 59, 25, 44, 12, 36, 9, 21] }]);
-const spark1Options = ref({
-  chart: {
-    id: 'spark1',
-    group: 'sparks',
-    type: 'line',
-    height: 50,
-    sparkline: { enabled: true },
-    dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 }
-  },
-  stroke: { curve: 'smooth' },
-  markers: { size: 0 },
-  colors: [colorLine],
-  tooltip: { x: { show: false }, y: { title: { formatter: () => '' } } }
-});
-
-const spark2Series = ref([{ data: [12, 14, 2, 47, 32, 44, 14, 55, 41, 69] }]);
-const spark2Options = ref({
-  chart: {
-    id: 'spark2',
-    group: 'sparks',
-    type: 'line',
-    height: 80,
-    sparkline: { enabled: true },
-    dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 }
-  },
-  stroke: { curve: 'smooth' },
-  markers: { size: 0 },
-  colors: [colorLine],
-  tooltip: { x: { show: false }, y: { title: { formatter: () => '' } } }
-});
-
-const spark3Series = ref([{ data: [47, 45, 74, 32, 56, 31, 44, 33, 45, 19] }]);
-const spark3Options = ref({
-  chart: {
-    id: 'spark3',
-    group: 'sparks',
-    type: 'line',
-    height: 80,
-    sparkline: { enabled: true },
-    dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 }
-  },
-  stroke: { curve: 'smooth' },
-  markers: { size: 0 },
-  colors: [colorLine],
-  tooltip: { x: { show: false }, y: { title: { formatter: () => '' } } }
-});
-
-const spark4Series = ref([{ data: [15, 75, 47, 65, 14, 32, 19, 54, 44, 61] }]);
-const spark4Options = ref({
-  chart: {
-    id: 'spark4',
-    group: 'sparks',
-    type: 'line',
-    height: 80,
-    sparkline: { enabled: true },
-    dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 }
-  },
-  stroke: { curve: 'smooth' },
-  markers: { size: 0 },
-  colors: [colorLine],
-  tooltip: { x: { show: false }, y: { title: { formatter: () => '' } } }
-});
-
-// Other charts data and options
-const lineSeries = ref([
-  { name: 'Music', data: [1, 15, 26, 20, 33, 27] },
-  { name: 'Photos', data: [3, 33, 21, 42, 19, 32] },
-  { name: 'Files', data: [0, 39, 52, 11, 29, 43] }
-]);
-const lineOptions = ref({
-  chart: {
-    height: 328,
-    type: 'line',
-    zoom: { enabled: false },
-    dropShadow: { enabled: true, top: 3, left: 2, blur: 4, opacity: 1 }
-  },
-  stroke: { curve: 'smooth', width: 2 },
-  markers: { size: 6, strokeWidth: 0, hover: { size: 9 } },
-  grid: { show: true, padding: { bottom: 0 } },
-  labels: ['01/15/2002', '01/16/2002', '01/17/2002', '01/18/2002', '01/19/2002', '01/20/2002'],
-  xaxis: { tooltip: { enabled: false } },
-  legend: { position: 'top', horizontalAlign: 'right', offsetY: -20 }
-});
-
-const radialBarSeries = ref([71, 63, 77]);
-const radialBarOptions = ref({
-  chart: {
-    type: 'radialBar',
-    height: 350,
-    width: 380,
-  },
-  plotOptions: {
-    radialBar: {
-      offsetY: 0,
-      startAngle: 0,
-      endAngle: 360,
-      hollow: { margin: 5, size: '48%', background: 'transparent' },
-      track: { show: false },
-      dataLabels: { name: { show: false }, value: { show: false } }
-    }
-  },
-  stroke: { lineCap: 'round' },
-  labels: ['June', 'May', 'April'],
-  legend: { show: true, floating: true, position: 'right', offsetX: 70, offsetY: 240 }
-});
-
-const barSeries = ref([
-  { name: 'PRODUCT A', data: [14, 25, 21, 17, 12, 13, 11, 19] },
-  { name: 'PRODUCT B', data: [13, 23, 20, 8, 13, 27, 33, 12] },
-  { name: 'PRODUCT C', data: [11, 17, 15, 15, 21, 14, 15, 13] }
-]);
+const colorBar= ['#fa6c3d','#127583'];
 const barOptions =ref( {
   chart: {
-    // height: 780000,
-    type: 'line',
-    stacked: true,
     toolbar: {
       show: true,
       tools: {
@@ -144,112 +41,106 @@ const barOptions =ref( {
           title: 'Change chart type',
           class: 'custom-icon',
           click: function (chart, options, e) {
-            console.log('ee')
             const selectElement = document.getElementById('chart-type-select');
             selectElement.addEventListener('change', function(e){
-              updateChartType(chart, options, e);
+              updateTypeChart(chart, e);
             });
-            // updateChartType(e)
-            // No se necesita hacer nada aquí ya que manejamos el evento `change` más adelante
           }
         }]
       }
     }
+  },
+  colors:colorBar,
+  stroke:{
+    width: 1
   },
   dataLabels:{
     enabled:false
   },
   plotOptions: {
     bar: {
-      columnWidth: '40%',
+      columnWidth: '15%',
       horizontal: false,
-      // borderRadius:10,
+      borderRadius:7.5,
       // borderRadiusOnAllStackedSeries: true
       // borderRadiusApplication:'end',
       // borderRadiusWhenStacked:'last'
     },
   },
   xaxis: {
-    tickPlacement:'on',
-    categories: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4'],
+    show:true,
+    tickPlacement:'middle',
+    categories: [],
+    labels:{
+      // rotate:0,
+      trim:true,
+      showDuplicates:true
+      // hideOverlappingLabels:true
+    },
   },
   fill: {
     opacity: 1
   },
 
-
 });
-const bar2Options =ref( {
+const StepClusterOptions =ref( {
   chart: {
-    // height: 780000,
-    type: 'line',
-    stacked: true,
-  },
-  dataLabels:{
-    enabled:true
+    type: 'bar',
+    stacked:true
   },
   plotOptions: {
     bar: {
-      columnWidth: '40%',
       horizontal: true,
-      borderRadius:10,
-      borderRadiusOnAllStackedSeries: true
-      // borderRadiusApplication:'end',
-      // borderRadiusWhenStacked:'last'
-    },
+      columnWidth: '40%',
+      barHeight:'20%',
+      borderRadius:7.5,
+    }
+  },
+  dataLabels: {
+    enabled: true,
+    offsetX: -10,
+    style: {
+      fontSize: '12px',
+      colors: ['#fff']
+    }
   },
   xaxis: {
+    categories: ['2011 Q1', '2011 Q2'],
     tickPlacement:'on',
-    categories: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4'],
+    labels:{
+      show:false
+    },
+    axisBorder:{
+      show:false
+    },
+    axisTicks:{
+      show:false
+    }
   },
-  fill: {
-    opacity: 1
+  grid: {
+    show:false,
+    xaxis: {
+      lines: {
+        show: false
+      }
+    },
+    yaxis:{
+      lines:{
+        show:false
+      },
+    }
   },
-
-
-})
-const areaSeries=ref([
-  {
-    name: "Music",
-    data: [11, 15, 26, 20, 33, 27]
-  },
-  {
-    name: "Photos",
-    data: [32, 33, 21, 42, 19, 32]
-  },
-  {
-    name: "Files",
-    data: [20, 39, 52, 11, 29, 43]
+  yaxis: {
+    reversed: true,
+    axisBorder:{
+      show:false
+    },
+    axisTicks:{
+      show:false
+    }
   }
-]);
-const areaOptions =ref( {
-  chart: {
-    height: 380,
-    type: 'area',
-    stacked: false,
-  },
-  stroke: {
-    curve: 'straight'
-  },
+});
 
-  xaxis: {
-    categories: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2'],
-  },
-  tooltip: {
-    followCursor: true
-  },
-  fill: {
-    opacity: 1,
-  },
-})
-const list_score=ref([]);
-const updateChartType = (chart, options, event) => {
-  const chartType = event.target.value;
-  barOptions.value.chart.type = chartType;
-  // console.log(chart)
-  // console.log(chart.)
-  chart.updateOptions(barOptions.value);
-};
 const setScore=()=>{
   let res=[];
   let namesScores=getNamesScore();
@@ -257,13 +148,19 @@ const setScore=()=>{
     res.push(getValueScore(props.activeCluster, nameStep));
   })
   list_score.value=res;
+};
+const setSeries=()=>{
+  let values=getValuesPercent(props.activeCluster);
+  barOptions.value.xaxis.categories=Object.keys(values);
+  series.value=[{name: props.activeCluster,data: Object.values(values)}];
 }
-onBeforeMount(()=>{
-  setScore();
-})
+
+const updateTypeChart = (chart, event) => {
+  barOptions.value.chart.type = event.target.value;
+  chart.updateOptions(barOptions.value);
+};
 </script>
 <template>
-<!--  <div>-->
   <v-row class="row_first">
     <v-container class="content_score">
       <v-row class="row sparkboxes">
@@ -281,7 +178,7 @@ onBeforeMount(()=>{
               <div class="details">
 <!--                <h3>{{ sparkData.spark2 }}</h3>-->
                 <h3>FAIR transparency Score</h3>
-                <h1>{{ (list_score[0])? list_score[0]: 0}} %</h1>
+                  <h1>{{ (list_score[1])? list_score[1]: 0}} %</h1>
               </div>
 <!--              <apexchart ref="spark2" type="line" :options="spark2Options" :series="spark2Series"></apexchart>-->
             </div>
@@ -294,7 +191,7 @@ onBeforeMount(()=>{
 <!--              <h3>-->
 <!--              </h3>-->
               <h3>Spatial & Temporal coverage</h3>
-              <h1>{{ (list_score[0])? list_score[0]: 0}} %</h1>
+              <h1>{{ (list_score[2])? list_score[2]: 0}} %</h1>
             </div>
 <!--            <apexchart ref="spark3" type="line" :options="spark3Options" :series="spark3Series"></apexchart>-->
           </div>
@@ -303,7 +200,7 @@ onBeforeMount(()=>{
           <div class="box boxchart">
             <div class="details">
               <h3>SQDF</h3>
-              <h1>{{ (list_score[0])? list_score[0]: 0}} %</h1>
+              <h1>{{ (list_score[3])? list_score[3]: 0}} %</h1>
             </div>
 <!--            <apexchart ref="spark4" type="line" :options="spark4Options" :series="spark4Series"></apexchart>-->
           </div>
@@ -314,76 +211,34 @@ onBeforeMount(()=>{
       <v-row class="row sparkboxes">
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
-<!--            <div class="box boxchart">-->
-<!--              <div class="details">-->
-<!--                <h3>{{ sparkData.spark3 }}</h3>-->
-<!--                <h4>Spatial & Temporal coverage</h4>-->
-<!--              </div>-->
-            <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="barOptions" :series="barSeries"></apexchart>
+            <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="barOptions" :series="series"></apexchart>
           </div>
         </v-col>
       </v-row>
     </v-container>
   </v-row>
-  <v-row>
-    <v-container>
+  <v-row v-for="(step, i) in nameAllQuestions">
+    <v-container v-if="i%2==0">
       <v-row>
         <v-col class="v-col-6">
           <div class="box shadow boxChartCluster">
-            <apexchart ref="barChart" type="bar" :options="bar2Options" :series="barSeries"></apexchart>
-
+            <div class="details">
+              <h3>{{ step }}</h3>
+            </div>
+            <apexchart ref="barChart" type="bar" :options="StepClusterOptions" :series="barSeries"></apexchart>
           </div>
         </v-col>
         <v-col class="v-col-6">
           <div class="box shadow boxChartCluster">
-            <apexchart ref="barChart" type="bar" :options="bar2Options" :series="barSeries"></apexchart>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <v-container>
-      <v-row>
-        <v-col class="v-col-6">
-          <div class="box shadow boxChartCluster">
-            <apexchart ref="barChart" type="bar" :options="bar2Options" :series="barSeries"></apexchart>
-          </div>
-        </v-col>
-        <v-col class="v-col-6">
-          <div class="box shadow boxChartCluster">
-            <apexchart ref="barChart" type="bar" :options="bar2Options" :series="barSeries"></apexchart>
+            <div class="details">
+              <h3>{{ nameAllQuestions[i+1] }}</h3>
+            </div>
+            <apexchart ref="barChart" type="bar" :options="StepClusterOptions" :series="barSeries"></apexchart>
           </div>
         </v-col>
       </v-row>
     </v-container>
   </v-row>
-
-<!--    <div class="row mt-4">-->
-<!--      <div class="col-md-5">-->
-<!--        <div class="box shadow mt-4">-->
-<!--          <apexchart ref="radialBarBottom" type="radialBar" :options="radialBarOptions" :series="radialBarSeries"></apexchart>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="col-7">-->
-<!--        <div class="box shadow mt-4">-->
-<!--          <apexchart ref="lineAdwords" type="line" :options="lineOptions" :series="lineSeries"></apexchart>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="row mt-4">-->
-<!--      <div class="col-5">-->
-<!--        <div class="box shadow mt-4">-->
-<!--          <apexchart ref="barChart" type="bar" :options="barOptions" :series="barSeries"></apexchart>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="col-7">-->
-<!--        <div class="box shadow mt-4">-->
-<!--          <apexchart ref="areaChart" type="area" :options="areaOptions" :series="areaSeries"></apexchart>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
 </template>
 
 
@@ -429,22 +284,16 @@ onBeforeMount(()=>{
   border-radius: 5px;
   width: fit-content;
 }
-/*.sparkboxes .box[data-v-d0866945] {
-//  padding-top: 5px;
-//  padding-bottom: 10px;
-//  text-shadow: 0 1px 1px 1px #666;
-//  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
-//  position: relative;
-//  border-radius: 5px;
-//  width: fit-content;
-}*/
 .boxChartCluster{
   padding: 25px 25px 12.5px 25px !important;
+}
+.box .details{
+  color: #127583;
 }
 .sparkboxes .box .details {
   /* z-index: 50; */
   position: static;
-  color: #127583;
+
   transform: scale(0.7) translate(-35px, 20px);
   margin: 0% 0% 5% 0%;
   font-size: 16px;
@@ -455,6 +304,9 @@ onBeforeMount(()=>{
 .sparkboxes .box .details h1{
   text-align: center;
   transform: translate(-22px, 20px);
+}
+.sparkboxes .box .details h3{
+  height: 75px;
 
 }
 .sparkboxes strong {
