@@ -13,7 +13,7 @@ const activePanel = ref([]);
 const title= ['Relevance & Application Score', 'FAIR Transparency Score', 'SDF Score', 'Spatial & temporal score'];
 const namesScore=getNamesScore();
 const namesSteps=getKey(transformValues.value);
-const height=ref({heightCharScore:325, heightChar:275});
+const height=ref({heightCharScore:325, heightChar:325});
 const width=ref({widthCharScore:425});
 
 onBeforeMount(() => {
@@ -36,7 +36,7 @@ const chartOptions = {
   },
   plotOptions: {
     bar: {
-      horizontal: false,
+      horizontal: true,
       columnWidth: '100%',
       endingShape: 'rounded'
     },
@@ -55,7 +55,16 @@ const chartOptions = {
         return val + "%";
       },
     }
-  }
+  },
+  title: {
+    text: nameAllQuestions[0],
+    // floating: false,
+    // offsetY: 5030,
+    align: 'center',
+    style: {
+      color: '#444'
+    }
+  },
 };
 // const chartOptionsScore = ref({
 //   chart: {
@@ -118,9 +127,10 @@ const chartOptionsScore = {
   },
   plotOptions: {
     bar: {
-      borderRadius: 10,
+      horizontal:true,
+      // borderRadius: 10,
       dataLabels: {
-        position: 'top', // top, center, bottom
+        position: 'center', // top, center, bottom
       },
     }
   },
@@ -129,10 +139,10 @@ const chartOptionsScore = {
     formatter: function (val) {
       return val + "%";
     },
-    offsetY: -20,
+    // offsetY: -20,
     style: {
       fontSize: '12px',
-      colors: ["#304758"]
+      colors: ["#fff","#304758"]
     }
   },
   xaxis: {
@@ -161,19 +171,24 @@ const chartOptionsScore = {
     }
   },
   yaxis: {
+    reversed:true,
     axisBorder: {
       show: false
     },
     axisTicks: {
-      show: false,
+      show: true,
     },
     labels: {
-      show: false,
+      show: true,
       formatter: function (val) {
-        return val + "%";
+        return val;
       }
     }
 
+  },
+  legend: {
+    // show: true,
+    showForSingleSeries: true,
   },
   title: {
     text: title.value,
@@ -245,6 +260,10 @@ const getSeriesScores=(i)=>{
     return [{name: undefined, data: []}]
   }
 }
+const getChartOptions =(i)=>{
+  chartOptions.title.text=nameAllQuestions[i];
+  return chartOptions;
+}
 const getChartOptionsScore =(i)=>{
   chartOptionsScore.title.text=title[i];
   return chartOptionsScore;
@@ -267,8 +286,12 @@ const getChartOptionsScore =(i)=>{
         <div class="content_block content_report">
           <v-container class="item_activity">
             <v-row  no-gutters>
-              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="chartOptions" :series="getSeries(i)"></apexchart>
-              <apexchart :width="width.widthCharScore" :height="height.heightCharScore" type="bar" :options="getChartOptionsScore(i)" :series="getSeriesScores(i)"></apexchart>
+              <v-col>
+              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getChartOptions(i)" :series="getSeries(i)"></apexchart>
+              </v-col>
+              <v-col>
+              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getChartOptionsScore(i)" :series="getSeriesScores(i)"></apexchart>
+              </v-col>
             </v-row>
           </v-container>
         </div>
