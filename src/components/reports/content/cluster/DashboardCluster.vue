@@ -28,7 +28,7 @@ const barSeries = ref([
 ]);
 
 const width={score: 450, rest: 650};
-const heigth={score: 450, rest: 450};
+const heigth={score: 350, rest: 450};
 const colorBar= ['#fa6c3d','#127583'];
 const barOptions =ref( {
   chart: {
@@ -55,12 +55,12 @@ const barOptions =ref( {
     width: 1
   },
   dataLabels:{
-    enabled:false
+    enabled:true,
   },
   plotOptions: {
     bar: {
-      columnWidth: '15%',
-      horizontal: false,
+      columnWidth: '5%',
+      horizontal: true,
       borderRadius:7.5,
       // borderRadiusOnAllStackedSeries: true
       // borderRadiusApplication:'end',
@@ -73,15 +73,24 @@ const barOptions =ref( {
     categories: [],
     labels:{
       // rotate:0,
-      trim:true,
-      showDuplicates:true
+      // trim:false,
+      showDuplicates:true,
       // hideOverlappingLabels:true
+      labels:{
+        minHeight: 50,
+        maxHeight: 75,
+      }
     },
   },
   fill: {
     opacity: 1
   },
-
+  yaxis: {
+    reversed: true,
+    axisTicks:{
+      show:true
+    }
+  },
 });
 const StepClusterOptions =ref( {
   chart: {
