@@ -33,13 +33,13 @@ export function setFilterValues(){
         transformValues.value={...transformValues.value, ...newStep};
 
     });
-    console.log(transformValues.value)
+    // console.log(transformValues.value)
 
 }
 
 // Función recursiva para filtrar los valores en Relevance
 function filterRelevance(relevance) {
-    console.log(relevance)
+    // console.log(relevance)
     if(relevance ==undefined || relevance==null) return {};
     let res= Object.entries(relevance).reduce((acc,[key, item]) => {
         // const mainKey = Object.keys(item)[0];
@@ -61,7 +61,7 @@ function filterRelevance(relevance) {
 
 function filterDescriptors(descriptors) {
     const filteredDescriptors = {};
-    console.log(descriptors)
+    // console.log(descriptors)
     Object.entries(descriptors).forEach(([descriptor, activities]) => {
         const filteredActivities = filterActivities(activities);
 
@@ -90,8 +90,8 @@ function filterOtherSections(cluster, filteredRelevance) {
 
     let res= Object.entries(cluster).reduce((acc,[key, item]) => {
         // const mainKey = Object.keys(item)[0];
-        console.log(item)
-        console.log(key)
+        // console.log(item)
+        // console.log(key)
         const filteredDescriptors = filterDescriptorsBasedOnRelevance(item, filteredRelevance);
 
         if (Object.keys(filteredDescriptors).length > 0) {
@@ -99,7 +99,7 @@ function filterOtherSections(cluster, filteredRelevance) {
             return acc;
         }
     },{});
-    console.log(res)
+    // console.log(res)
     return res;
 }
 

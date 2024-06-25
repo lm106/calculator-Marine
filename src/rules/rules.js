@@ -109,7 +109,7 @@ export function getLengthFilterRelevance(cluster){
  * @returns {{}}
  */
 export function getScoreRow(list_blocks, cluster, step){
-    console.log(list_blocks, cluster, step);
+    // console.log(list_blocks, cluster, step);
     let res_cluster_score=(step == 'Relevance')?
         Object.entries(list_blocks).reduce((acc, [keyBlock, activities]) => {
             acc[keyBlock] = Object.entries(activities).reduce((activityAcc, [keyActivity, activityValues]) => {
@@ -138,8 +138,8 @@ export function getPercentColumn(countRest,countRelevance, cluster, step){
 
     let resScore= {}, resOtherColumn, resRelevance;
 
-    console.log('score', scoreGlobal.value[step][cluster])
-    console.log('score', transformValues.value[step][cluster])
+    // console.log('score', scoreGlobal.value[step][cluster])
+    // console.log('score', transformValues.value[step][cluster])
     let sum = getSumTotalColumn(scoreGlobal.value[step][cluster], 'Score');
     resScore={[step + ' scores']: getPercentScore(sum,(step=='Relevance')?countRelevance:countRest)};
     let sumQuestions = getSumTotalColumn(transformValues.value[step][cluster], 'Transform');

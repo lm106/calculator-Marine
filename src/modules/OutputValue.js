@@ -10,7 +10,7 @@ export function getOutputValues(){
         const output = convertToOutput(clusterObject);
         // console.log(output)
         outputValues.value={...getCopy(outputValues.value), ...{[keyStep]: output}};
-        console.log(outputValues.value)
+        // console.log(outputValues.value)
     })
     // console.log(values.value)
 }
