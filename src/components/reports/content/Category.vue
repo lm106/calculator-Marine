@@ -66,60 +66,6 @@ const chartOptions = {
     }
   },
 };
-// const chartOptionsScore = ref({
-//   chart: {
-//     id: 'fb',
-//     group: 'social',
-//     type: 'line',
-//     height: 650,
-//     width:'500'
-//   },
-//   colors: ['#fb4300'],
-//   xaxis: {
-//     categories: getAllClusters(),
-//     labels: {
-//       show: true,
-//       rotate: -45,
-//       rotateAlways: true,
-//       // hideOverlappingLabels: true,
-//       // showDuplicates: false,
-//       minHeight: 75,
-//       style: {
-//         //   colors: [],
-//         fontSize: '12px',
-//         //   fontFamily: 'Helvetica, Arial, sans-serif',
-//         //   fontWeight: 400,
-//         //   cssClass: 'apexcharts-xaxis-label',
-//       }
-//     },
-//   },
-//   legend: {
-//     show: true,
-//     showForSingleSeries: true,
-//     // position: 'bottom',
-//     horizontalAlign: 'center',
-//   },
-//   // title: {
-//   //   text: title,
-//   //   align: 'center',
-//   //   style: {
-//   //     color: '#444'
-//   //   }
-//   // },
-//   // chart: {
-//   //   height: 500,
-//   //   type: 'line',
-//   //   zoom: {
-//   //     enabled: false
-//   //   }
-//   // },
-//   dataLabels: {
-//     enabled: true
-//   },
-//   markers: {
-//     size: 1
-//   },
-// });
 const chartOptionsScore = {
   chart: {
     height: 350,
@@ -149,10 +95,10 @@ const chartOptionsScore = {
     categories: getAllClusters(),
     position: 'bottom',
     axisBorder: {
-      show: false
+      show: true
     },
     axisTicks: {
-      show: false
+      show: true
     },
     crosshairs: {
       fill: {
@@ -173,7 +119,7 @@ const chartOptionsScore = {
   yaxis: {
     reversed:true,
     axisBorder: {
-      show: false
+      show: true
     },
     axisTicks: {
       show: true,
@@ -184,16 +130,12 @@ const chartOptionsScore = {
         return val;
       }
     }
-
   },
   legend: {
-    // show: true,
     showForSingleSeries: true,
   },
   title: {
     text: title.value,
-    // floating: false,
-    // offsetY: 5030,
     align: 'center',
     style: {
       color: '#444'
@@ -218,23 +160,6 @@ const setSeries=()=>{
     series.value={...series.value,[step]: res};
 
   });
-  // [
-  //   {
-  //     name: 'series-1',
-  //     data: [30, 40, 45, 50, 49, 60, 70, 91]
-  //   },
-  //   {
-  //     name: 'series-2',
-  //     data: [31, 42, 50, 52, 49, 60, 70, 91]
-  //   },
-  //   {
-  //     name: 'series-3',
-  //     data: [31, 42, 50, 52, 49, 60, 70, 91]
-  //   },{
-  //   name: 'series-4',
-  //   data: [31, 42, 50, 52, 49, 60, 70, 91]
-  // },
-  // ]
 };
 const setSeriesScores=()=>{
   namesScore.forEach((e)=> {
