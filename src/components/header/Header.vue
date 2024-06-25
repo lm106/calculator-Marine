@@ -4,7 +4,7 @@
 
 <template>
   <header class="header_form">
-    <img alt="Vue logo" class="logo" src="../../assets/logo.svg" width="50" height="50" />
+    <img alt="Vue logo" class="logo" src="../../assets/logoRemap.png"  width="145" height="45" />
   </header>
 </template>
 
@@ -13,5 +13,8 @@
   width: 100%;
   border-bottom: 5px solid var(--color-header-border);
   height: var(--header-heigth);
+}
+.logo{
+  margin-top: 5px;
 }
 </style>
