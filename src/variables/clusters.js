@@ -289,3 +289,4 @@ export const questions={
 'SDQF':['Completeness and timeliness', 'Data accuracy and possible margin of error', 'Data consistency with MSP input data']
 }
 export const nameAllQuestions=['Relevance for MSP','FAIR', 'Spatial and temporal coverage & resolution', 'SDQF']
+export const nameQuestions=['Relevance','Fair', 'Resolution and temporal', 'SDQF']

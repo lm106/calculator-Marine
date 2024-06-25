@@ -35,3 +35,22 @@ export function getValuesAsk(nameAsk){
     // console.log(values)
     return values
 }
+export function getValuesPercent(nameCluster){
+    return (countRow.value[nameCluster])?countRow.value[nameCluster].percent: 0.0;
+}
+export function getAllValuesStep(nameCluster){
+    let res={};
+    if(countRow.value[nameCluster]) {
+        let data = countRow.value[nameCluster].percent
+        Object.entries(questions).forEach(([keyStep, arrayQuestions])=> {
+            let step = [];
+            Object.entries(data).forEach(([keyColumns, value]) => {
+                if (!keyColumns.includes('scores') && arrayQuestions.includes(keyColumns)) {
+                    step.push({ name:keyColumns, data:[value]});
+                }
+            })
+            res={...res,[keyStep]:step}
+        })
+    }
+    return res;
+}

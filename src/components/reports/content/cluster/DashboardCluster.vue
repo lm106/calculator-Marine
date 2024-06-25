@@ -200,6 +200,7 @@ const getOptionsStep=(step)=>{
         colors: ['#fff']
       }
     },
+    color: colorBar,
     xaxis: {
       categories: categories,
       tickPlacement:'on',
