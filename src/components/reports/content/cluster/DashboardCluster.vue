@@ -1,7 +1,7 @@
 <script setup>
 import {onBeforeMount, ref} from 'vue';
-import {getNamesScore, getValueScore, getValuesPercent} from "@/modules/countRow.js";
-import {nameAllQuestions} from "@/variables/clusters.js";
+import {getAllValuesStep, getNamesScore, getValueScore, getValuesPercent} from "@/modules/countRow.js";
+import {nameAllQuestions, nameQuestions} from "@/variables/clusters.js";
 
 
 const props = defineProps({
@@ -11,25 +11,23 @@ const props = defineProps({
 onBeforeMount(()=>{
   setScore();
   setSeries();
+  setSeriesStep();
 })
 
 const list_score=ref([]);
-
-const series = ref([
-  // { name: 'PRODUCT A', data: [14, 25, 21, 17, 12, 13, 11, 19] },
-  // { name: 'PRODUCT B', data: [13, 23, 20, 8, 13, 27, 33, 12] },
-  // { name: 'PRODUCT C', data: [11, 17, 15, 15, 21, 14, 15, 13] }
-]);
-const labelsSeries=ref([]);
-const barSeries = ref([
-  { name: 'PRODUCT A', data: [14, 25 /*, 21, 17, 12, 13, 11, 19*/] },
-  { name: 'PRODUCT B', data: [13, 23/*, 20, 8, 13, 27, 33, 12*/] },
-  { name: 'PRODUCT C', data: [11, 17/*, 15, 15, 21, 14, 15, 13*/] }
-]);
+const series = ref([]);
+const seriesSteps=ref([]);
+//
+// const barSeries = ref([
+//   { name: 'PRODUCT A', data: [14, 25 /*, 21, 17, 12, 13, 11, 19*/] },
+//   { name: 'PRODUCT B', data: [13, 23/*, 20, 8, 13, 27, 33, 12*/] },
+//   { name: 'PRODUCT C', data: [11, 17/*, 15, 15, 21, 14, 15, 13*/] }
+// ]);
 
 const width={score: 450, rest: 650};
 const heigth={score: 350, rest: 450};
 const colorBar= ['#fa6c3d','#127583'];
+
 const barOptions =ref( {
   chart: {
     toolbar: {
@@ -95,7 +93,7 @@ const barOptions =ref( {
 const StepClusterOptions =ref( {
   chart: {
     type: 'bar',
-    stacked:true
+    // stacked:true
   },
   plotOptions: {
     bar: {
@@ -163,7 +161,83 @@ const setSeries=()=>{
   barOptions.value.xaxis.categories=Object.keys(values);
   series.value=[{name: props.activeCluster,data: Object.values(values)}];
 }
+const setSeriesStep=()=>{
+  let values=getAllValuesStep(props.activeCluster);
+  seriesSteps.value=values;
+};
 
+const getSeriesStep=(step)=>{
+  console.log(seriesSteps.value[step])
+  console.log(step)
+  let values=[{name: step, data: []}]
+  seriesSteps.value[step].forEach((obj)=>{
+    values[0].data.push(obj.data[0])
+  })
+  return values
+}
+const getOptionsStep=(step)=>{
+  let categories=[]
+  seriesSteps.value[step].forEach((obj)=>{
+    categories.push(obj.name)
+  })
+  let options ={chart: {
+      type: 'bar',
+      // stacked:true
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        columnWidth: '40%',
+        barHeight:'20%',
+        borderRadius:7.5,
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      offsetX: -10,
+      style: {
+        fontSize: '12px',
+        colors: ['#fff']
+      }
+    },
+    xaxis: {
+      categories: categories,
+      tickPlacement:'on',
+      labels:{
+        show:false
+      },
+      axisBorder:{
+        show:false
+      },
+      axisTicks:{
+        show:false
+      }
+    },
+    grid: {
+      show:false,
+      xaxis: {
+        lines: {
+          show: false
+        }
+      },
+      yaxis:{
+        lines:{
+          show:false
+        },
+      }
+    },
+    yaxis: {
+      reversed: true,
+      axisBorder:{
+        show:false
+      },
+      axisTicks:{
+        show:false
+      }
+    }};
+
+  return options;
+}
 const updateTypeChart = (chart, event) => {
   barOptions.value.chart.type = event.target.value;
   chart.updateOptions(barOptions.value);
@@ -234,7 +308,7 @@ const updateTypeChart = (chart, event) => {
             <div class="details">
               <h3>{{ step }}</h3>
             </div>
-            <apexchart ref="barChart" type="bar" :options="StepClusterOptions" :series="barSeries"></apexchart>
+            <apexchart ref="barChart" type="bar" :options="getOptionsStep(nameQuestions[i])" :series="getSeriesStep(nameQuestions[i])"></apexchart>
           </div>
         </v-col>
         <v-col class="v-col-6">
@@ -242,7 +316,7 @@ const updateTypeChart = (chart, event) => {
             <div class="details">
               <h3>{{ nameAllQuestions[i+1] }}</h3>
             </div>
-            <apexchart ref="barChart" type="bar" :options="StepClusterOptions" :series="barSeries"></apexchart>
+            <apexchart ref="barChart" type="bar" :options="getOptionsStep(nameQuestions[i+1])" :series="getSeriesStep(nameQuestions[i+1])"></apexchart>
           </div>
         </v-col>
       </v-row>
