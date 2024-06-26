@@ -17,16 +17,12 @@ onBeforeMount(()=>{
 const list_score=ref([]);
 const series = ref([]);
 const seriesSteps=ref([]);
-//
-// const barSeries = ref([
-//   { name: 'PRODUCT A', data: [14, 25 /*, 21, 17, 12, 13, 11, 19*/] },
-//   { name: 'PRODUCT B', data: [13, 23/*, 20, 8, 13, 27, 33, 12*/] },
-//   { name: 'PRODUCT C', data: [11, 17/*, 15, 15, 21, 14, 15, 13*/] }
-// ]);
 
-const width={score: 450, rest: 650};
+
+const width={score: 450, rest: 550};
 const heigth={score: 350, rest: 450};
-const colorBar= ['#fa6c3d','#127583'];
+const colorBar= ['#2b94a3','#fa6c3d'];
+const colorStep= ['#fa6c3d','rgba(255,237,227,0.77)'];
 
 const barOptions =ref( {
   chart: {
@@ -87,7 +83,17 @@ const barOptions =ref( {
     reversed: true,
     axisTicks:{
       show:true
-    }
+    },
+    labels: {
+      show: true,
+      align: 'left',
+      style:{
+        fontWeight:700
+      },
+      minWidth: 0,
+      maxWidth: 100,
+      offsetX: 0,
+    },
   },
 });
 const StepClusterOptions =ref( {
@@ -167,48 +173,63 @@ const setSeriesStep=()=>{
 };
 
 const getSeriesStep=(step)=>{
-  console.log(seriesSteps.value[step])
-  console.log(step)
-  let values=[{name: step, data: []}]
+  // console.log(seriesSteps.value[step])
+  // console.log(step)
+  let values=[{name: step, data: []},{name:'', data:Array(getCategories(step).length).fill(100)},]
   seriesSteps.value[step].forEach((obj)=>{
     values[0].data.push(obj.data[0])
   })
   return values
 }
-const getOptionsStep=(step)=>{
+
+const getCategories=(step)=>{
   let categories=[]
   seriesSteps.value[step].forEach((obj)=>{
     categories.push(obj.name)
   })
-  let options ={chart: {
+  return categories;
+}
+
+const getOptionsStep=(step)=>{
+  let options ={
+    chart: {
       type: 'bar',
-      // stacked:true
+      stacked: true,
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        columnWidth: '40%',
-        barHeight:'20%',
-        borderRadius:7.5,
+        columnWidth: '25px',
+        barHeight:'20px',
+        borderRadius:10,
       }
     },
     dataLabels: {
       enabled: true,
-      offsetX: -10,
+      offsetX: 325,
+      formatter: function (val) {
+        return val + "%";
+      },
       style: {
         fontSize: '12px',
-        colors: ['#fff']
+        colors: ['#000']
       }
     },
-    color: colorBar,
+    colors: colorStep,
+    legend: {
+      show: false,
+    },
     xaxis: {
-      categories: categories,
+      categories: getCategories(step),
       tickPlacement:'on',
+      position:'top',
       labels:{
-        show:false
+        show:false,
       },
       axisBorder:{
-        show:false
+        show:false,
+        heigth:0.5,
+        width: '50%',
       },
       axisTicks:{
         show:false
@@ -228,13 +249,25 @@ const getOptionsStep=(step)=>{
       }
     },
     yaxis: {
-      reversed: true,
+      // reversed: true,
       axisBorder:{
         show:false
       },
       axisTicks:{
         show:false
-      }
+      },
+      floating: true,
+      labels: {
+        show: true,
+        align: 'left',
+        style:{
+          fontWeight:700
+        },
+        minWidth: 0,
+        maxWidth: 1000,
+        offsetX: 0,
+        offsetY: -20,
+      },
     }};
 
   return options;
