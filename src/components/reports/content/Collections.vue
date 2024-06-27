@@ -19,7 +19,7 @@ onBeforeMount(() => {
 <template>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" readonly>
     <v-expansion-panel v-for="(name, i) in list" :key="i"
-        class="panel_block panel_report" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
+        class="panel_block panel_report panel_collections" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
         border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
         hide-actions
     >
@@ -38,5 +38,8 @@ onBeforeMount(() => {
 </template>
 
 <style scoped>
-
+.panel_collections{
+  max-width: 100% !important;
+  background-color: white !important;
+}
 </style>
