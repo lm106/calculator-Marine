@@ -17,7 +17,6 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  {{ route.name }}
   <v-expansion-panels class="panels panels_report" v-model="activePanel" readonly>
     <v-expansion-panel v-for="(name, i) in list" :key="i"
         class="panel_block panel_report" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
