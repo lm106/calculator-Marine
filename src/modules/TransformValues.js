@@ -77,9 +77,7 @@ function filterActivities(activities) {
     const filteredActivities = {};
 
     Object.entries(activities).forEach(([activity, values]) => {
-        if (values[0] > 1) {
-            filteredActivities[activity] = values;
-        }
+        filteredActivities[activity] = values;
     });
 
     return filteredActivities;
@@ -142,8 +140,12 @@ function extractDescriptorsFromRelevance(filteredRelevance) {
             if (!descriptors[keyBlock]) {
                 descriptors[keyBlock] = {};
             }
-            Object.keys(activities).forEach(activity => {
-                descriptors[keyBlock][activity] = true;
+            Object.entries(activities).forEach(([activity, value]) => {
+                if(value[0]>1){
+                    descriptors[keyBlock][activity] = true;
+                }else{
+                    descriptors[keyBlock][activity] = false;
+                }
             });
         });
     });
