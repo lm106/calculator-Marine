@@ -1,18 +1,16 @@
 <script setup>
-import {useRoute} from "vue-router";
-import {onBeforeMount, ref, watch} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 
 import DashboardCollections from "@/components/reports/content/collection/DashboardCollections.vue";
+import {setInitListValues, setListValues} from "@/modules/ListsValues.js";
+import {listValues} from "@/variables/store.js";
 
-
-const route= useRoute();
 const list=ref(['List 1', "List 2"])
 const activePanel = ref([0,1]);
+onBeforeMount(()=>{
+  listValues.value=setListValues(setInitListValues());
+})
 
-
-onBeforeMount(() => {
-
-});
 
 </script>
 
@@ -23,14 +21,8 @@ onBeforeMount(() => {
         border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
         hide-actions
     >
-      <template #title>
-        <div class="title_block">
-          <h3 class="title">{{ name }}</h3>
-          <v-divider></v-divider>
-        </div>
-      </template>
       <v-expansion-panel-text>
-        <DashboardCollections :activeCluster="name"></DashboardCollections>
+        <DashboardCollections :activeList="name"></DashboardCollections>
       </v-expansion-panel-text>
       <v-spacer></v-spacer>
     </v-expansion-panel>

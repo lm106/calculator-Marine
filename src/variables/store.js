@@ -6,4 +6,5 @@ export const outputValues=ref({});
 export const transformValues=ref({});
 export const countRow = ref({});
 export const scoreGlobal=ref({});
+export const listValues=ref({});
 

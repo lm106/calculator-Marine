@@ -1,153 +1,111 @@
 <script setup>
-import { ref } from 'vue'
-const desserts = ref([
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-  }
-]);
+import {ref, computed, defineProps} from 'vue';
+import {listValues} from "@/variables/store.js";
+import {
+  getAccurancyConsistency,
+  getCoverage,
+  getHighFairScore,
+  getHighlyModerately, getInadequateAccuracy, getInadequateConsistency,
+  getNotAdequateSpatialCoverage,
+  getNotAdequateSpatialResolution,
+  getNotAdequateTemporalCoverage,
+  getNotAdequateTemporalResolution,
+  getNotAvailable,
+  getNotFindable,
+  getNotFulfillingMonitoringRequirements,
+  getNotInteroperable,
+  getNotUseAvailable,
+  getNotUseNotAvailable,
+  getRelevantFulfilling,
+  getResolution
+} from "@/rules/rulesList.js";
+
+const props=defineProps({
+  activeList:String
+})
+
 const search = ref('');
-const items = ref([
-  {
-    name: 'Nebula GTX 3080',
-    image: '1.png',
-    price: 699.99,
-    rating: 5,
-    stock: true,
-  },
-  {
-    name: 'Galaxy RTX 3080',
-    image: '2.png',
-    price: 799.99,
-    rating: 4,
-    stock: false,
-  },
-  {
-    name: 'Orion RX 6800 XT',
-    image: '3.png',
-    price: 649.99,
-    rating: 3,
-    stock: true,
-  },
-  {
-    name: 'Vortex RTX 3090',
-    image: '4.png',
-    price: 1499.99,
-    rating: 4,
-    stock: true,
-  },
-  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },  {
-    name: 'Cosmos GTX 1660 Super',
-    image: '5.png',
-    price: 299.99,
-    rating: 4,
-    stock: false,
-  },
-  // Añade más elementos según sea necesario
-]);
+
+const templateItem=  {
+  name: '',
+  "Highly/Moderately": false,
+  "High FAIR Score": false,
+  "Coverage": true,
+  "Resolution": true,
+  "Relevant and Fulfilling": true,
+  "Accurancy and Consistency": true,
+};
+const templateItem2={
+  name: '',
+      "Not used (not available)": false,
+    "Not used (available)": false,
+    "Not findable": true,
+    "Not available": true,
+    "Not interoperable": true,
+    "Not adequate spatial coverage": true,
+    "Not adequate spatial resolution": true,
+    "Not adequate temporal coverage": true,
+    "Not adequate temporal resolution": true,
+    "Inadequate accuracy": true,
+    "Inadequate consistency": true,
+    "Not fulfilling monitoring requirements": true
+};
+
+const generateItems=()=>{
+  let res=[];
+  Object.keys(listValues.value).forEach((keyParameter)=>{
+    let values=(props.activeList=='List 1')?getValuesItem1(keyParameter):getValuesItem2(keyParameter);
+    res.push({name:keyParameter,...values});
+  })
+  return res;
+}
+
+const getValuesItem1=(parameter)=>{
+  let res={
+    "Highly/Moderately": getHighlyModerately(parameter),
+    "High FAIR Score": getHighFairScore(parameter),
+    "Coverage": getCoverage(parameter),
+    "Resolution": getResolution(parameter),
+    "Relevant and Fulfilling": getRelevantFulfilling(parameter),
+    "Accurancy and Consistency": getAccurancyConsistency(parameter),
+  };
+  return res;
+}
+const getValuesItem2=(parameter)=>{
+  let res={
+    "Not used (not available)": getNotUseNotAvailable(parameter),
+    "Not used (available)": getNotUseAvailable(parameter),
+    "Not findable": getNotFindable(parameter),
+    "Not available": getNotAvailable(parameter),
+    "Not interoperable": getNotInteroperable(parameter),
+    "Not adequate spatial coverage": getNotAdequateSpatialCoverage(parameter),
+    "Not adequate spatial resolution": getNotAdequateSpatialResolution(parameter),
+    "Not adequate temporal coverage": getNotAdequateTemporalCoverage(parameter),
+    "Not adequate temporal resolution": getNotAdequateTemporalResolution(parameter),
+    "Inadequate accuracy": getInadequateAccuracy(parameter),
+    "Inadequate consistency": getInadequateConsistency(parameter),
+    "Not fulfilling monitoring requirements": getNotFulfillingMonitoringRequirements(parameter)
+  };
+  return res;
+}
+const generateHeaders = () => {
+  let data=(props.activeList=='List 1')? templateItem: templateItem2;
+  if (data.length === 0) return [];
+  return Object.keys(data).map(key => ({
+    text: key,
+    value: key
+  }));
+};
+const headers = computed(() => generateHeaders());
+const activeItems = computed(() => generateItems());
+
 </script>
 
 <template>
-<!--  <v-table height="70px" fixed-header>-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--      <th class="text-left">Name</th>-->
-<!--      <th class="text-left">Calories</th>-->
-<!--      <th class="text-left">Calories</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr v-for="item in desserts" :key="item.name">-->
-<!--      <td>{{ item.name }}</td>-->
-<!--      <td>{{ item.calories }}</td>-->
-<!--      <td>{{ item.calories }}</td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--  </v-table>-->
   <v-card flat>
-    <v-card-title class="d-flex align-center pe-2">
-      <v-icon icon="mdi-video-input-component"></v-icon> &nbsp; Find a Graphics
-      Card
-
-      <v-spacer></v-spacer>
+    <v-card-title class="d-flex align-right pe-2 mb-5">
+      <h4 class="title">{{ props.activeList }}</h4>
+      <v-spacer class="w-75"></v-spacer>
       <v-text-field
           v-model="search"
           density="compact"
@@ -157,44 +115,21 @@ const items = ref([
           flat
           hide-details
           single-line
+          class="w-25"
       ></v-text-field>
     </v-card-title>
 
     <v-divider></v-divider>
-    <v-data-table v-model:search="search" :items="items" height="500px" fixed-header fixed-footer>
-      <template v-slot:header.stock>
-        <div class="text-end">Stock</div>
+    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>
+      <template v-slot:item.name="{ item }">
+        <div class="nameParameter">{{ item.name }}</div>
       </template>
-
-      <template v-slot:item.image="{ item }">
-        <v-card class="my-2" elevation="2" rounded>
-          <v-img
-              :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
-              height="64"
-              cover
-          ></v-img>
-        </v-card>
-      </template>
-
-      <template v-slot:item.rating="{ item }">
-        <v-rating
-            :model-value="item.rating"
-            color="orange-darken-2"
-            density="compact"
-            size="small"
-            readonly
-        ></v-rating>
-      </template>
-
-      <template v-slot:item.stock="{ item }">
+      <template  v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
         <div class="text-end">
-          <v-chip
-              :color="item.stock ? 'green' : 'red'"
-              :text="item.stock ? 'In stock' : 'Out of stock'"
-              class="text-uppercase"
-              size="small"
-              label
-          ></v-chip>
+          <v-chip :color="item[header.value] ? 'green' : 'red'"
+            class="text-uppercase" size="small" label >
+              {{ item[header.value] ? 'In stock' : 'Out of stock' }}
+          </v-chip>
         </div>
       </template>
     </v-data-table>
@@ -202,5 +137,7 @@ const items = ref([
 </template>
 
 <style scoped>
-
+.nameParameter{
+  font-weight: bold;
+}
 </style>
