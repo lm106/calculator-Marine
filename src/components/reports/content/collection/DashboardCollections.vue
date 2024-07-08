@@ -125,11 +125,11 @@ const activeItems = computed(() => generateItems());
         <div class="nameParameter">{{ item.name }}</div>
       </template>
       <template  v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
-        <div class="text-end">
-          <v-chip :color="item[header.value] ? 'green' : 'red'"
-            class="text-uppercase" size="small" label >
-              {{ item[header.value] ? 'In stock' : 'Out of stock' }}
-          </v-chip>
+        <div class="text-center">
+          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'"
+              size="small" :color="item[header.value] ? 'green' : 'red'">
+<!--              {{ item[header.value] ? '' : 'Out' }}-->
+          </v-icon>
         </div>
       </template>
     </v-data-table>

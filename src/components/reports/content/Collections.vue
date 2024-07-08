@@ -11,7 +11,6 @@ onBeforeMount(()=>{
   listValues.value=setListValues(setInitListValues());
 })
 
-
 </script>
 
 <template>
