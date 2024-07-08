@@ -3,6 +3,7 @@
 @import "./components/inputSelectNumber.css";
 @import "./components/contentBlock.css";
 @import "./components/navbarReport.css";
+@import "./components/alertReports.css";
 
 a,.green {
   text-decoration: none;

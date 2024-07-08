@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import DownloadAlert from "@/components/reports/DownloadAlert.vue";
+import ShareAlert from "@/components/reports/ShareAlert.vue";
+import DeleteAlert from "@/components/reports/DeleteAlert.vue";
 
 const list_items=[
   {icon: 'mdi-shape', title:'Category', value:'Category'},
@@ -10,7 +13,7 @@ const list_items=[
   {icon: 'mdi-home-variant', title:'Welcome', value:'Welcome'},
   {icon: 'mdi-view-dashboard', title:'Dashboard', value:'Results'},
 
-  {icon: 'mdi-share-variant', title:'Share', value:'Share'},
+  {icon: 'mdi-share-variant', title:'Share', value:'share'},
   {icon: 'mdi-download', title:'Download', value:'download'},
   {icon: 'mdi-file-plus-outline', title:'New form', value:'new_form'},
   {icon: 'mdi-delete-outline', title:'Delete', value:'delete'},
@@ -20,7 +23,11 @@ const list_items=[
 ];
 const emit=defineEmits(['updateActiveSection']);
 const route= useRoute();
+const router= useRouter();
 const drawer = ref(true);
+const dialog = ref(false);
+const share = ref(false);
+const deleteReport = ref(false);
 const rail = ref(true);
 const activeItem = ref((route.name=='Help')? 'Help': 'Category');
 
@@ -36,7 +43,18 @@ const handleItemClick = (value) => {
     case 'Results':
       emit('updateActiveSection', value);
       break;
-
+    case 'download':
+      dialog.value=!dialog.value
+      break;
+    case 'share':
+      share.value=!share.value
+      break;
+    case 'edit_form':
+      router.push({name:'Relevance'});
+      break;
+    case 'delete':
+      deleteReport.value=!deleteReport.value;
+      break;
   }
 };
 
@@ -89,6 +107,9 @@ const handleItemClick = (value) => {
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
+  <DownloadAlert v-if="dialog" @close="handleItemClick('download')"></DownloadAlert>
+  <ShareAlert v-if="share" @close="handleItemClick('share')"></ShareAlert>
+  <DeleteAlert v-if="deleteReport" @close="handleItemClick('delete')"></DeleteAlert>
 </template>
 
 <style scoped>

@@ -1,11 +1,21 @@
 <script setup>
 import { useRouter } from "vue-router";
+import DownloadAlert from "@/components/reports/DownloadAlert.vue";
+import {ref} from "vue";
 
 const router = useRouter();
 const generateReport =()=>{
   router.push({name:'Category'});
 }
+const dialog=ref(false)
 
+const openDownloadDialog = () => {
+  dialog.value = true;
+};
+
+const closeDownloadDialog = () => {
+  dialog.value = false;
+};
 </script>
 
 <template>
@@ -29,9 +39,10 @@ const generateReport =()=>{
         <div>You can save your report on file with format pdf now.</div>
       </v-card-text>
       <template v-slot:actions>
-        <v-btn  @click="" append-icon="mdi-tray-arrow-down" class="text-none btn btn_padding btn_results" base-color="var(--color-orange)" variant="flat">Download</v-btn>
+        <v-btn  @click="openDownloadDialog" append-icon="mdi-tray-arrow-down" class="text-none btn btn_padding btn_results" base-color="var(--color-orange)" variant="flat">Download</v-btn>
       </template>
     </v-card>
+    <DownloadAlert v-if="dialog" @close="closeDownloadDialog"></DownloadAlert>
   </div>
 </template>
 
