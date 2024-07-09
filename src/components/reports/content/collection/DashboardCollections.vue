@@ -121,6 +121,21 @@ const activeItems = computed(() => generateItems());
 
     <v-divider></v-divider>
     <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>
+      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
+        <tr >
+          <template v-for="column in columns" :key="column.key">
+            <td>
+              <span class="mr-2 cursor-pointer" @click="() => toggleSort(column)">
+                {{ column.title }}
+              </span>
+              <v-icon class="btn_info_table" color="grey" icon="mdi-information"></v-icon>
+              <template v-if="isSorted(column)">
+                <v-icon :icon="getSortIcon(column)"></v-icon>
+              </template>
+            </td>
+          </template>
+        </tr>
+      </template>
       <template v-slot:item.name="{ item }">
         <div class="nameParameter">{{ item.name }}</div>
       </template>
@@ -140,4 +155,10 @@ const activeItems = computed(() => generateItems());
 .nameParameter{
   font-weight: bold;
 }
+.btn_info_table{
+  float: rigth;
+}
+/*.header_tr_td{
+//  display: flex !important;
+}*/
 </style>
