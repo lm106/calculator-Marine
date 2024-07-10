@@ -307,7 +307,7 @@ const updateTypeChart = (chart, event) => {
             <div class="details">
 <!--              <h3>-->
 <!--              </h3>-->
-              <h3>Spatial & Temporal coverage</h3>
+              <h3>Spatial & Temporal coverage score</h3>
               <h1>{{ (list_score[2])? list_score[2]: 0}} %</h1>
             </div>
 <!--            <apexchart ref="spark3" type="line" :options="spark3Options" :series="spark3Series"></apexchart>-->
@@ -316,7 +316,7 @@ const updateTypeChart = (chart, event) => {
         <v-col class="column">
           <div class="box boxchart">
             <div class="details">
-              <h3>SQDF</h3>
+              <h3>SQDF score</h3>
               <h1>{{ (list_score[3])? list_score[3]: 0}} %</h1>
             </div>
 <!--            <apexchart ref="spark4" type="line" :options="spark4Options" :series="spark4Series"></apexchart>-->

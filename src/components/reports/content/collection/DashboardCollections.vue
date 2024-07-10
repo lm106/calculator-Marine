@@ -122,7 +122,7 @@ const activeItems = computed(() => generateItems());
     <v-divider></v-divider>
     <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>
       <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-        <tr >
+        <tr class="header_tr">
           <template v-for="column in columns" :key="column.key">
             <td>
               <span class="mr-2 cursor-pointer" @click="() => toggleSort(column)">
@@ -156,9 +156,9 @@ const activeItems = computed(() => generateItems());
   font-weight: bold;
 }
 .btn_info_table{
-  float: rigth;
+  float: right;
 }
-/*.header_tr_td{
-//  display: flex !important;
-}*/
+.header_tr{
+  background-color: white;
+}
 </style>
