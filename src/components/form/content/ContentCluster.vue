@@ -16,7 +16,6 @@ const activePanel = ref([]);
 const tokenInit = ref(false);
 const cluster=ref([]);
 
-
 const initForm=()=>{
   inputValues.value[route.name]= {};
   if (questions[route.name] && !checkStepValues(route.name, props.active)) {
@@ -38,9 +37,19 @@ const initForm=()=>{
 const checkDisable=(index, column, activity,blockTitle)=>{
   if(index>0 && route.name=='Relevance'){
     let firstColumnValue=inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][0]]
+    if(firstColumnValue <2) {
+      inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][1]] = 0
+    }
     return firstColumnValue<=1;
   }else if(route.name !='Relevance'){
-    return getValueRelevance(props.active, blockTitle,activity, questions['Relevance'][0]);
+    let valueFirstColumnRelevance=getValueRelevance(props.active, blockTitle,activity, questions['Relevance'][0])
+    console.log(valueFirstColumnRelevance)
+    if(valueFirstColumnRelevance){
+      for (let i = 0; i < questions[route.name].length; i++) {
+        inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][i]] = 0
+      }
+    }
+    return valueFirstColumnRelevance;
   } else{
     return false;
   }
@@ -109,8 +118,6 @@ watch([() => route.name, () => props.active], () => {
     initForm();
   }
   tokenInit.value=true;
-  // calculateMean()
-
 }, { immediate: true });
 
 watch(inputValues, calculateMean, { deep: true });
@@ -125,7 +132,7 @@ watch(inputValues, calculateMean, { deep: true });
       <v-btn class="btn ma-2" @click="none" :base-color="'var(--color-btn-grey)'">None</v-btn>
     </div>
 
-<!--    <div class="pb-4">v-model {{ activePanel }}</div>-->
+
     <v-expansion-panels class="panels" v-model="activePanel" multiple>
       <v-expansion-panel v-for="(block, index) in clusters[active]"
           :key="index" :value="block.title"
@@ -141,7 +148,7 @@ watch(inputValues, calculateMean, { deep: true });
         </template>
         <v-expansion-panel-text>
           <div class="content_block">
-          <v-container class="item_activity" >
+          <v-container class="item_activity">
             <v-row  no-gutters>
               <v-col cols="4">
                 <label class="pa-2 ma-2 label_name"></label>
@@ -150,10 +157,11 @@ watch(inputValues, calculateMean, { deep: true });
                 <label class="pa-2 ma-2 label_name">{{ column }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
               </v-col>
             </v-row>
+            <div class="content_block_scroll">
               <v-row  no-gutters v-for="(activity, index) in block.activities" :key="index">
-              <v-col cols="4" class="names_activities names">
-                  <label class="pa-2 ma-2 label_name">{{ activity }}  </label><v-icon color="grey" icon="mdi-information"></v-icon>
-              </v-col>
+                <v-col cols="4" class="names_activities names">
+                    <label class="pa-2 ma-2 label_name">{{ activity }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
+                </v-col>
                 <v-col v-for="(column, indexColumn) in questions[route.name]" cols="2">
                   <v-number-input v-if="checkInput(indexColumn, route.name)"
                       :reverse="false" class="selected" controlVariant="default"
@@ -169,7 +177,7 @@ watch(inputValues, calculateMean, { deep: true });
                   ></v-number-input>
                 </v-col>
               </v-row>
-
+            </div>
           </v-container>
           </div>
         </v-expansion-panel-text>
@@ -203,6 +211,9 @@ watch(inputValues, calculateMean, { deep: true });
   border-radius: 10px;
   width: 150px;
 }
-
+.content_block_scroll{
+  max-height: 250px;
+  overflow-y: auto;
+}
 </style>
 

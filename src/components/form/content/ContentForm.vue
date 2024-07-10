@@ -56,12 +56,12 @@ watch([()=>route.name], ()=>{
 </script>
 
 <template>
-    <v-card class="nav_cluster" v-if="route.name != 'Results'">
-      <v-tabs center-active active-class="tab_active">
-        <v-tab @click="handleClickCluster(index)" v-for="(cluster, index) in clusters" class="tab"  :key="index" color="white" >{{ cluster }}</v-tab>
-      </v-tabs>
-    </v-card>
-    <ContentCluster @updateCluster="setCluster" :active="active_cluster"></ContentCluster>
+  <v-card class="nav_cluster" v-if="route.name != 'Results'">
+    <v-tabs center-active active-class="tab_active">
+      <v-tab @click="handleClickCluster(index)" v-for="(cluster, index) in clusters" class="tab"  :key="index" color="white" >{{ cluster }}</v-tab>
+    </v-tabs>
+  </v-card>
+  <ContentCluster @updateCluster="setCluster" :active="active_cluster"></ContentCluster>
 </template>
 
 <style scoped>
