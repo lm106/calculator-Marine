@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, defineProps} from 'vue';
+import {ref, computed} from 'vue';
 import {listValues} from "@/variables/store.js";
 import {
   getAccurancyConsistency,
