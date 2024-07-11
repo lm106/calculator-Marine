@@ -1,6 +1,6 @@
 <script setup>
 import { clusters, questions } from "@/variables/clusters.js";
-import { ref, watch } from 'vue'
+import {onMounted, onUnmounted, ref, watch} from 'vue'
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import {getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance} from "@/rules/rules.js";
@@ -107,6 +107,24 @@ const sendCluster=(cluster)=>{
   emit('updateCluster', inputValues.value);
 }
 
+const windowWidth = ref(window.innerWidth);
+
+const updateWindowWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateWindowWidth);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWindowWidth);
+});
+const getColumnSize = (index) => {
+  return windowWidth.value < 1440 ? '' : '2';
+};
+
+
 watch([() => route.name, () => props.active], () => {
   // console.log('Pase por aquí')
   // console.log('P', inputValues.value)
@@ -125,8 +143,7 @@ watch(inputValues, calculateMean, { deep: true });
 
 <template>
   <Results v-if="route.name =='Results'"></Results>
-  <div v-else>
-  <div>
+  <div class="content_cluster" v-else>
     <div v-if="clusters[active].length > 2" class="text-center d-flex pb-4 justify-end ma-2">
       <v-btn class="btn ma-2" @click="all" :base-color="'var(--color-orange)'">All</v-btn>
       <v-btn class="btn ma-2" @click="none" :base-color="'var(--color-btn-grey)'">None</v-btn>
@@ -153,7 +170,7 @@ watch(inputValues, calculateMean, { deep: true });
               <v-col cols="4">
                 <label class="pa-2 ma-2 label_name"></label>
               </v-col>
-              <v-col v-for="(column, index) in questions[route.name]" class="names_activities" cols="2">
+              <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize(index)" >
                 <label class="pa-2 ma-2 label_name">{{ column }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
               </v-col>
             </v-row>
@@ -162,7 +179,7 @@ watch(inputValues, calculateMean, { deep: true });
                 <v-col cols="4" class="names_activities names">
                     <label class="pa-2 ma-2 label_name">{{ activity }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
                 </v-col>
-                <v-col v-for="(column, indexColumn) in questions[route.name]" cols="2">
+                <v-col v-for="(column, indexColumn) in questions[route.name]" :cols="getColumnSize(indexColumn)" class="cell_input_number">
                   <v-number-input v-if="checkInput(indexColumn, route.name)"
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset :min="0" :max="3"
@@ -185,10 +202,12 @@ watch(inputValues, calculateMean, { deep: true });
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
-  </div>
 </template>
 
 <style scoped>
+.content_cluster{
+  padding-left: 7.5%;
+}
 .names_activities{
   margin-top: 1.25%;
   text-align: end;
@@ -200,10 +219,10 @@ watch(inputValues, calculateMean, { deep: true });
 }
 .label_name{
   overflow: hidden;
-  white-space: nowrap;
+  text-align: center;
   text-overflow: ellipsis;
   max-width: 80%;
-  width: fit-content; /* Ensure it takes the full width available */
+  width: fit-content;
   display: inline-block;
   padding: 0 !important;
 }
@@ -214,6 +233,9 @@ watch(inputValues, calculateMean, { deep: true });
 .content_block_scroll{
   max-height: 250px;
   overflow-y: auto;
+}
+.cell_input_number{
+  padding-left: 3% !important;
 }
 </style>
 
