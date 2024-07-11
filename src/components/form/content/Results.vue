@@ -36,7 +36,7 @@ const closeDownloadDialog = () => {
         <v-card-title>Download</v-card-title>
       </v-img>
       <v-card-text class="card_desc">
-        <div>You can save your report on file with format pdf now.</div>
+        <div>You can save your report on file now.</div>
       </v-card-text>
       <template v-slot:actions>
         <v-btn  @click="openDownloadDialog" append-icon="mdi-tray-arrow-down" class="text-none btn btn_padding btn_results" base-color="var(--color-orange)" variant="flat">Download</v-btn>
