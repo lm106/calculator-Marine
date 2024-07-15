@@ -4,10 +4,10 @@ import Steps from "@/components/form/steps/Steps.vue";
 import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
 import AlertHelp from "@/components/help/AlertHelp.vue";
+import LegendForm from "@/components/form/LegendForm.vue";
+import {questions} from "@/variables/clusters.js";
 
-const cantidad = ref(0);
 const showAlert =ref(false);
-const textos = ref([]);
 const router=useRouter();
 const steps = ref([
   { number: 1, name: 'Relevance for MSP', route:'Relevance', status: 'active' },
@@ -16,13 +16,8 @@ const steps = ref([
   { number: 4, name: 'SDQF',  route:'SDQF',status: 'pending' },
   { number: 5, name: 'Results', route:'Results', status: 'pending' }
 ]);
-const updateInputs = () => {
-  // Reiniciar el array de textos y agregar los nuevos
-  textos.value = [];
-  for (let i = 0; i < cantidad.value; i++) {
-    textos.value.push('');
-  }
-};
+const list_questions=ref([...questions.Relevance])
+
 const handleClick=(name)=>{
   router.push({name:name})
 }
@@ -33,6 +28,7 @@ const handleClickStep=(step)=>{
   let before=steps.value.findIndex((item)=>item.status=='active');
   if(before!= -1) steps.value[before].status='pending';
   steps.value[now].status='active';
+  list_questions.value=questions[step.route];
   handleClick(steps.value[now].route);
 }
 const checkStepNow=()=>{
@@ -61,22 +57,23 @@ watch([()=>router.currentRoute.value.name], ()=>{
     <Steps :steps="steps" @contentName="handleClickStep"></Steps>
     <router-view></router-view>
     <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn btn_weight" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
-    <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-2" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
+    <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-1" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
     <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
+    <LegendForm  v-if="checkStepNow() && checkPageReports()" class="ma-2 text-none" :columns="list_questions"></LegendForm>
   </div>
 </template>
 
 <style scoped>
 #btn_next{
+  position: fixed;
+  z-index: 1;
   padding-inline: 2.5%;
+  bottom: 1%;
   right: 1%;
 }
 #btn_help{
-  left: 1%;
-}
-#btn_help, #btn_next {
-  position: fixed;
-  bottom: 1%;
-  z-index: 1;
+  position: absolute;
+  right: 1%;
+  top: 110px;
 }
 </style>
