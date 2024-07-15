@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
@@ -18,10 +18,10 @@ const clusters= ref([
   ]);
 const route=useRoute();
 const active_cluster=ref(clusters.value[0]);
+
 const handleClickCluster=(i)=>{
   active_cluster.value=clusters.value[i];
 }
-
 const processing=(tokenStep,data)=>{
   // console.log('Cluster: -----', data);
   // console.log('Values: -----', values.value);
@@ -36,7 +36,6 @@ const processing=(tokenStep,data)=>{
     values.value[nameStep][nameCluster]=copy[nameStep][nameCluster];
   }
 }
-
 const setCluster=(data)=>{
   // console.log('formform')
   // let key=Object.keys(cluster)[0];
@@ -53,12 +52,22 @@ watch([()=>route.name], ()=>{
     active_cluster.value=clusters.value[0];
   }
 }, {immediate:true})
+
+const disabledTabs = computed(() => {
+  return clusters.value.map((cluster) => {
+    if (route.name === 'Relevance') {
+      return false;
+    } else {
+      return values.value.Relevance && !values.value.Relevance[cluster];
+    }
+  });
+});
 </script>
 
 <template>
   <v-card class="nav_cluster" v-if="route.name != 'Results'">
     <v-tabs center-active active-class="tab_active">
-      <v-tab @click="handleClickCluster(index)" v-for="(cluster, index) in clusters" class="tab"  :key="index" color="white" >{{ cluster }}</v-tab>
+      <v-tab @click="handleClickCluster(index)" v-for="(cluster, index) in clusters" class="tab" :key="index" color="white" :disabled="disabledTabs[index]">{{ cluster }}</v-tab>
     </v-tabs>
   </v-card>
   <ContentCluster @updateCluster="setCluster" :active="active_cluster"></ContentCluster>
