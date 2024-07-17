@@ -16,7 +16,7 @@ export function getNamesClusterTransformValues(){
     return list_names;
 }
 
-export function setFilterValues(){
+export function setFilterTransformValues(){
     transformValues.value ={};
     // console.log(outputValues.value)
     let data_relevance={...getCopy(outputValues.value)};

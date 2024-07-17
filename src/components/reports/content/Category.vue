@@ -76,7 +76,7 @@ const chartOptionsScore = {
       horizontal:true,
       // borderRadius: 10,
       dataLabels: {
-        position: 'center', // top, center, bottom
+        position: 'center',
       },
     }
   },

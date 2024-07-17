@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 const emit = defineEmits(['close']);
 
@@ -11,18 +11,12 @@ const closeDialog = () => {
 };
 
 const downloadFilePdf = () => {
-  // Lógica para descargar el archivo
   console.log('Descargando archivo...');
-  // Puedes agregar aquí la lógica para descargar el archivo en formato PDF o Excel
-  // Por ejemplo, usando librerías como FileSaver.js o axios para hacer la solicitud de descarga
-  closeDialog(); // Cerrar el diálogo después de la descarga (o dejarlo abierto según tu flujo)
+  closeDialog();
 };
 const downloadFileExcel = () => {
-  // Lógica para descargar el archivo
   console.log('Descargando archivo...');
-  // Puedes agregar aquí la lógica para descargar el archivo en formato PDF o Excel
-  // Por ejemplo, usando librerías como FileSaver.js o axios para hacer la solicitud de descarga
-  closeDialog(); // Cerrar el diálogo después de la descarga (o dejarlo abierto según tu flujo)
+  closeDialog();
 };
 </script>
 
