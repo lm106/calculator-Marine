@@ -28,7 +28,7 @@ const handleClickStep=(step)=>{
   let before=steps.value.findIndex((item)=>item.status=='active');
   if(before!= -1) steps.value[before].status='pending';
   steps.value[now].status='active';
-  list_questions.value=questions[step.route];
+  list_questions.value=questions[steps.value[now].route];
   handleClick(steps.value[now].route);
 }
 const checkStepNow=()=>{
