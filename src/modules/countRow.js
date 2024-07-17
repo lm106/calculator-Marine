@@ -1,6 +1,19 @@
-import {countRow} from "@/variables/store.js";
+import {countRow, scoreGlobal} from "@/variables/store.js";
 import {getKey} from "@/modules/utils.js";
 import {questions} from "@/variables/clusters.js";
+import {getNamesClusterTransformValues} from "@/modules/TransformValues.js";
+import {getLengthFilterRelevance} from "@/rules/rules.js";
+
+export function setCountRow(){
+    countRow.value=[];
+    let namesCluster=getNamesClusterTransformValues();
+    let resFilter={};
+    namesCluster.forEach((nameCluster)=>{
+        resFilter[nameCluster] = getLengthFilterRelevance(nameCluster)[nameCluster];
+
+    });
+    countRow.value={...countRow.value, ...resFilter};
+}
 
 export function getNamesScore(){
     if(getKey(countRow.value).length==0) return [];

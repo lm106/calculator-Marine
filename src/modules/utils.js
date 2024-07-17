@@ -1,4 +1,8 @@
 import {clusters} from "@/variables/clusters.js";
+import {getOutputValues} from "@/modules/OutputValue.js";
+import {setFilterTransformValues} from "@/modules/TransformValues.js";
+import {setScoreGlobal} from "@/modules/ScoreGlobal.js";
+import {setCountRow} from "@/modules/countRow.js";
 
 export function getKey(obj){
     return Object.keys(obj);
@@ -27,4 +31,10 @@ export function getCopy(obj) {
 export function getAllClusters(){
     // return Object.keys(clusters);
     return ['MSFD GES','WFD GES', 'MPAs', 'Oceanographic', 'Coastal Land Use', 'Activities marine', 'Socio-economic', 'Governance'];
+}
+export function generateValues(){
+    getOutputValues();
+    setFilterTransformValues();
+    setScoreGlobal();
+    setCountRow();
 }
