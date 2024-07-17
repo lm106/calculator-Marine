@@ -23,17 +23,21 @@ export function setFilterTransformValues(){
     const filteredRelevance = filterRelevance(data_relevance.Relevance);
 
     Object.entries(outputValues.value).forEach(([keyStep, cluster_content]) => {
-        // let key=Object.keys(step);
-        let newStep = {};
-        if (keyStep!='Relevance') {
-            newStep[keyStep] = filterOtherSections(cluster_content || [], filteredRelevance);
-        }else{
-            newStep.Relevance = filteredRelevance;
+        // let key=Object.keys(step)
+        if(filteredRelevance != undefined || filteredRelevance != null) {
+            let newStep = {};
+            if (keyStep != 'Relevance') {
+                let contentCluster = filterOtherSections(cluster_content || [], filteredRelevance);
+                if (contentCluster != undefined && contentCluster != null) {
+                    newStep[keyStep] = contentCluster;
+                }
+            } else {
+                newStep.Relevance = filteredRelevance;
+            }
+            transformValues.value = {...transformValues.value, ...newStep};
         }
-        transformValues.value={...transformValues.value, ...newStep};
-
     });
-    // console.log(transformValues.value)
+    console.log(transformValues.value)
 
 }
 
@@ -77,7 +81,9 @@ function filterActivities(activities) {
     const filteredActivities = {};
 
     Object.entries(activities).forEach(([activity, values]) => {
-        filteredActivities[activity] = values;
+        if(values[0]>=1) {
+            filteredActivities[activity] = values;
+        }
     });
 
     return filteredActivities;

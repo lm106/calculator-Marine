@@ -52,7 +52,12 @@ export function getLength(cluster, step){
         (step !='Relevance')?
             Object.values(transformValues.value.Relevance[cluster])
             .flatMap(block => Object.values(block))
-            .map(activity => Object.values(activity)).length
+            .map(activity => Object.values(activity)[0]).reduce((acc, value) => {
+                if (value>1) { // Ensure value is not undefined or null
+                    acc += 1;
+                }
+                return acc;
+            }, 0)
         :
             Object.values(outputValues.value.Relevance[cluster])
                 .flatMap(block => Object.values(block)).length
