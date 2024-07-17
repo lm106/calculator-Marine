@@ -2,20 +2,8 @@ import {PDFDocument, rgb, StandardFonts} from "pdf-lib";
 import ApexCharts from "apexcharts";
 
 import { jsPDF } from 'jspdf';
-import {createChartInCanvas} from "@/modules/Charts.js";
-export async function generateChart(){
-    const chart=createChartInCanvas()
-    return chart.render().then(async () => {
+import {generateChart} from "@/modules/Charts.js";
 
-        const { imgURI } = await chart.dataURI();
-        return imgURI;
-        // chart.dataURI().then(({ imgURI, blob }) => {
-        //     var pdf = new jsPDF();
-        //     pdf.addImage(imgURI, 'PNG', 0, 0);
-        //     pdf.save("chart.pdf");
-        // })
-    })
-}
 export async function generatePDF(data){
     const pdf = new jsPDF();
     const config = styleFilePdf();
@@ -60,9 +48,121 @@ export async function generatePDF(data){
         colors: ['#FF1654', '#247BA0'],
     };
 
+    const options = {
+        chart: {
+            height: 450,
+            type: 'bar',
+            animations: {
+                enabled: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '40%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: ['#008000', '#d4a823', '#2548f9'],
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        series: [{
+            name: 'Net Profit',
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        },
+            {
+                name: 'Revenue',
+                data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+            },
+            {
+                name: 'Free Cash Flow',
+                data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+            }],
+        xaxis: {
+            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        },
+        yaxis: {
+            title: {
+                text: '$ (thousands)'
+            }
+        },
+        fill: {
+            opacity: 1
+
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "$ " + val + " thousands"
+                }
+            }
+        }
+    }
+    const options2 = {
+        chart: {
+            height: 450,
+            type: 'bar',
+            animations: {
+                enabled: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '40%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: ['#008000', '#d4a823', '#fb0707'],
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        series: [{
+            name: 'Net Profit',
+            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        },
+            {
+                name: 'Revenue',
+                data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+            },
+            {
+                name: 'Free Cash Flow',
+                data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+            }],
+        xaxis: {
+            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        },
+        yaxis: {
+            title: {
+                text: '$ (thousands)'
+            }
+        },
+        fill: {
+            opacity: 1
+
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "$ " + val + " thousands"
+                }
+            }
+        }
+    }
     const [categoriaImage, clusterImage] = await Promise.all([
-        generateChart(categoriaOptions),
-        generateChart(clusterOptions),
+        generateChart(options),
+        generateChart(options2),
     ]);
 
     let y = config.y;

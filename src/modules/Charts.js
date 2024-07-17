@@ -83,8 +83,8 @@ const chartOptionsScore = {
     },
     colors: ['#fb4300'],
 };
-export function createChartInCanvas (){
-    const options = {
+
+const options = {
         chart: {
             height: 450,
             type: 'bar',
@@ -140,6 +140,16 @@ export function createChartInCanvas (){
             }
         }
     }
+export async function generateChart(options){
+    const chart=new ApexCharts(document.querySelector("#chart"), options);
+    return chart.render().then(async () => {
 
-    return new ApexCharts(document.querySelector("#chart"), options);
+        const { imgURI } = await chart.dataURI();
+        return imgURI;
+        // chart.dataURI().then(({ imgURI, blob }) => {
+        //     var pdf = new jsPDF();
+        //     pdf.addImage(imgURI, 'PNG', 0, 0);
+        //     pdf.save("chart.pdf");
+        // })
+    })
 }
