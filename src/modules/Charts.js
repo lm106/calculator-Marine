@@ -1,20 +1,22 @@
 import ApexCharts from "apexcharts";
-import {getAllClusters} from "@/modules/utils.js";
-import {jsPDF} from "jspdf";
-
+import {getAllClusters, getCopy} from "@/modules/utils.js";
+import {nameAllQuestions} from "@/variables/clusters.js";
+import {optionsChartClusters, optionsStepClusters} from "@/variables/chartOptions.js";
+import {getValuesPercent} from "@/modules/countRow.js";
+import {getCategories} from "@/modules/utilsCharts.js"
 
 const chartOptionsScore = {
     series:[{
         data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
     }],
     chart: {
-        height: 350,
+        height: 325,
+        width: 425,
         type: 'bar',
     },
     plotOptions: {
         bar: {
             horizontal:true,
-            // borderRadius: 10,
             dataLabels: {
                 position: 'center',
             },
@@ -84,62 +86,6 @@ const chartOptionsScore = {
     colors: ['#fb4300'],
 };
 
-const options = {
-        chart: {
-            height: 450,
-            type: 'bar',
-            animations: {
-                enabled: false
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '40%',
-                endingShape: 'rounded'
-            },
-        },
-        dataLabels: {
-            enabled: false
-        },
-        colors: ['#008000', '#d4a823', '#f92525'],
-        stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-        },
-        series: [{
-            name: 'Net Profit',
-            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-        },
-            {
-                name: 'Revenue',
-                data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-            },
-            {
-                name: 'Free Cash Flow',
-                data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-            }],
-        xaxis: {
-            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-        },
-        yaxis: {
-            title: {
-                text: '$ (thousands)'
-            }
-        },
-        fill: {
-            opacity: 1
-
-        },
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return "$ " + val + " thousands"
-                }
-            }
-        }
-    }
 export async function generateChart(options){
     const chart=new ApexCharts(document.querySelector("#chart"), options);
     return chart.render().then(async () => {
@@ -152,4 +98,29 @@ export async function generateChart(options){
         //     pdf.save("chart.pdf");
         // })
     })
+}
+
+
+async function generateChartCategory(){
+    for (let i = 0; i < nameAllQuestions.length; i++) {
+        let nameStep=nameAllQuestions[i];
+        generateChart(nameStep);
+        generateChart(nameStep);
+
+    }
+}
+
+
+
+
+export function getOptionsClusters(namecluster){
+    let options=getCopy(optionsChartClusters.value);
+    options.xaxis.categories=Object.keys(getValuesPercent(namecluster))
+    return options;
+}
+
+export function getOptionsStepClusters(step){
+    let options= getCopy(optionsStepClusters.value);
+    options.xaxis.categories=getCategories(step);
+    return options;
 }

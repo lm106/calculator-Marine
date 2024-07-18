@@ -2,6 +2,8 @@
 import {onBeforeMount, ref} from 'vue';
 import {getAllValuesStep, getNamesScore, getValueScore, getValuesPercent} from "@/modules/countRow.js";
 import {nameAllQuestions, nameQuestions} from "@/variables/clusters.js";
+import {getOptionsClusters, getOptionsStepClusters} from "@/modules/Charts.js";
+import { getSeriesClusters, getSeriesStepClusters, setSeriesClusters, setSeriesStepClusters } from "@/modules/SeriesCharts.js"
 
 
 const props = defineProps({
@@ -10,149 +12,16 @@ const props = defineProps({
 
 onBeforeMount(()=>{
   setScore();
-  setSeries();
-  setSeriesStep();
+  setSeriesClusters(props.activeCluster);
+  setSeriesStepClusters(props.activeCluster);
 })
 
 const list_score=ref([]);
-const series = ref([]);
-const seriesSteps=ref([]);
+
 
 
 const width={score: 450, rest: 550};
 const heigth={score: 350, rest: 450};
-const colorBar= ['#2b94a3','#fa6c3d'];
-const colorStep= ['#fa6c3d','rgba(255,237,227,0.77)'];
-
-const barOptions =ref( {
-  chart: {
-    toolbar: {
-      show: true,
-      tools: {
-        customIcons: [{
-          icon: '<select id="chart-type-select"><option id="defa"></option> <option value="line">Line</option><option value="radar">radar</option><option value="bar">Bar</option><option value="area">Area</option></select>',
-          index: 4,
-          title: 'Change chart type',
-          class: 'custom-icon',
-          click: function (chart, options, e) {
-            const selectElement = document.getElementById('chart-type-select');
-            selectElement.addEventListener('change', function(e){
-              updateTypeChart(chart, e);
-            });
-          }
-        }]
-      }
-    }
-  },
-  colors:colorBar,
-  stroke:{
-    width: 1
-  },
-  dataLabels:{
-    enabled:true,
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: '5%',
-      horizontal: true,
-      borderRadius:7.5,
-      // borderRadiusOnAllStackedSeries: true
-      // borderRadiusApplication:'end',
-      // borderRadiusWhenStacked:'last'
-    },
-  },
-  xaxis: {
-    show:true,
-    tickPlacement:'middle',
-    categories: [],
-    labels:{
-      // rotate:0,
-      // trim:false,
-      showDuplicates:true,
-      // hideOverlappingLabels:true
-      labels:{
-        minHeight: 50,
-        maxHeight: 75,
-      }
-    },
-  },
-  fill: {
-    opacity: 1
-  },
-  yaxis: {
-    reversed: true,
-    axisTicks:{
-      show:true
-    },
-    labels: {
-      show: true,
-      align: 'left',
-      style:{
-        fontWeight:700
-      },
-      minWidth: 0,
-      maxWidth: 100,
-      offsetX: 0,
-    },
-  },
-});
-const StepClusterOptions =ref( {
-  chart: {
-    type: 'bar',
-    // stacked:true
-  },
-  plotOptions: {
-    bar: {
-      horizontal: true,
-      columnWidth: '40%',
-      barHeight:'20%',
-      borderRadius:7.5,
-    }
-  },
-  dataLabels: {
-    enabled: true,
-    offsetX: -10,
-    style: {
-      fontSize: '12px',
-      colors: ['#fff']
-    }
-  },
-  xaxis: {
-    categories: ['2011 Q1', '2011 Q2'],
-    tickPlacement:'on',
-    labels:{
-      show:false
-    },
-    axisBorder:{
-      show:false
-    },
-    axisTicks:{
-      show:false
-    }
-  },
-  grid: {
-    show:false,
-    xaxis: {
-      lines: {
-        show: false
-      }
-    },
-    yaxis:{
-      lines:{
-        show:false
-      },
-    }
-  },
-  yaxis: {
-    reversed: true,
-    axisBorder:{
-      show:false
-    },
-    axisTicks:{
-      show:false
-    }
-  }
-});
 
 const setScore=()=>{
   let res=[];
@@ -162,116 +31,7 @@ const setScore=()=>{
   })
   list_score.value=res;
 };
-const setSeries=()=>{
-  let values=getValuesPercent(props.activeCluster);
-  barOptions.value.xaxis.categories=Object.keys(values);
-  series.value=[{name: props.activeCluster,data: Object.values(values)}];
-}
-const setSeriesStep=()=>{
-  let values=getAllValuesStep(props.activeCluster);
-  seriesSteps.value=values;
-};
 
-const getSeriesStep=(step)=>{
-  // console.log(seriesSteps.value[step])
-  // console.log(step)
-  let values=[{name: step, data: []},{name:'', data:Array(getCategories(step).length).fill(100)},]
-  seriesSteps.value[step].forEach((obj)=>{
-    values[0].data.push(obj.data[0])
-  })
-  return values
-}
-
-const getCategories=(step)=>{
-  let categories=[]
-  seriesSteps.value[step].forEach((obj)=>{
-    categories.push(obj.name)
-  })
-  return categories;
-}
-
-const getOptionsStep=(step)=>{
-  let options ={
-    chart: {
-      type: 'bar',
-      stacked: true,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true,
-        columnWidth: '25px',
-        barHeight:'20px',
-        borderRadius:10,
-      }
-    },
-    dataLabels: {
-      enabled: true,
-      offsetX: 325,
-      formatter: function (val) {
-        return val + "%";
-      },
-      style: {
-        fontSize: '12px',
-        colors: ['#000']
-      }
-    },
-    colors: colorStep,
-    legend: {
-      show: false,
-    },
-    xaxis: {
-      categories: getCategories(step),
-      tickPlacement:'on',
-      position:'top',
-      labels:{
-        show:false,
-      },
-      axisBorder:{
-        show:false,
-        heigth:0.5,
-        width: '50%',
-      },
-      axisTicks:{
-        show:false
-      }
-    },
-    grid: {
-      show:false,
-      xaxis: {
-        lines: {
-          show: false
-        }
-      },
-      yaxis:{
-        lines:{
-          show:false
-        },
-      }
-    },
-    yaxis: {
-      // reversed: true,
-      axisBorder:{
-        show:false
-      },
-      axisTicks:{
-        show:false
-      },
-      floating: true,
-      labels: {
-        show: true,
-        align: 'left',
-        style:{
-          fontWeight:700
-        },
-        minWidth: 0,
-        maxWidth: 1000,
-        offsetX: 0,
-        offsetY: -20,
-      },
-    }};
-
-  return options;
-}
 const updateTypeChart = (chart, event) => {
   barOptions.value.chart.type = event.target.value;
   chart.updateOptions(barOptions.value);
@@ -287,17 +47,14 @@ const updateTypeChart = (chart, event) => {
                 <h3>Relevance & Application Score</h3>
                 <h1>{{ (list_score[0])? list_score[0]: 0}} %</h1>
               </div>
-<!--              <apexchart ref="spark1" type="line" :options="spark1Options" :series="spark1Series"></apexchart>-->
             </div>
           </v-col>
           <v-col class="column">
             <div class="box boxchart">
               <div class="details">
-<!--                <h3>{{ sparkData.spark2 }}</h3>-->
                 <h3>FAIR transparency Score</h3>
                   <h1>{{ (list_score[1])? list_score[1]: 0}} %</h1>
               </div>
-<!--              <apexchart ref="spark2" type="line" :options="spark2Options" :series="spark2Series"></apexchart>-->
             </div>
           </v-col>
       </v-row>
@@ -305,12 +62,9 @@ const updateTypeChart = (chart, event) => {
         <v-col class="column">
           <div class="box boxchart">
             <div class="details">
-<!--              <h3>-->
-<!--              </h3>-->
               <h3>Spatial & Temporal coverage score</h3>
               <h1>{{ (list_score[2])? list_score[2]: 0}} %</h1>
             </div>
-<!--            <apexchart ref="spark3" type="line" :options="spark3Options" :series="spark3Series"></apexchart>-->
           </div>
         </v-col>
         <v-col class="column">
@@ -319,7 +73,6 @@ const updateTypeChart = (chart, event) => {
               <h3>SQDF score</h3>
               <h1>{{ (list_score[3])? list_score[3]: 0}} %</h1>
             </div>
-<!--            <apexchart ref="spark4" type="line" :options="spark4Options" :series="spark4Series"></apexchart>-->
           </div>
         </v-col>
       </v-row>
@@ -328,7 +81,7 @@ const updateTypeChart = (chart, event) => {
       <v-row class="row sparkboxes">
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
-            <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="barOptions" :series="series"></apexchart>
+            <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="getOptionsClusters(props.activeCluster)" :series="getSeriesClusters(props.activeCluster)"></apexchart>
           </div>
         </v-col>
       </v-row>
@@ -342,7 +95,7 @@ const updateTypeChart = (chart, event) => {
             <div class="details">
               <h3>{{ step }}</h3>
             </div>
-            <apexchart ref="barChart" type="bar" :options="getOptionsStep(nameQuestions[i])" :series="getSeriesStep(nameQuestions[i])"></apexchart>
+            <apexchart ref="barChart" type="bar" :options="getOptionsStepClusters(nameQuestions[i])" :series="getSeriesStepClusters(nameQuestions[i])"></apexchart>
           </div>
         </v-col>
         <v-col class="v-col-6">
@@ -350,14 +103,13 @@ const updateTypeChart = (chart, event) => {
             <div class="details">
               <h3>{{ nameAllQuestions[i+1] }}</h3>
             </div>
-            <apexchart ref="barChart" type="bar" :options="getOptionsStep(nameQuestions[i+1])" :series="getSeriesStep(nameQuestions[i+1])"></apexchart>
+            <apexchart ref="barChart" type="bar" :options="getOptionsStepClusters(nameQuestions[i+1])" :series="getSeriesStepClusters(nameQuestions[i+1])"></apexchart>
           </div>
         </v-col>
       </v-row>
     </v-container>
   </v-row>
 </template>
-
 
 <style scoped>
 .content-area {
