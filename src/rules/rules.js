@@ -119,7 +119,7 @@ export function getScoreRow(list_blocks, cluster, step){
         Object.entries(list_blocks).reduce((acc, [keyBlock, activities]) => {
             acc[keyBlock] = Object.entries(activities).reduce((activityAcc, [keyActivity, activityValues]) => {
                 let percent = activityValues.reduce((acc, value) => acc * value, 1) / (3 ** activityValues.length);
-                activityAcc[keyActivity] = percent;
+                activityAcc[keyActivity] = parseFloat(percent.toFixed(3));
                 return activityAcc;
             }, {});
             return acc;
@@ -128,7 +128,7 @@ export function getScoreRow(list_blocks, cluster, step){
         Object.entries(list_blocks).reduce((acc, [keyBlock, activities]) => {
             acc[keyBlock] = Object.entries(activities).reduce((activityAcc, [keyActivity, activityValues]) => {
                 let percent = activityValues.reduce((acc, value) => acc + value) /  activityValues.length/3;
-                activityAcc[keyActivity] = percent;
+                activityAcc[keyActivity] = parseFloat(percent.toFixed(3));;
                 return activityAcc;
             }, {});
             return acc;
