@@ -1,5 +1,127 @@
 import {ref} from "vue";
+import {getAllClusters} from "@/modules/utils.js";
 
+
+export const seriesCategory=ref({});
+export const seriesScoreCategory=ref({});
+
+export const chartOptionsClusterCategory=ref({
+    chart: {
+        id: 'basic-bar'
+    },
+    xaxis: {
+        categories: getAllClusters()
+    },
+    theme:{
+        palette: 'palette2'
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+            columnWidth: '100%',
+            endingShape: 'rounded'
+        },
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    stroke: {
+        // show: true,
+        width: 2.75,
+        // colors: ['transparent']
+    },
+    tooltip:{
+        y:{
+            formatter: function (val) {
+                return val + "%";
+            },
+        }
+    },
+    title: {
+        text: '',
+        align: 'center',
+        style: {
+            color: '#444'
+        }
+    },
+});
+export const chartOptionsClusterScoreCategory=ref({
+    chart: {
+        height: 350,
+        type: 'bar',
+    },
+    plotOptions: {
+        bar: {
+            horizontal:true,
+            // borderRadius: 10,
+            dataLabels: {
+                position: 'center',
+            },
+        }
+    },
+    dataLabels: {
+        enabled: true,
+        formatter: function (val) {
+            return val + "%";
+        },
+        // offsetY: -20,
+        style: {
+            fontSize: '12px',
+            colors: ["#fff","#304758"]
+        }
+    },
+    xaxis: {
+        categories: [],
+        position: 'bottom',
+        axisBorder: {
+            show: true
+        },
+        axisTicks: {
+            show: true
+        },
+        crosshairs: {
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    colorFrom: '#D8E3F0',
+                    colorTo: '#BED1E6',
+                    stops: [0, 100],
+                    opacityFrom: 0.4,
+                    opacityTo: 0.5,
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+        }
+    },
+    yaxis: {
+        reversed:true,
+        axisBorder: {
+            show: true
+        },
+        axisTicks: {
+            show: true,
+        },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return val;
+            }
+        }
+    },
+    legend: {
+        showForSingleSeries: true,
+    },
+    title: {
+        text: '',
+        align: 'center',
+        style: {
+            color: '#444'
+        }
+    },
+    colors: ['#fb4300'],
+});
 
 
 

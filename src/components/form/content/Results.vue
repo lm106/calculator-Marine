@@ -1,12 +1,15 @@
 <script setup>
 import { useRouter } from "vue-router";
 import DownloadAlert from "@/components/reports/DownloadAlert.vue";
-import {ref} from "vue";
-
+import {onBeforeMount, ref} from "vue";
+import {tokenReport} from "@/modules/InitialReport.js";
 const router = useRouter();
 const generateReport =()=>{
   router.push({name:'Category'});
 }
+onBeforeMount(()=>{
+  tokenReport.value=true;
+})
 const dialog=ref(false)
 
 const openDownloadDialog = () => {
