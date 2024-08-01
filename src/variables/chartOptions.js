@@ -7,7 +7,12 @@ export const seriesScoreCategory=ref({});
 
 export const chartOptionsClusterCategory=ref({
     chart: {
-        id: 'basic-bar'
+        height: 450,
+        width: 400,
+        type: 'bar',
+        animations: {
+            enabled: false
+        }
     },
     xaxis: {
         categories: getAllClusters()

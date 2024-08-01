@@ -1,9 +1,15 @@
 import ApexCharts from "apexcharts";
 import {getAllClusters, getCopy} from "@/modules/utils.js";
-import {nameAllQuestions} from "@/variables/clusters.js";
-import {optionsChartClusters, optionsStepClusters} from "@/variables/chartOptions.js";
+import {nameAllQuestions, nameQuestions} from "@/variables/clusters.js";
+import {
+    chartOptionsClusterCategory,
+    chartOptionsClusterScoreCategory,
+    optionsChartClusters,
+    optionsStepClusters
+} from "@/variables/chartOptions.js";
 import {getValuesPercent} from "@/modules/countRow.js";
 import {getCategories} from "@/modules/utilsCharts.js"
+import {getSeries, getSeriesScores} from "@/modules/SeriesCharts.js";
 
 const chartOptionsScore = {
     series:[{
@@ -101,17 +107,42 @@ export async function generateChart(options){
 }
 
 
-async function generateChartCategory(){
-    for (let i = 0; i < nameAllQuestions.length; i++) {
-        let nameStep=nameAllQuestions[i];
-        generateChart(nameStep);
-        generateChart(nameStep);
-
+export async function generateChartsCategory(){
+    let list_img_chart=[];
+    let optionsclusterCategory=getCopy(chartOptionsClusterCategory.value);
+    let optionsclusterScoreCategory=getCopy(chartOptionsClusterScoreCategory.value);
+    let response;
+    for (let i = 0; i < nameQuestions.length; i++) {
+        let nameStep=nameQuestions[i];
+        optionsclusterCategory.series=getSeries(nameStep);
+        optionsclusterCategory.dataLabels.enabled=true
+        optionsclusterCategory.title.text=nameAllQuestions[i];
+        optionsclusterScoreCategory.series=getSeriesScores(nameStep);
+        response=await Promise.all([
+            generateChart(optionsclusterCategory),
+            generateChart(optionsclusterScoreCategory),
+        ]);
+        list_img_chart.push(...response);
     }
+    return list_img_chart
 }
 
+async function generateChartsCluster(){
+    
+}
 
-
+export function getOptionsClusterCategory(nameTitle){
+    let options=getCopy(chartOptionsClusterCategory.value);
+    options.xaxis.categories=getAllClusters();
+    options.title.text=nameTitle;
+    return options;
+}
+export function getOptionsClusterScoreCategory(nameTitle){
+    let options=getCopy(chartOptionsClusterScoreCategory.value);
+    options.xaxis.categories=getAllClusters();
+    options.title.text=nameTitle;
+    return options;
+}
 
 export function getOptionsClusters(namecluster){
     let options=getCopy(optionsChartClusters.value);

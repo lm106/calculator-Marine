@@ -28,6 +28,7 @@ const handleActiveSection = (value) => {
     <NavReport @updateActiveSection="handleActiveSection"></NavReport>
     <router-view></router-view>
   </v-layout>
+  <div id="chart"></div>
 </template>
 
 <style scoped>

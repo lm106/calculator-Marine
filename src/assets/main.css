@@ -38,3 +38,8 @@ a,.green {
   align-self: initial;
 }
 
+#chart{
+  /*display: none;*/
+  visibility: hidden;
+  position: absolute;
+}

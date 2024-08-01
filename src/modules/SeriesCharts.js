@@ -39,8 +39,9 @@ export function setSeriesScoreCategory(){
 
 export function getSeries(nameStep){
     const namesSteps=getKey(transformValues.value);
-    if(namesSteps[nameStep]){
-        return seriesCategory.value[namesSteps[nameStep]];
+    let i= namesSteps.findIndex((e)=> e==nameStep)
+    if(i!=-1){
+        return seriesCategory.value[namesSteps[i]];
     }else{
         return [{name: undefined, data: []}]
     }

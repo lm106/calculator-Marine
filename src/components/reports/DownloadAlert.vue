@@ -41,7 +41,6 @@ const downloadFileExcel = () => {
         <v-btn class="btn_pdf" @click="downloadFilePdf">Pdf</v-btn>
 <!--        <v-btn class="btn_excel" @click="downloadFileExcel">Excel</v-btn>-->
         <v-btn class="btn_close_dialog" color="grey" @click="closeDialog" icon="$clear" variant="plain"></v-btn>
-      <div id="chart"></div>
       </v-card-actions>
     </v-card>
   </v-dialog>

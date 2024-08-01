@@ -46,6 +46,8 @@ const closeDownloadDialog = () => {
       </template>
     </v-card>
     <DownloadAlert v-if="dialog" @close="closeDownloadDialog"></DownloadAlert>
+    <div id="chart"></div>
+
   </div>
 </template>
 
