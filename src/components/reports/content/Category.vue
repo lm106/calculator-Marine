@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute } from "vue-router";
 import {onBeforeMount, ref} from 'vue';
-import {nameAllQuestions} from "@/variables/clusters.js";
+import {nameAllQuestions, nameQuestions, title} from "@/variables/clusters.js";
 // import {getOutputValues} from "@/modules/utils.js";
 import {countRow, outputValues, scoreGlobal, transformValues} from "../../../variables/store.js";
 import {getAllClusters} from "@/modules/utils.js";
@@ -17,7 +17,6 @@ import {getNamesScore} from "@/modules/countRow.js";
 
 const route= useRoute();
 const activePanel = ref([]);
-const title= ['Relevance & Application Score', 'FAIR Transparency Score', 'SDF Score', 'Spatial & temporal score'];
 
 const height=ref({heightCharScore:325, heightChar:325});
 const width=ref({widthCharScore:425});
@@ -218,10 +217,10 @@ onBeforeMount(() => {
           <v-container class="item_activity">
             <v-row  no-gutters>
               <v-col>
-              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getOptionsClusterCategory(nameAllQuestions[i])" :series="getSeries(i)"></apexchart>
+              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getOptionsClusterCategory(nameAllQuestions[i])" :series="getSeries(nameQuestions[i])"></apexchart>
               </v-col>
               <v-col>
-              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getOptionsClusterScoreCategory(title[i])" :series="getSeriesScores(i)"></apexchart>
+              <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getOptionsClusterScoreCategory(title[i])" :series="getSeriesScores(nameQuestions[i])"></apexchart>
               </v-col>
             </v-row>
           </v-container>
