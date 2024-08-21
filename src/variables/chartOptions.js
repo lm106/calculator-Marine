@@ -151,6 +151,12 @@ export const optionsChartClusters =ref( {
             //     }
             //   }]
             // }
+        },
+        type: 'bar',
+        height: 450,
+        width: 400,
+        animations: {
+            enabled: false
         }
     },
     colors: ['#2b94a3','#fa6c3d'],
@@ -203,6 +209,13 @@ export const optionsChartClusters =ref( {
             maxWidth: 100,
             offsetX: 0,
         },
+    },
+    title: {
+        text: '',
+        align: 'center',
+        style: {
+            color: '#444'
+        }
     },
 });
 
