@@ -290,3 +290,11 @@ export const questions={
 }
 export const nameAllQuestions=['Relevance for MSP','FAIR', 'Spatial and temporal coverage & resolution', 'SDQF']
 export const nameQuestions=['Relevance','Fair', 'Resolution and temporal', 'SDQF']
+export const title= ['Relevance & Application Score', 'FAIR Transparency Score', 'SDF Score', 'Spatial & temporal score'];
+export const nameClusters=[
+    'MSFD GES', 'WFD GES','Conservation & designeted sites',
+    'Oceanographic characteristics and climate',
+    'Coastal Land use & Planning',
+    'Operative maritime activities and Planning',
+    'Socio-economic information','Governance information'
+]
