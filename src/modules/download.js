@@ -2,7 +2,7 @@ import {PDFDocument, rgb, StandardFonts} from "pdf-lib";
 import ApexCharts from "apexcharts";
 
 import { jsPDF } from 'jspdf';
-import {generateChart, generateChartsCategory} from "@/modules/Charts.js";
+import {generateChart, generateChartsCategory, generateChartsCluster} from "@/modules/Charts.js";
 let pdf = new jsPDF();
 const config = styleFilePdf();
 const lineHeight = 15;
@@ -12,73 +12,13 @@ function resetPDF(){
 }
 
 export async function generatePDF(dataValues, dataScore,dataCountRow){
-
-    // const options2 = {
-    //     chart: {
-    //         height: 450,
-    //         type: 'bar',
-    //         animations: {
-    //             enabled: false
-    //         }
-    //     },
-    //     plotOptions: {
-    //         bar: {
-    //             horizontal: false,
-    //             columnWidth: '40%',
-    //             endingShape: 'rounded'
-    //         },
-    //     },
-    //     dataLabels: {
-    //         enabled: false
-    //     },
-    //     colors: ['#008000', '#d4a823', '#fb0707'],
-    //     stroke: {
-    //         show: true,
-    //         width: 2,
-    //         colors: ['transparent']
-    //     },
-    //     series: [{
-    //         name: 'Net Profit',
-    //         data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-    //     },
-    //         {
-    //             name: 'Revenue',
-    //             data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-    //         },
-    //         {
-    //             name: 'Free Cash Flow',
-    //             data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-    //         }],
-    //     xaxis: {
-    //         categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-    //     },
-    //     yaxis: {
-    //         title: {
-    //             text: '$ (thousands)'
-    //         }
-    //     },
-    //     fill: {
-    //         opacity: 1
-    //
-    //     },
-    //     tooltip: {
-    //         y: {
-    //             formatter: function (val) {
-    //                 return "$ " + val + " thousands"
-    //             }
-    //         }
-    //     }
-    // }
-    // const [categoriaImage, clusterImage] = await Promise.all([
-    //     generateChart(options),
-    //     generateChart(options2),
-    // ]);
     resetPDF();
     let y = config.y;
     y = generatePageToValues(dataValues, config.x, y);
     y = generatePageToScoreGlobal(dataScore, config.x, y);
     y = generatePageToCountRow(dataCountRow, config.x, y);
     addPageChart(await generateChartsCategory())
+    addPageChart(await generateChartsCluster())
 
     pdf.save(getNameFile());
 }
@@ -163,7 +103,7 @@ function addPageChart(list_chart){
     for (let i = 0; i < list_chart.length; i++) {
         pdf.addImage(list_chart[i], 'PNG', config.x, y);
         if(i==0){
-            y+=100;
+            y+=120;
             addPageIfNeeded(y)
         }else{
             if(i==list_chart.length-1){break;}
@@ -171,7 +111,7 @@ function addPageChart(list_chart){
                 pdf.addPage();
                 y=config.y;
             }else{
-                y+=100;
+                y+=120;
                 addPageIfNeeded(y)
             }
         }

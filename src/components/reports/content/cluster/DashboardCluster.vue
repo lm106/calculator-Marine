@@ -12,7 +12,7 @@ const props = defineProps({
 
 onBeforeMount(()=>{
   setScore();
-  setSeriesClusters(props.activeCluster);
+  // setSeriesClusters(props.activeCluster);
   setSeriesStepClusters(props.activeCluster);
 })
 

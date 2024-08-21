@@ -53,12 +53,15 @@ export const chartOptionsClusterCategory=ref({
 export const chartOptionsClusterScoreCategory=ref({
     chart: {
         height: 350,
+        width: 400,
         type: 'bar',
+        animations: {
+            enabled: false
+        }
     },
     plotOptions: {
         bar: {
             horizontal:true,
-            // borderRadius: 10,
             dataLabels: {
                 position: 'center',
             },
@@ -76,7 +79,7 @@ export const chartOptionsClusterScoreCategory=ref({
         }
     },
     xaxis: {
-        categories: [],
+        categories: getAllClusters(),
         position: 'bottom',
         axisBorder: {
             show: true
@@ -125,7 +128,7 @@ export const chartOptionsClusterScoreCategory=ref({
             color: '#444'
         }
     },
-    colors: ['#fb4300'],
+    colors: ['#fb4300']
 });
 
 

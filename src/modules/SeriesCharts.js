@@ -10,6 +10,7 @@ import {
 import {getCategories} from "@/modules/utilsCharts.js";
 import {getCopy, getKey} from "@/modules/utils.js";
 import {transformValues} from "@/variables/store.js";
+import {nameClusters} from "@/variables/clusters.js";
 
 // export const namesScore=getNamesScore();
 // export const namesSteps=getKey(transformValues.value);
@@ -49,26 +50,30 @@ export function getSeries(nameStep){
 export function getSeriesScores(nameScore){
     const namesSteps=getKey(transformValues.value);
     const namesScore=getNamesScore();
-
-    if(namesSteps[nameScore]){
+    let i= namesSteps.findIndex((e)=> e==nameScore)
+    if(i!=-1){
         // console.log(seriesScores.value[namesSteps[i]])
-        return [{name: namesScore[nameScore],data:seriesScoreCategory.value[namesScore[nameScore]]}];
+        return [{name: namesScore[i],data:getCopy(seriesScoreCategory.value[namesScore[i]])}];
     }else{
         return [{name: undefined, data: []}]
     }
 }
-export function setSeriesClusters(nameCluster){
-    let values=getValuesPercent(nameCluster);
-    let obj={name: nameCluster, data: Object.values(values)};
-    if (seriesCluster.value[nameCluster]){
-        seriesCluster.value[nameCluster]=obj;
-    }else{
-        seriesCluster.value={...getCopy(seriesCluster.value),[nameCluster]:obj};
+
+export function setSeriesClusters(){
+    for (let i = 0; i < nameClusters.length; i++) {
+        let values=getValuesPercent(nameClusters[i]);
+        let obj={name: nameClusters[i], data: getCopy(Object.values(values))};
+        if (seriesCluster.value[nameClusters[i]]){
+            seriesCluster.value[nameClusters[i]]=obj;
+        }else{
+            seriesCluster.value={...getCopy(seriesCluster.value),[nameClusters[i]]:obj};
+        }
     }
 }
 export function getSeriesClusters(nameCluster){
     return [getCopy(seriesCluster.value[nameCluster])];
 }
+
 export function setSeriesStepClusters(nameCluster){
     seriesStepsCluster.value=getAllValuesStep(nameCluster);
 }

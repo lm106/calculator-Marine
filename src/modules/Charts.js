@@ -1,6 +1,6 @@
 import ApexCharts from "apexcharts";
 import {getAllClusters, getCopy} from "@/modules/utils.js";
-import {nameAllQuestions, nameQuestions} from "@/variables/clusters.js";
+import {nameAllQuestions, nameClusters, nameQuestions, title} from "@/variables/clusters.js";
 import {
     chartOptionsClusterCategory,
     chartOptionsClusterScoreCategory,
@@ -8,8 +8,8 @@ import {
     optionsStepClusters
 } from "@/variables/chartOptions.js";
 import {getValuesPercent} from "@/modules/countRow.js";
-import {getCategories} from "@/modules/utilsCharts.js"
-import {getSeries, getSeriesScores} from "@/modules/SeriesCharts.js";
+import {getCategories, getCategoriesCluster} from "@/modules/utilsCharts.js"
+import {getSeries, getSeriesClusters, getSeriesScores} from "@/modules/SeriesCharts.js";
 
 const chartOptionsScore = {
     series:[{
@@ -93,11 +93,15 @@ const chartOptionsScore = {
 };
 
 export async function generateChart(options){
-    const chart=new ApexCharts(document.querySelector("#chart"), options);
+    let chartDiv=document.createElement('div');
+    chartDiv.id=options.title.text.trim();
+    const containerChart=document.querySelector("#chart");
+    containerChart.appendChild(chartDiv);
+    const chart=new ApexCharts(chartDiv, options);
     return chart.render().then(async () => {
 
         const { imgURI } = await chart.dataURI();
-        return imgURI;
+        return (imgURI == 'data:,')?'': imgURI;
         // chart.dataURI().then(({ imgURI, blob }) => {
         //     var pdf = new jsPDF();
         //     pdf.addImage(imgURI, 'PNG', 0, 0);
@@ -109,26 +113,48 @@ export async function generateChart(options){
 
 export async function generateChartsCategory(){
     let list_img_chart=[];
-    let optionsclusterCategory=getCopy(chartOptionsClusterCategory.value);
-    let optionsclusterScoreCategory=getCopy(chartOptionsClusterScoreCategory.value);
     let response;
     for (let i = 0; i < nameQuestions.length; i++) {
         let nameStep=nameQuestions[i];
+        let optionsclusterCategory=getOptionsClusterCategory(nameStep);
+        let optionsclusterScoreCategory=getOptionsClusterScoreCategory(title[i]);
+
         optionsclusterCategory.series=getSeries(nameStep);
-        optionsclusterCategory.dataLabels.enabled=true
-        optionsclusterCategory.title.text=nameAllQuestions[i];
+        optionsclusterCategory.dataLabels.enabled=true;
+
         optionsclusterScoreCategory.series=getSeriesScores(nameStep);
         response=await Promise.all([
             generateChart(optionsclusterCategory),
-            generateChart(optionsclusterScoreCategory),
+            generateChart(optionsclusterScoreCategory)
         ]);
         list_img_chart.push(...response);
+
     }
     return list_img_chart
 }
 
-async function generateChartsCluster(){
-    
+export async function generateChartsCluster(){
+    let list_img_chart=[];
+    let response;
+    for (let i = 0; i < nameClusters.length; i++) {
+        let nameCluster=nameClusters[i];
+        let optionscluster=getOptionsClusters(nameCluster);
+        let optionsStepCluster=getOptionsStepClusters(title[i]);
+
+        optionscluster.series=getSeriesClusters(nameCluster);
+        optionscluster.title.text=nameCluster;
+
+        optionsStepCluster.dataLabels.enabled=true;
+        optionsStepCluster.dataLabels.floating=false;
+
+        // optionsStepCluster.series=getSeriesScores(nameStep);
+        response=await Promise.all([
+            generateChart(optionscluster),
+        //     // generateChart2(optionsStepCluster),
+        ]);
+        list_img_chart.push(...response);
+    }
+    return list_img_chart
 }
 
 export function getOptionsClusterCategory(nameTitle){
@@ -146,7 +172,7 @@ export function getOptionsClusterScoreCategory(nameTitle){
 
 export function getOptionsClusters(namecluster){
     let options=getCopy(optionsChartClusters.value);
-    options.xaxis.categories=Object.keys(getValuesPercent(namecluster))
+    options.xaxis.categories=getCategoriesCluster();
     return options;
 }
 
