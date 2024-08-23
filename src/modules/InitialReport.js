@@ -1,4 +1,3 @@
-
 import {ref} from "vue";
 import {getOutputValues} from "@/modules/OutputValue.js";
 import {setFilterTransformValues} from "@/modules/TransformValues.js";
@@ -10,7 +9,7 @@ import {
     setSeriesScoreCategory,
     setSeriesStepClusters
 } from "@/modules/SeriesCharts.js";
-import {generatePDF} from "@/modules/download.js";
+
 export const tokenReport=ref(true);
 export function initReport(n) {
     console.log("initReport");
@@ -33,6 +32,6 @@ function initReportChart(){
     setSeriesCategory();
     setSeriesScoreCategory();
     setSeriesClusters();
-    setSeriesStepClusters();
+    // setSeriesStepClusters();
 }
 
