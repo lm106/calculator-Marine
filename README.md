@@ -49,3 +49,4 @@ But it's still recommended to test the production build with `test:e2e` before d
 npm run build
 npm run test:e2e
 ```
+test
