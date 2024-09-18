@@ -1,5 +1,4 @@
-import { values, currentCollection } from '@/variables/store';
-
+import { values, currentCollection, inputValues } from '@/variables/store';
 export function saveValuesToLocalStorage() {
   const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
   if (currentCollection.value) {
@@ -17,6 +16,7 @@ export function loadValuesFromLocalStorage(collectionName) {
   const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
   if (collectionData[collectionName]) {
     values.value = collectionData[collectionName];
+    inputValues.value = collectionData[collectionName];
     currentCollection.value = collectionName;
   }
 }
