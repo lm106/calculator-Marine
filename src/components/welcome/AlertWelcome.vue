@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import { currentCollection } from '@/variables/store';
 
 const props = defineProps({
   showModal: Boolean
@@ -15,6 +16,7 @@ const items = ref(['']);
 const saveCollectionName = () => {
   if (textos.value.length > 0 && textos.value[0]) {
     const collectionName = textos.value[0];
+    currentCollection.value = collectionName;
     localStorage.setItem('currentCollection', collectionName);
     
     // Obtener colecciones existentes o inicializar un array vacío
