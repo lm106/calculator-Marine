@@ -1,18 +1,21 @@
 <script setup>
-import {ref} from 'vue';
-import {getAllClusters, getKey} from "@/modules/utils.js";
+import { ref } from 'vue';
+import { getAllClusters } from "@/modules/utils.js";
 import DashboardCluster from "@/components/reports/content/cluster/DashboardCluster.vue";
 
 const activePanel = ref([]);
-const list_Clusters=getAllClusters();
+const listClusters = getAllClusters(); 
 
 </script>
 
 <template>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" multiple>
-    <v-expansion-panel v-for="(cluster, i) in list_Clusters" :key="i" :value="cluster" class="panel_block panel_report"
-                       style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
-                              border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
+    <v-expansion-panel 
+      v-for="(cluster, index) in listClusters" 
+      :key="index" 
+      :value="cluster" 
+      class="panel_block panel_report"
+      style="border-radius: 10px;"
     >
       <template #title>
         <div class="title_block">
@@ -23,7 +26,7 @@ const list_Clusters=getAllClusters();
       <v-expansion-panel-text>
         <div class="content_block">
           <v-container class="item_activity">
-            <DashboardCluster :activeCluster="cluster"></DashboardCluster>
+            <DashboardCluster :activeCluster="cluster" />
           </v-container>
         </div>
       </v-expansion-panel-text>
@@ -33,5 +36,4 @@ const list_Clusters=getAllClusters();
 </template>
 
 <style scoped>
-
 </style>
