@@ -3,9 +3,10 @@ import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values, saveValuesToLocalStorage } from '../../../variables/store.js'
+import { values } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
+import { saveValuesToLocalStorage } from '@/services/localStorageService';
 
 const clusters= ref([
     'MSFD GES','WFD GES',

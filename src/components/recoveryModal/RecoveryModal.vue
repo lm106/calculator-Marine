@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { loadValuesFromLocalStorage, getStoredCollections } from '@/variables/store';
+import { loadValuesFromLocalStorage, getStoredCollections } from '@/services/localStorageService';
 
 const props = defineProps({
   show: Boolean,

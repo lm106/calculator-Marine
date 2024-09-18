@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 import RecoveryModal from '@/components/recoveryModal/RecoveryModal.vue';
-import { hasStoredValues, shouldAutoLoadCollection, autoLoadCollection } from '@/variables/store';
+import { hasStoredValues, shouldAutoLoadCollection, autoLoadCollection } from '@/services/localStorageService';
 
 const showRecoveryModal = ref(false);
 const router = useRouter();
