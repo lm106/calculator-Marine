@@ -120,11 +120,22 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', updateWindowWidth);
 });
-const getColumnSize = (index) => {
-  return windowWidth.value < 1440 ? '' : '2';
+const getColumnSize = () => {
+  if (route.name != 'Relevance' && route.name != 'SDQF') {
+    return windowWidth.value < 1440 ? '' : '2.5';
+  }else {
+    return windowWidth.value < 1440 ? '' : '2';
+  }
 };
 
-
+const getColumnsSizeLabel = () => {
+  if (route.name != 'Relevance' && route.name != 'SDQF') {
+    return windowWidth.value < 1440 ? '' : '3';
+  }else {
+    return windowWidth.value < 1440 ? '' : '4';
+  }
+  // return '';
+};
 watch([() => route.name, () => props.active], () => {
   // console.log('Pase por aquí')
   // console.log('P', inputValues.value)
@@ -143,43 +154,33 @@ watch(inputValues, calculateMean, { deep: true });
 
 <template>
   <Results v-if="route.name =='Results'"></Results>
-  <div class="content_cluster" v-else>
-    <div v-if="clusters[active].length > 2" class="text-center d-flex pb-4 justify-end ma-2">
-      <v-btn class="btn ma-2" @click="all" :base-color="'var(--color-orange)'">All</v-btn>
-      <v-btn class="btn ma-2" @click="none" :base-color="'var(--color-btn-grey)'">None</v-btn>
-    </div>
-
-
-    <v-expansion-panels class="panels" v-model="activePanel" multiple>
-      <v-expansion-panel v-for="(block, index) in clusters[active]"
-          :key="index" :value="block.title"
-          class="panel_block"
-          style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
-          border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
-      >
-        <template #title>
-          <div class="title_block">
-            <h3 class="title">{{ block.title }}</h3>
-            <v-divider></v-divider>
-          </div>
-        </template>
-        <v-expansion-panel-text>
-          <div class="content_block">
-          <v-container class="item_activity">
-            <v-row  no-gutters>
-              <v-col cols="4">
-                <label class="pa-2 ma-2 label_name"></label>
-              </v-col>
-              <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize(index)" >
-                <label class="pa-2 ma-2 label_name">{{ column }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
-              </v-col>
-            </v-row>
-            <div class="content_block_scroll">
-              <v-row  no-gutters v-for="(activity, index) in block.activities" :key="index">
-                <v-col cols="4" class="names_activities names">
-                    <label class="pa-2 ma-2 label_name">{{ activity }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
+  <div v-else>
+    <div class="content_cluster">
+      <v-row class="content_names" no-gutters>
+        <v-col :cols="getColumnsSizeLabel()">
+          <label class="pa-2 ma-2 label_name"></label>
+        </v-col>
+        <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize()" >
+          <label class="pa-2 ma-2 label_name">{{ column }}</label><v-icon color="grey" icon="mdi-information"></v-icon>
+        </v-col>
+      </v-row>
+      <div class="content_ask">
+      <template v-for="(block, index) in clusters[active]">
+<!--          <div class="content_block">-->
+<!--          <v-container class="item_activity">-->
+<!--            <v-row no-gutters>-->
+<!--              <v-col cols="4">-->
+<!--                <label class="pa-2 ma-2 label_name"><h3 class="title">{{ block.title }}</h3></label>-->
+<!--              </v-col>-->
+<!--            </v-row>-->
+              <v-row class="content_names" style="width: 100%"  no-gutters v-for="(activity, index) in block.activities" :key="index">
+                <v-col :cols="getColumnsSizeLabel()" class="names_activities names">
+                    <h4 v-if="index==0" class="title title_descriptor">{{block.title}} {{(block.title.includes(activity))? '':' - ' }} </h4>
+                    <label class="pa-2 ma-2 label_name">
+                      {{ (block.title.includes(activity))? '' : activity}}
+                    </label><v-icon color="grey" icon="mdi-information"></v-icon>
                 </v-col>
-                <v-col v-for="(column, indexColumn) in questions[route.name]" :cols="getColumnSize(indexColumn)" class="cell_input_number">
+                <v-col v-for="(column, indexColumn) in questions[route.name]" :cols="getColumnSize()" class="cell_input_number">
                   <v-number-input v-if="checkInput(indexColumn, route.name)"
                       :reverse="false" class="selected" controlVariant="default"
                       :hideInput="false" inset :min="0" :max="3"
@@ -194,13 +195,11 @@ watch(inputValues, calculateMean, { deep: true });
                   ></v-number-input>
                 </v-col>
               </v-row>
-            </div>
-          </v-container>
-          </div>
-        </v-expansion-panel-text>
-        <v-spacer></v-spacer>
-      </v-expansion-panel>
-    </v-expansion-panels>
+<!--          </div>-->
+        <v-divider></v-divider>
+      </template>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -212,6 +211,8 @@ watch(inputValues, calculateMean, { deep: true });
   margin-top: 1.25%;
   text-align: end;
   display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 .names{
   justify-content: flex-end;
@@ -230,12 +231,33 @@ watch(inputValues, calculateMean, { deep: true });
   border-radius: 10px;
   width: 150px;
 }
-.content_block_scroll{
-  max-height: 250px;
-  overflow-y: auto;
+.content_block_scroll, .content_ask{
+  max-height: 275px;
+  overflow-y: scroll;
+}
+.content_select{
+  display: flex;
+  flex-direction: column;
+}
+.title_descriptor{
+  margin-bottom: 3.5%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 .cell_input_number{
   padding-left: 3% !important;
+  padding-top: 1% !important;
 }
+.contenido {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.header_questions{
+
+}
+
 </style>
 
