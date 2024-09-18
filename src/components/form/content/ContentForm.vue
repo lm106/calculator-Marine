@@ -3,7 +3,7 @@ import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values } from '../../../variables/store.js'
+import { values, saveValuesToLocalStorage } from '../../../variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
 
@@ -46,6 +46,7 @@ const setCluster=(data)=>{
   }else{
     processing(tokenStep,data);
   }
+  saveValuesToLocalStorage();
 }
 watch([()=>route.name], ()=>{
   if(route.name=='Results'){
