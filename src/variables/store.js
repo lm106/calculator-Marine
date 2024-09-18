@@ -41,7 +41,7 @@ export function hasStoredValues() {
 
 export function shouldAutoLoadCollection() {
   const collections = getStoredCollections();
-  return collections.length === 1 && (collections[0] === currentCollection.value || collections[0] === localStorage.getItem('currentCollection'));
+  return collections.length === 1 && (collections[0] === currentCollection.value || collections[0] === localStorage.getItem('currentCollection'));
 }
 
 export function autoLoadCollection() {

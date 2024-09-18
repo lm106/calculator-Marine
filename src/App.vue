@@ -8,16 +8,18 @@ const showRecoveryModal = ref(false);
 const router = useRouter();
 const snackbar = ref(false);
 const snackbarText = ref('');
-
 onMounted(() => {
-  if (hasStoredValues()) {
-    if (shouldAutoLoadCollection()) {
-      if (autoLoadCollection()) {
-        snackbarText.value = "Datos recuperados de la memoria";
-        snackbar.value = true;
+  const currentUrl = window.location.href;
+  if (!currentUrl.endsWith('/inputdata/')) {
+    if (hasStoredValues()) {
+      if (shouldAutoLoadCollection()) {
+        if (autoLoadCollection()) {
+          snackbarText.value = "Datos recuperados de la memoria";
+          snackbar.value = true;
+        }
+      } else {
+        showRecoveryModal.value = true;
       }
-    } else {
-      showRecoveryModal.value = true;
     }
   }
 });
