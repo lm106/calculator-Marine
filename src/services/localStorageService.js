@@ -18,6 +18,7 @@ export function loadValuesFromLocalStorage(collectionName) {
     values.value = collectionData[collectionName];
     inputValues.value = collectionData[collectionName];
     currentCollection.value = collectionName;
+    localStorage.setItem('currentCollection', collectionName);
   }
 }
 
@@ -42,4 +43,13 @@ export function autoLoadCollection() {
     return true;
   }
   return false;
+}
+
+export function deleteCollection(collectionName) {
+  const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
+  if (collectionData[collectionName]) {
+    delete collectionData[collectionName];
+    localStorage.setItem('collectionData', JSON.stringify(collectionData));
+    localStorage.setItem('collections', JSON.stringify(JSON.parse(localStorage.getItem('collections')).filter(collection => collection !== collectionName)))
+  }
 }
