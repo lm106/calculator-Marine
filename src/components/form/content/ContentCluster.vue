@@ -1,6 +1,6 @@
 <script setup>
 import { clusters, questions } from "@/variables/clusters.js";
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import { getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance } from "@/rules/rules.js";
@@ -17,6 +17,24 @@ const emit = defineEmits(['updateCluster']);
 const activePanel = ref([]);
 const tokenInit = ref(false);
 const windowWidth = ref(window.innerWidth);
+
+const isDevelopment = computed(() => {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+});
+
+const fillAllInputs = (value) => {
+  if (!isDevelopment.value) return;
+  
+  Object.keys(inputValues.value[route.name][props.active]).forEach(blockTitle => {
+    Object.keys(inputValues.value[route.name][props.active][blockTitle]).forEach(activity => {
+      questions[route.name].forEach(column => {
+        if (checkInput(questions[route.name].indexOf(column), route.name)) {
+          inputValues.value[route.name][props.active][blockTitle][activity][column] = value;
+        }
+      });
+    });
+  });
+};
 
 const initForm = () => {
   inputValues.value[route.name] = {};
@@ -163,6 +181,19 @@ watch(inputValues, calculateMean, { deep: true });
           <v-divider></v-divider>
         </template>
       </div>
+      <div v-if="isDevelopment" class="fill-buttons">
+        <v-btn
+          v-for="n in 4"
+          :key="n"
+          fab
+          small
+          color="#dd6d45"
+          class="ma-2"
+          @click="fillAllInputs(n - 1)"
+        >
+          {{ n - 1 }}
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -213,5 +244,17 @@ watch(inputValues, calculateMean, { deep: true });
 .cell_input_number {
   padding-left: 3% !important;
   padding-top: 1% !important;
+}
+.fill-buttons {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  display: flex;
+  flex-direction: row;
+  z-index: 1000;
+}
+.fill-buttons .v-btn {
+  background-color: #000; 
+  color: #fff;
 }
 </style>
