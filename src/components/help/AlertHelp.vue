@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from "vue";
+import {cluster_helps} from "../../variables/helps.js";
 
 const props = defineProps({
   showAlert: Boolean
@@ -17,13 +18,13 @@ const props = defineProps({
       </div>
     </template>
     <div class="content_alert overflow-y-auto">
-      Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      maurmus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.
+      <template v-for="([name, value]) in Object.entries(cluster_helps)">
+        <h4>{{name}}</h4>
+          <p v-html="value"></p>
+        <br>
+        <strong>--------------------</strong><br>
+      </template>
       <br></br>
-      wnkfnsk
     </div>
   </v-alert>
   </v-overlay>
@@ -36,7 +37,7 @@ const props = defineProps({
   margin: 5% auto;
   max-width: 65% !important;
   height: 70vh !important;
-  display: flex !important;
+  display: block !important;
 }
 .title_alert{
   display: flex;
@@ -46,7 +47,7 @@ const props = defineProps({
 
 }
 .content_alert{
-  min-width: 100%;
-  height: 90%;
+  height: 59vh;
+  overflow-y: scroll;
 }
 </style>

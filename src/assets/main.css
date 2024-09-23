@@ -46,3 +46,12 @@ a,.green {
   left: -50%;
   z-index:-5;
 }
+.alert_help>.v-alert__close{
+  position: absolute;
+  top: 2%;
+  right: 1%;
+}
+.asterisco{
+  font-size: 7px;
+  float: right;
+}
