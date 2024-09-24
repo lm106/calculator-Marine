@@ -6,6 +6,7 @@ import Results from "@/components/form/content/Results.vue";
 import { getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance } from "@/rules/rules.js";
 import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.js";
 import { inputValues } from "@/variables/store.js";
+import {btn_info_ask} from "../../../variables/helps.js";
 
 const props = defineProps({
   active: String
@@ -75,13 +76,6 @@ const checkDisable = (index, column, activity, blockTitle) => {
 
 const getTitleBlock = () => clusters[props.active].map(item => item.title);
 
-const all = () => {
-  activePanel.value = getTitleBlock();
-};
-
-const none = () => {
-  activePanel.value = [];
-};
 
 const checkInput = (indexColumn, step) => {
   if (step === 'Fair' && indexColumn === 3) return false;
@@ -144,15 +138,26 @@ watch(inputValues, calculateMean, { deep: true });
 
 <template>
   <Results v-if="route.name === 'Results'"></Results>
-  <div v-else>
-    <div class="content_cluster">
+  <div v-else class="content_cluster">
       <v-row class="content_names" no-gutters>
         <v-col :cols="getColumnsSizeLabel()">
           <label class="pa-2 ma-2 label_name"></label>
         </v-col>
         <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize()" :key="index">
           <label class="pa-2 ma-2 label_name">{{ column }}</label>
-          <v-icon color="grey" icon="mdi-information"></v-icon>
+          <v-tooltip>
+            <template v-slot:activator="{props}">
+              <v-icon
+                  color="grey"
+                  icon="mdi-information"
+                  v-bind="props"
+              ></v-icon>
+            </template>
+            <div class="content_msg">
+              <span v-for="(e) in btn_info_ask[column]">{{e}}<br></span>
+            </div>
+          </v-tooltip>
+
         </v-col>
       </v-row>
       <div class="content_ask">
@@ -195,7 +200,7 @@ watch(inputValues, calculateMean, { deep: true });
         </v-btn>
       </div>
     </div>
-  </div>
+
 </template>
 
 <style scoped>
@@ -227,12 +232,10 @@ watch(inputValues, calculateMean, { deep: true });
   width: 150px;
 }
 .content_block_scroll, .content_ask {
-  max-height: 275px;
+  max-height: calc(100vh - 58vh);
   overflow-y: scroll;
 }
-.content_select {
-  display: flex;
-  flex-direction: column;
+.content_msg {;
 }
 .title_descriptor {
   margin-bottom: 3.5%;
