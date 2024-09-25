@@ -28,3 +28,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+.aidigestignore
+codebase.md
+.cursorignore

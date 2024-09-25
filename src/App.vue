@@ -1,10 +1,41 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import TheWelcome from "@/components/welcome/TheWelcome.vue";
+import { ref, onMounted } from 'vue';
+import { RouterView, useRouter } from 'vue-router';
+import RecoveryModal from '@/components/recoveryModal/RecoveryModal.vue';
+import { hasStoredValues, shouldAutoLoadCollection, autoLoadCollection } from '@/services/localStorageService';
+
+const showRecoveryModal = ref(false);
+const router = useRouter();
+const snackbar = ref(false);
+const snackbarText = ref('');
+onMounted(() => {
+  const currentUrl = window.location.href;
+  if (!currentUrl.endsWith('/inputdata/')) {
+    if (hasStoredValues()) {
+      if (shouldAutoLoadCollection()) {
+        if (autoLoadCollection()) {
+          snackbarText.value = "Datos recuperados de la memoria";
+          snackbar.value = true;
+        }
+      } else {
+        showRecoveryModal.value = true;
+      }
+    }
+  }
+});
 </script>
 
 <template>
-  <router-view></router-view>
+  <RecoveryModal v-if="showRecoveryModal" :show="showRecoveryModal" @close="showRecoveryModal = false" />
+  <RouterView />
+  <v-snackbar v-model="snackbar" :timeout="3000">
+    {{ snackbarText }}
+    <template v-slot:actions>
+      <v-btn color="blue" variant="text" @click="snackbar = false">
+        Cerrar
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <style scoped>
