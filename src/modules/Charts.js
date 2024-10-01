@@ -160,12 +160,22 @@ export async function generateChartsCluster(){
 export function getOptionsClusterCategory(nameTitle){
     let options=getCopy(chartOptionsClusterCategory.value);
     options.xaxis.categories=getAllClusters();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     options.title.text=nameTitle;
     return options;
 }
 export function getOptionsClusterScoreCategory(nameTitle){
     let options=getCopy(chartOptionsClusterScoreCategory.value);
     options.xaxis.categories=getAllClusters();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     options.title.text=nameTitle;
     return options;
 }
@@ -173,11 +183,21 @@ export function getOptionsClusterScoreCategory(nameTitle){
 export function getOptionsClusters(namecluster){
     let options=getCopy(optionsChartClusters.value);
     options.xaxis.categories=getCategoriesCluster();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     return options;
 }
 
 export function getOptionsStepClusters(step){
     let options= getCopy(optionsStepClusters.value);
     options.xaxis.categories=getCategories(step);
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     return options;
 }
