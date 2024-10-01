@@ -11,15 +11,12 @@ export function getCategories(step){
 }
 export function getCategoriesCluster(){
     return [
-        'Relevance scores',
         'Relevance for national MSP process',
         'Considered/used within MSP process',
-        'Fair scores', 'Data is Findable',
-        'Data is Accesible', 'Data is Interoperable',
-        'Data is Reusable', 'Resolution and temporal scores',
-        'Spatial coverage (extension) of the data set',
+        'Data is Findable', 'Data is Accesible', 'Data is Interoperable',
+        'Data is Reusable','Spatial coverage (extension) of the data set',
         'Spatial resolution of the data (level of details)',
-        'Temporal coverage', 'Temporal resolution', 'SDQF scores',
+        'Temporal coverage', 'Temporal resolution',
         'Completeness and timeliness',
         'Data accuracy and possible margin of error',
         'Data consistency with MSP input data',
