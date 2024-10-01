@@ -1,4 +1,10 @@
-import {seriesCategory, seriesCluster, seriesScoreCategory, seriesStepsCluster} from "@/variables/chartOptions.js";
+import {
+    seriesCategory,
+    seriesCluster,
+    seriesScoreCategory,
+    seriesScoreCluster,
+    seriesStepsCluster
+} from "@/variables/chartOptions.js";
 import {
     getAllValuesStep,
     getNamesAskStep,
@@ -62,6 +68,10 @@ export function getSeriesScores(nameScore){
 export function setSeriesClusters(){
     for (let i = 0; i < nameClusters.length; i++) {
         let values=getValuesPercent(nameClusters[i]);
+
+        values = Object.fromEntries(
+            Object.entries(values).filter(([key]) => !key.includes('scores'))
+        );
         let obj={name: nameClusters[i], data: getCopy(Object.values(values))};
         if (seriesCluster.value[nameClusters[i]]){
             seriesCluster.value[nameClusters[i]]=obj;
@@ -72,6 +82,25 @@ export function setSeriesClusters(){
 }
 export function getSeriesClusters(nameCluster){
     return [getCopy(seriesCluster.value[nameCluster])];
+}
+
+export function setSeriesScoreClusters(){
+    for (let i = 0; i < nameClusters.length; i++) {
+        let values=getValuesPercent(nameClusters[i]);
+
+        values = Object.fromEntries(
+            Object.entries(values).filter(([key]) => key.includes('scores'))
+        );
+        let obj={name: nameClusters[i], data: getCopy(Object.values(values))};
+        if (seriesScoreCluster.value[nameClusters[i]]){
+            seriesScoreCluster.value[nameClusters[i]]=obj;
+        }else{
+            seriesScoreCluster.value={...getCopy(seriesScoreCluster.value),[nameClusters[i]]:obj};
+        }
+    }
+}
+export function getSeriesScoreClusters(nameCluster){
+   return [seriesScoreCluster.value[nameCluster]];
 }
 
 export function setSeriesStepClusters(nameCluster){

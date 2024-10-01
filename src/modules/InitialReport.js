@@ -6,7 +6,7 @@ import {setCountRow} from "@/modules/countRow.js";
 import {
     setSeriesCategory,
     setSeriesClusters,
-    setSeriesScoreCategory,
+    setSeriesScoreCategory, setSeriesScoreClusters,
     setSeriesStepClusters
 } from "@/modules/SeriesCharts.js";
 
@@ -32,6 +32,7 @@ function initReportChart(){
     setSeriesCategory();
     setSeriesScoreCategory();
     setSeriesClusters();
+    setSeriesScoreClusters();
     // setSeriesStepClusters();
 }
 
