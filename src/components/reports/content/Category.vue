@@ -49,6 +49,7 @@ onBeforeMount(() => {
         </div>
       <v-spacer></v-spacer>
     </div>
+    <v-divider></v-divider>
     <div class="block_step" v-for="(nameCluster) in getAllClusters()">
       <v-container class="item_activity">
         <v-row  no-gutters>
