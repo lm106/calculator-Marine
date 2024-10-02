@@ -190,7 +190,7 @@ export function getOptionsScoreClusters(nameCluster){
     };
     options.plotOptions.bar={...options.plotOptions.bar, distributed:true};
     options.colors= colorsCluster;
-    options.title.text='Scores';
+    options.title.text=nameCluster+' Scores';
     return options;
 }
 export function getOptionsClusters(namecluster){
