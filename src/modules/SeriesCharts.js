@@ -100,7 +100,7 @@ export function setSeriesScoreClusters(){
     }
 }
 export function getSeriesScoreClusters(nameCluster){
-   return [seriesScoreCluster.value[nameCluster]];
+   return (seriesScoreCluster.value[nameCluster])?[seriesScoreCluster.value[nameCluster]]:[];
 }
 
 export function setSeriesStepClusters(nameCluster){
