@@ -14,6 +14,7 @@ onBeforeMount(()=>{
 </script>
 
 <template>
+  <div>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" readonly>
     <v-expansion-panel v-for="(name, i) in list" :key="i"
         class="panel_block panel_report panel_collections" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
@@ -26,6 +27,7 @@ onBeforeMount(()=>{
       <v-spacer></v-spacer>
     </v-expansion-panel>
   </v-expansion-panels>
+  </div>
 </template>
 
 <style scoped>

@@ -166,7 +166,7 @@ watch(inputValues, calculateMean, { deep: true });
             <v-col :cols="getColumnsSizeLabel()" class="names_activities names">
               <h4 v-if="index === 0" class="title title_descriptor">{{ block.title }} {{ (block.title.includes(activity)) ? '' : ' - ' }}</h4>
               <label class="pa-2 ma-2 label_name">{{ (block.title.includes(activity)) ? '' : activity }}</label>
-              <v-icon color="grey" icon="mdi-information"></v-icon>
+<!--              <v-icon color="grey" icon="mdi-information"></v-icon>-->
             </v-col>
             <v-col v-for="(column, indexColumn) in questions[route.name]" :cols="getColumnSize()" class="cell_input_number">
               <v-number-input v-if="checkInput(indexColumn, route.name)"
@@ -235,7 +235,7 @@ watch(inputValues, calculateMean, { deep: true });
   max-height: calc(100vh - 58vh);
   overflow-y: scroll;
 }
-.content_msg {;
+.content_msg {
 }
 .title_descriptor {
   margin-bottom: 3.5%;

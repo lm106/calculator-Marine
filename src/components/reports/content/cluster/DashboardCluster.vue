@@ -2,8 +2,19 @@
 import {onBeforeMount, ref} from 'vue';
 import {getAllValuesStep, getNamesScore, getValueScore, getValuesPercent} from "@/modules/countRow.js";
 import {nameAllQuestions, nameQuestions} from "@/variables/clusters.js";
-import {getOptionsClusters, getOptionsStepClusters} from "@/modules/Charts.js";
-import { getSeriesClusters, getSeriesStepClusters, setSeriesClusters, setSeriesStepClusters } from "@/modules/SeriesCharts.js"
+import {
+  getOptionsClusterCategory,
+  getOptionsClusters,
+  getOptionsScoreClusters,
+  getOptionsStepClusters
+} from "@/modules/Charts.js";
+import {
+  getSeriesClusters,
+  getSeriesScoreClusters,
+  getSeriesStepClusters,
+  setSeriesClusters,
+  setSeriesStepClusters
+} from "@/modules/SeriesCharts.js"
 
 
 const props = defineProps({
@@ -41,38 +52,9 @@ const updateTypeChart = (chart, event) => {
   <v-row class="row_first">
     <v-container class="content_score">
       <v-row class="row sparkboxes">
-          <v-col class="column">
-            <div class="box boxchart">
-              <div class="details">
-                <h3>Relevance & Application Score</h3>
-                <h1>{{ (list_score[0])? list_score[0]: 0}} %</h1>
-              </div>
-            </div>
-          </v-col>
-          <v-col class="column">
-            <div class="box boxchart">
-              <div class="details">
-                <h3>FAIR transparency Score</h3>
-                  <h1>{{ (list_score[1])? list_score[1]: 0}} %</h1>
-              </div>
-            </div>
-          </v-col>
-      </v-row>
-      <v-row class="row sparkboxes">
-        <v-col class="column">
-          <div class="box boxchart">
-            <div class="details">
-              <h3>Spatial & Temporal coverage score</h3>
-              <h1>{{ (list_score[2])? list_score[2]: 0}} %</h1>
-            </div>
-          </div>
-        </v-col>
-        <v-col class="column">
-          <div class="box boxchart">
-            <div class="details">
-              <h3>SQDF score</h3>
-              <h1>{{ (list_score[3])? list_score[3]: 0}} %</h1>
-            </div>
+        <v-col class="v-col-5">
+          <div class="box shadow boxChartCluster">
+            <apexchart :width="width.score" :height="heigth.rest" type="bar" :options="getOptionsScoreClusters(props.activeCluster)" :series="getSeriesScoreClusters(props.activeCluster)"></apexchart>
           </div>
         </v-col>
       </v-row>
@@ -82,28 +64,6 @@ const updateTypeChart = (chart, event) => {
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
             <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="getOptionsClusters(props.activeCluster)" :series="getSeriesClusters(props.activeCluster)"></apexchart>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-row>
-  <v-row v-for="(step, i) in nameAllQuestions">
-    <v-container v-if="i%2==0">
-      <v-row>
-        <v-col class="v-col-6">
-          <div class="box shadow boxChartCluster">
-            <div class="details">
-              <h3>{{ step }}</h3>
-            </div>
-            <apexchart ref="barChart" type="bar" :options="getOptionsStepClusters(nameQuestions[i])" :series="getSeriesStepClusters(nameQuestions[i])"></apexchart>
-          </div>
-        </v-col>
-        <v-col class="v-col-6">
-          <div class="box shadow boxChartCluster">
-            <div class="details">
-              <h3>{{ nameAllQuestions[i+1] }}</h3>
-            </div>
-            <apexchart ref="barChart" type="bar" :options="getOptionsStepClusters(nameQuestions[i+1])" :series="getSeriesStepClusters(nameQuestions[i+1])"></apexchart>
           </div>
         </v-col>
       </v-row>
