@@ -26,7 +26,7 @@ const handleActiveSection = (value) => {
   <Header></Header>
   <v-layout class="nav_block">
     <NavReport @updateActiveSection="handleActiveSection"></NavReport>
-    <router-view></router-view>
+    <router-view class="contenido"></router-view>
   </v-layout>
   <div id="chart"></div>
 </template>
@@ -34,5 +34,11 @@ const handleActiveSection = (value) => {
 <style scoped>
 .nav_block{
   flex: 1;
+  height: calc(100vh - 60px);
+}
+.contenido{
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+  width: 100%;
 }
 </style>
