@@ -125,10 +125,14 @@ const getColumnsSizeLabel = () => {
   return (route.name !== 'Relevance' && route.name !== 'SDQF') ? (windowWidth.value < 1440 ? '' : '3') : (windowWidth.value < 1440 ? '' : '4');
 };
 
-const onFocus=(e,nameQuestion)=>{
+const onFocus=(e,nameQuestion, number)=>{
   if(e){
     legendInput.setFocusedInput(nameQuestion);
+    onChange(number)
   }
+}
+const onChange=(number)=>{
+  legendInput.setInputValue(number);
 }
 
 watch([() => route.name, () => props.active], () => {
@@ -183,7 +187,8 @@ watch(inputValues, calculateMean, { deep: true });
                 :hideInput="false" inset :min="0" :max="3"
                 v-model="inputValues[route.name][active][block.title][activity][column]"
                 :disabled="checkDisable(indexColumn, column, activity, block.title)"
-                @update:focused="(e)=>onFocus (e, column)"
+                @update:focused="(e)=>onFocus (e, column,inputValues[route.name][active][block.title][activity][column])"
+                @update:modelValue="onChange(inputValues[route.name][active][block.title][activity][column])"
               >
               </v-number-input>
               <v-number-input v-else

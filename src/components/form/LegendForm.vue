@@ -81,7 +81,9 @@ const stopDrag = () => {
 
         <v-divider  v-if="legend.focusedInput"></v-divider>
         <p v-else>On focus any input</p>
-        <h5 v-for="(score, index) in btn_info_ask[legend.focusedInput]"><span class="type_score"> {{ score }}</span><br></h5>
+        <h5 v-for="(score, index) in btn_info_ask[legend.focusedInput]">
+          <span :class="(legend.inputValue==(btn_info_ask[legend.focusedInput].length - 1 - index))? 'type_score_weight type_score':'type_score'"> {{ score }}</span><br>
+        </h5>
       </div>
     </div>
   </div>
@@ -129,6 +131,9 @@ const stopDrag = () => {
 }
 .type_score{
   font-weight: normal;
+}
+.type_score_weight{
+  font-weight: bolder;
 }
 .draggable {
   position: absolute;

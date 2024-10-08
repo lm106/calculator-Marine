@@ -11,7 +11,8 @@ const generateReport =()=>{
 const legendInput=useInputFocusLegend();
 onBeforeMount(()=>{
   tokenReport.value=true;
-  legendInput.clearFocusedInput()
+  legendInput.clearFocusedInput();
+  legendInput.clearInputValue();
 })
 const dialog=ref(false)
 
