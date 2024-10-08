@@ -1,5 +1,5 @@
 <script setup>
-import { clusters, questions } from "@/variables/clusters.js";
+import {clusters, nameQuestions, questions} from "@/variables/clusters.js";
 import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
@@ -7,12 +7,15 @@ import { getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevan
 import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.js";
 import { inputValues } from "@/variables/store.js";
 import {btn_info_ask} from "../../../variables/helps.js";
+import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
 
 const props = defineProps({
   active: String
 });
 
-const route = useRoute();
+const legendInput=useInputFocusLegend();
+
+const route = useRoute()
 const emit = defineEmits(['updateCluster']);
 
 const activePanel = ref([]);
@@ -122,6 +125,12 @@ const getColumnsSizeLabel = () => {
   return (route.name !== 'Relevance' && route.name !== 'SDQF') ? (windowWidth.value < 1440 ? '' : '3') : (windowWidth.value < 1440 ? '' : '4');
 };
 
+const onFocus=(e,nameQuestion)=>{
+  if(e){
+    legendInput.setFocusedInput(nameQuestion);
+  }
+}
+
 watch([() => route.name, () => props.active], () => {
   if (tokenInit.value && Object.values(inputValues.value).length > 0) {
     sendCluster('updateCluster', inputValues.value);
@@ -173,7 +182,9 @@ watch(inputValues, calculateMean, { deep: true });
                 :reverse="false" class="selected" controlVariant="default"
                 :hideInput="false" inset :min="0" :max="3"
                 v-model="inputValues[route.name][active][block.title][activity][column]"
-                :disabled="checkDisable(indexColumn, column, activity, block.title)">
+                :disabled="checkDisable(indexColumn, column, activity, block.title)"
+                @update:focused="(e)=>onFocus (e, column)"
+              >
               </v-number-input>
               <v-number-input v-else
                 :reverse="false" class="selected" controlVariant="default"
