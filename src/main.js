@@ -13,6 +13,7 @@ import 'vuetify/styles'
 import { VNumberInput } from 'vuetify/labs/VNumberInput'
 
 import VueApexCharts from "vue3-apexcharts";
+import {createPinia} from "pinia";
 
 const vuetify = createVuetify({
     components:{ VNumberInput,}
@@ -21,4 +22,5 @@ const vuetify = createVuetify({
 app.use(VueApexCharts);
 app.use(router)
 app.use(vuetify)
+app.use(createPinia())
 app.mount('#app')

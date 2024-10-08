@@ -16,6 +16,7 @@
     "apexcharts": "^3.49.1",
     "jspdf": "^2.5.1",
     "pdf-lib": "^1.17.1",
+    "pinia": "^2.2.4",
     "vee-validate": "^4.12.8",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",

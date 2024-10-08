@@ -3,12 +3,15 @@ import { useRouter } from "vue-router";
 import DownloadAlert from "@/components/reports/DownloadAlert.vue";
 import {onBeforeMount, ref} from "vue";
 import {tokenReport} from "@/modules/InitialReport.js";
+import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
 const router = useRouter();
 const generateReport =()=>{
   router.push({name:'Category'});
 }
+const legendInput=useInputFocusLegend();
 onBeforeMount(()=>{
   tokenReport.value=true;
+  legendInput.clearFocusedInput()
 })
 const dialog=ref(false)
 
