@@ -3,10 +3,14 @@ import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values } from '@/variables/store.js'
+import { values, currentCollection } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
-import { saveValuesToLocalStorage } from '@/services/localStorageService';
+import { saveValuesToLocalStorage, getCurrentCollectionName } from '@/services/localStorageService';
+import { getAndUpdate } from '@/services/firestoreService.js';
+import { useAuth } from '@/composables/useAuth';
+
+const { user } = useAuth();
 
 const clusters= ref([
     'MSFD GES','WFD GES',
@@ -37,10 +41,7 @@ const processing=(tokenStep,data)=>{
     values.value[nameStep][nameCluster]=copy[nameStep][nameCluster];
   }
 }
-const setCluster=(data)=>{
-  // console.log('formform')
-  // let key=Object.keys(cluster)[0];
-  console.log(data)
+const setCluster= async (data)=> {
   let tokenStep=checkQuestionsStepValues(getKey(data));
   if(!tokenStep) {
     values.value={...getCopy(values.value),...getCopy(data)};
@@ -48,6 +49,9 @@ const setCluster=(data)=>{
     processing(tokenStep,data);
   }
   saveValuesToLocalStorage();
+  if(user.value && getCurrentCollectionName() && user.value.uid){
+    await getAndUpdate('collections', getCurrentCollectionName(), user.value.uid, values.value);
+  }
 }
 watch([()=>route.name], ()=>{
   if(route.name=='Results'){

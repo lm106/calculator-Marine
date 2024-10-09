@@ -32,7 +32,7 @@ const login = async() => {
   try {
     await sendSignInLinkToEmail(auth, email.value, actionCodeSettings);
     localStorage.setItem('emailForSignIn', email.value);
-    toast.success("An email with a login link has been sent to your email.", {
+    toast.success("Se ha enviado un enlace de inicio de sesión a tu correo electrónico.", {
       timeout: 5000
     });
   } catch (error) {

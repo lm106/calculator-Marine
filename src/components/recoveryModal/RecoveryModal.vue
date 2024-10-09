@@ -1,7 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { loadValuesFromLocalStorage, getStoredCollections, deleteCollection } from '@/services/localStorageService';
+import { getAndDelete, getAll, getOne } from '@/services/firestoreService';
+import { values, inputValues } from '@/variables/store.js';
+import { useAuth } from '@/composables/useAuth';
+
+
+const { user, isLoggedIn } = useAuth();
 
 const props = defineProps({
   show: Boolean,
@@ -14,17 +19,30 @@ const collections = ref([]);
 const selectedCollection = ref('');
 
 onMounted(() => {
-  updateCollections();
+  watch(isLoggedIn, async (newValue) => {
+    if (newValue) {
+      await updateCollections()
+    }
+  });
 });
 
-const updateCollections = () => {
-  collections.value = getStoredCollections();
+
+const updateCollections = async () => {
+  if (user.value && user.value.uid) {
+    const allCollections = await getAll('collections', user.value.uid);
+    collections.value = allCollections.map(collection => collection.name);
+  }
 };
 
-const loadCollection = () => {
+const loadCollection = async () => {
   if (selectedCollection.value) {
-    loadValuesFromLocalStorage(selectedCollection.value);
-    emit('close');
+    if (user.value && user.value.uid) {
+      const collection = await getOne('collections', selectedCollection.value, user.value.uid);
+      values.value = collection.data;
+      inputValues.value = collection.data;
+      localStorage.removeItem('currentCollection');
+      emit('close');
+    }
   }
 };
 
@@ -33,10 +51,12 @@ const startNew = () => {
   emit('close');
 };
 
-const deleteSelectedCollection = () => {
-  if (selectedCollection.value) {
-    deleteCollection(selectedCollection.value);
+const deleteSelectedCollection = async () => {
+  if (selectedCollection.value && user.value && user.value.uid) {
+    await getAndDelete('collections', selectedCollection.value, user.value.uid);
     updateCollections();
+    values.value = {};
+    inputValues.value = {};
     selectedCollection.value = '';
   }
 };
@@ -45,24 +65,24 @@ const deleteSelectedCollection = () => {
 <template>
   <v-dialog v-model="props.show" persistent max-width="500px">
     <v-card>
-      <v-card-title>Recuperar o gestionar colecciones</v-card-title>
+      <v-card-title>Restore and manage collections</v-card-title>
       <v-card-text>
-        <p>Selecciona una colección para cargar o borrar:</p>
+        <p>Select a collection to load or delete:</p>
         <v-select
           v-model="selectedCollection"
           :items="collections"
-          label="Selecciona una colección"
+          label="Select a collection"
         ></v-select>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" @click="loadCollection" :disabled="!selectedCollection">
-          Cargar colección
+          Load collection
         </v-btn>
         <v-btn color="secondary" @click="startNew">
-          Comenzar nueva colección
+          Start new collection
         </v-btn>
         <v-btn color="error" @click="deleteSelectedCollection" :disabled="!selectedCollection">
-          Borrar colección
+          Delete collection
         </v-btn>
       </v-card-actions>
     </v-card>

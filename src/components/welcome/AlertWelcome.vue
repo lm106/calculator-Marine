@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router';
 import { currentCollection } from '@/variables/store';
 import { useAuth } from '@/composables/useAuth';
 import { getOrCreate } from '@/services/firestoreService';
-
+import { clusters, questions } from '@/variables/clusters';
+import { useCollectionEvent } from '@/composables/useCollectionEvent';
 const props = defineProps({
   showModal: Boolean
 });
@@ -13,6 +14,7 @@ const cantidad = ref(1);
 const router = useRouter();
 const textos = ref([]);
 const { user } = useAuth();
+const { emitCollectionCreated } = useCollectionEvent()
 
 const items = ref(['']);
 
@@ -23,10 +25,24 @@ const saveCollectionName = async () => {
     localStorage.setItem('currentCollection', collectionName);
 
     const userId = user ? user.value.uid : null;
+    const data = {};
+    const firstCluster = Object.keys(clusters)[0];
+    const questionName = Object.keys(questions)[0];
+    data[questionName] = { [firstCluster]: {} };
+    clusters[firstCluster].forEach(block => {
+      data[questionName][firstCluster][block.title] = {};
+      block.activities.forEach(activity => {
+        data[questionName][firstCluster][block.title][activity] = {};
+        questions[questionName].forEach(column => {
+          data[questionName][firstCluster][block.title][activity][column] = 0;
+        });
+      });
+    });
 
     if (userId) {
       try {
-        await getOrCreate('collections', collectionName, userId);
+        await getOrCreate('collections', collectionName, userId, data);
+        emitCollectionCreated(collectionName);
       } catch (error) {
         console.error('Error al guardar la colección:', error);
       }

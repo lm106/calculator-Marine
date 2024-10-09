@@ -55,45 +55,50 @@ const templateItem2 = {
 };
 
 const generateItems = () => {
-  return Object.keys(listValues.value).map(keyParameter => {
-    const values = (props.activeList === 'List 1') ? getValuesItem1(keyParameter) : getValuesItem2(keyParameter);
-    return { name: keyParameter, ...values };
-  });
-};
+  let res = [];
+  Object.keys(listValues.value).forEach((keyParameter) => {
+    let values = (props.activeList == 'List 1') ? getValuesItem1(keyParameter) : getValuesItem2(keyParameter);
+    res.push({ name: keyParameter, ...values });
+  })
+  return res;
+}
 
-const getValuesItem1 = (parameter) => ({
-  "Highly/Moderately": getHighlyModerately(parameter),
-  "High FAIR Score": getHighFairScore(parameter),
-  "Coverage": getCoverage(parameter),
-  "Resolution": getResolution(parameter),
-  "Relevant and Fulfilling": getRelevantFulfilling(parameter),
-  "Accurancy and Consistency": getAccurancyConsistency(parameter),
-});
-
-const getValuesItem2 = (parameter) => ({
-  "Not used (not available)": getNotUseNotAvailable(parameter),
-  "Not used (available)": getNotUseAvailable(parameter),
-  "Not findable": getNotFindable(parameter),
-  "Not available": getNotAvailable(parameter),
-  "Not interoperable": getNotInteroperable(parameter),
-  "Not adequate spatial coverage": getNotAdequateSpatialCoverage(parameter),
-  "Not adequate spatial resolution": getNotAdequateSpatialResolution(parameter),
-  "Not adequate temporal coverage": getNotAdequateTemporalCoverage(parameter),
-  "Not adequate temporal resolution": getNotAdequateTemporalResolution(parameter),
-  "Inadequate accuracy": getInadequateAccuracy(parameter),
-  "Inadequate consistency": getInadequateConsistency(parameter),
-  "Not fulfilling monitoring requirements": getNotFulfillingMonitoringRequirements(parameter)
-});
-
+const getValuesItem1 = (parameter) => {
+  let res = {
+    "Highly/Moderately": getHighlyModerately(parameter),
+    "High FAIR Score": getHighFairScore(parameter),
+    "Coverage": getCoverage(parameter),
+    "Resolution": getResolution(parameter),
+    "Relevant and Fulfilling": getRelevantFulfilling(parameter),
+    "Accurancy and Consistency": getAccurancyConsistency(parameter),
+  };
+  return res;
+}
+const getValuesItem2 = (parameter) => {
+  let res = {
+    "Not used (not available)": getNotUseNotAvailable(parameter),
+    "Not used (available)": getNotUseAvailable(parameter),
+    "Not findable": getNotFindable(parameter),
+    "Not available": getNotAvailable(parameter),
+    "Not interoperable": getNotInteroperable(parameter),
+    "Not adequate spatial coverage": getNotAdequateSpatialCoverage(parameter),
+    "Not adequate spatial resolution": getNotAdequateSpatialResolution(parameter),
+    "Not adequate temporal coverage": getNotAdequateTemporalCoverage(parameter),
+    "Not adequate temporal resolution": getNotAdequateTemporalResolution(parameter),
+    "Inadequate accuracy": getInadequateAccuracy(parameter),
+    "Inadequate consistency": getInadequateConsistency(parameter),
+    "Not fulfilling monitoring requirements": getNotFulfillingMonitoringRequirements(parameter)
+  };
+  return res;
+}
 const generateHeaders = () => {
-  let data=(props.activeList=='List 1')? templateItem: templateItem2;
+  let data = (props.activeList == 'List 1') ? templateItem : templateItem2;
   if (data.length === 0) return [];
   return Object.keys(data).map(key => ({
     text: key,
     value: key
   }));
 };
-
 const headers = computed(() => generateHeaders());
 const activeItems = computed(() => generateItems());
 
@@ -104,28 +109,13 @@ const activeItems = computed(() => generateItems());
     <v-card-title class="d-flex align-right pe-2 mb-5">
       <h4 class="title">{{ props.activeList }}</h4>
       <v-spacer class="w-75"></v-spacer>
-      <v-text-field
-        v-model="search"
-        density="compact"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="solo-filled"
-        flat
-        hide-details
-        single-line
-        class="w-25"
-      />
+      <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
+        variant="solo-filled" flat hide-details single-line class="w-25"></v-text-field>
     </v-card-title>
 
     <v-divider></v-divider>
-    <v-data-table
-      v-model:search="search"
-      :items="activeItems"
-      :header="headers"
-      height="600px"
-      fixed-header
-      fixed-footer
-    >
+    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header
+      fixed-footer>
       <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
         <tr class="header_tr">
           <template v-for="column in columns" :key="column.key">
@@ -133,9 +123,9 @@ const activeItems = computed(() => generateItems());
               <span class="mr-2 cursor-pointer" @click="() => toggleSort(column)">
                 {{ column.title }}
               </span>
-              <v-icon class="btn_info_table" color="grey" icon="mdi-information" />
+              <v-icon class="btn_info_table" color="grey" icon="mdi-information"></v-icon>
               <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)" />
+                <v-icon :icon="getSortIcon(column)"></v-icon>
               </template>
             </td>
           </template>
@@ -146,11 +136,10 @@ const activeItems = computed(() => generateItems());
       </template>
       <template v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
         <div class="text-center">
-          <v-icon
-            :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'"
-            size="small"
-            :color="item[header.value] ? 'green' : 'red'"
-          />
+          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'" size="small"
+            :color="item[header.value] ? 'green' : 'red'">
+            <!--              {{ item[header.value] ? '' : 'Out' }}-->
+          </v-icon>
         </div>
       </template>
     </v-data-table>
@@ -161,9 +150,11 @@ const activeItems = computed(() => generateItems());
 .nameParameter {
   font-weight: bold;
 }
+
 .btn_info_table {
   float: right;
 }
+
 .header_tr {
   background-color: white;
 }
