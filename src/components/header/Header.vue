@@ -1,21 +1,30 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { getStoredCollections, loadValuesFromLocalStorage } from '@/services/localStorageService';
+import { loadValuesFromLocalStorage, getStoredCollections } from '@/services/localStorageService';
 import { currentCollection } from '@/variables/store';
+import { useAuth } from '@/composables/useAuth';
 
+
+const { user, isLoggedIn } = useAuth();
 const router = useRouter();
 const collections = ref([]);
 const selectedCollection = ref('');
 
 onMounted(() => {
-  updateCollections();
-  selectedCollection.value = currentCollection.value;
+  watch(isLoggedIn, (newValue) => {
+    if (newValue) {
+      updateCollections();
+      selectedCollection.value = currentCollection.value;
+    }
+  });
 });
 
-const updateCollections = () => {
-  collections.value = getStoredCollections();
-  collections.value.push('Crear nueva');
+const updateCollections = async () => {
+  if (user.value) {
+    collections.value = await getStoredCollections(user)
+    collections.value.push('Crear nueva');
+  }
 };
 
 watch(selectedCollection, (newValue) => {

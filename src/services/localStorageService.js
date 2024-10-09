@@ -1,4 +1,5 @@
 import { values, currentCollection, inputValues } from '@/variables/store';
+import { getAll } from '@/services/firestoreService';
 export function saveValuesToLocalStorage() {
   const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
   if (currentCollection.value) {
@@ -22,9 +23,11 @@ export function loadValuesFromLocalStorage(collectionName) {
   }
 }
 
-export function getStoredCollections() {
-  const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
-  return Object.keys(collectionData);
+export async function getStoredCollections(user) {
+  const allCollections = await getAll('collections', user.value.uid);
+  return allCollections.map(collection => ({
+    [collection.name]: { ...collection.data }
+  }));
 }
 
 export function hasStoredValues() {

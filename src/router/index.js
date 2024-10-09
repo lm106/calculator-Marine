@@ -79,6 +79,11 @@ const router = createRouter({
         // }
       ]
 
+    },
+    {
+      path: '/confirm',
+      name: 'Confirm',
+      component: () => import('../views/Confirm.vue'),
     }
   ]
 })

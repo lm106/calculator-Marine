@@ -2,6 +2,8 @@
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { currentCollection } from '@/variables/store';
+import { useAuth } from '@/composables/useAuth';
+import { getOrCreate } from '@/services/firestoreService';
 
 const props = defineProps({
   showModal: Boolean
@@ -10,22 +12,24 @@ const props = defineProps({
 const cantidad = ref(1);
 const router = useRouter();
 const textos = ref([]);
+const { user } = useAuth();
 
 const items = ref(['']);
 
-const saveCollectionName = () => {
+const saveCollectionName = async () => {
   if (textos.value.length > 0 && textos.value[0]) {
     const collectionName = textos.value[0];
     currentCollection.value = collectionName;
     localStorage.setItem('currentCollection', collectionName);
-    
-    // Obtener colecciones existentes o inicializar un array vacío
-    const existingCollections = JSON.parse(localStorage.getItem('collections') || '[]');
-    
-    // Añadir la nueva colección si no existe
-    if (!existingCollections.includes(collectionName)) {
-      existingCollections.push(collectionName);
-      localStorage.setItem('collections', JSON.stringify(existingCollections));
+
+    const userId = user ? user.value.uid : null;
+
+    if (userId) {
+      try {
+        await getOrCreate('collections', collectionName, userId);
+      } catch (error) {
+        console.error('Error al guardar la colección:', error);
+      }
     }
   }
 };
