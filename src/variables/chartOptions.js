@@ -1,7 +1,8 @@
 import {ref} from "vue";
 import {getAllClusters} from "@/modules/utils.js";
 
-
+export const color= ['#2b94a3','#fa6c3d'];
+export const colorsCluster= ['#33b2df', '#546E7A', '#d4526e', '#13d8aa' ];
 export const seriesCategory=ref({});
 export const seriesScoreCategory=ref({});
 
@@ -132,9 +133,9 @@ export const chartOptionsClusterScoreCategory=ref({
 });
 
 
-
 export const seriesCluster = ref({});
 export const seriesStepsCluster=ref([]);
+export const seriesScoreCluster=ref([]);
 
 export const optionsChartClusters =ref( {
     chart: {
@@ -162,7 +163,7 @@ export const optionsChartClusters =ref( {
             enabled: false
         }
     },
-    colors: ['#2b94a3','#fa6c3d'],
+    colors: [],
     stroke:{
         width: 1
     },

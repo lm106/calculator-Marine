@@ -9,6 +9,7 @@ const listClusters = getAllClusters();
 </script>
 
 <template>
+  <div>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" multiple>
     <v-expansion-panel 
       v-for="(cluster, index) in listClusters" 
@@ -33,6 +34,7 @@ const listClusters = getAllClusters();
       <v-spacer></v-spacer>
     </v-expansion-panel>
   </v-expansion-panels>
+  </div>
 </template>
 
 <style scoped>

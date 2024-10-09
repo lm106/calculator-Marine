@@ -1,17 +1,21 @@
 <script setup>
-import { clusters, questions } from "@/variables/clusters.js";
+import {clusters, nameQuestions, questions} from "@/variables/clusters.js";
 import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { useRoute } from "vue-router";
 import Results from "@/components/form/content/Results.vue";
 import { getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevance } from "@/rules/rules.js";
 import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.js";
 import { inputValues } from "@/variables/store.js";
+import {btn_info_ask} from "../../../variables/helps.js";
+import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
 
 const props = defineProps({
   active: String
 });
 
-const route = useRoute();
+const legendInput=useInputFocusLegend();
+
+const route = useRoute()
 const emit = defineEmits(['updateCluster']);
 
 const activePanel = ref([]);
@@ -75,13 +79,6 @@ const checkDisable = (index, column, activity, blockTitle) => {
 
 const getTitleBlock = () => clusters[props.active].map(item => item.title);
 
-const all = () => {
-  activePanel.value = getTitleBlock();
-};
-
-const none = () => {
-  activePanel.value = [];
-};
 
 const checkInput = (indexColumn, step) => {
   if (step === 'Fair' && indexColumn === 3) return false;
@@ -128,6 +125,16 @@ const getColumnsSizeLabel = () => {
   return (route.name !== 'Relevance' && route.name !== 'SDQF') ? (windowWidth.value < 1440 ? '' : '3') : (windowWidth.value < 1440 ? '' : '4');
 };
 
+const onFocus=(e,nameQuestion, number)=>{
+  if(e){
+    legendInput.setFocusedInput(nameQuestion);
+    onChange(number)
+  }
+}
+const onChange=(number)=>{
+  legendInput.setInputValue(number);
+}
+
 watch([() => route.name, () => props.active], () => {
   if (tokenInit.value && Object.values(inputValues.value).length > 0) {
     sendCluster('updateCluster', inputValues.value);
@@ -144,15 +151,26 @@ watch(inputValues, calculateMean, { deep: true });
 
 <template>
   <Results v-if="route.name === 'Results'"></Results>
-  <div v-else>
-    <div class="content_cluster">
+  <div v-else class="content_cluster">
       <v-row class="content_names" no-gutters>
         <v-col :cols="getColumnsSizeLabel()">
           <label class="pa-2 ma-2 label_name"></label>
         </v-col>
         <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize()" :key="index">
           <label class="pa-2 ma-2 label_name">{{ column }}</label>
-          <v-icon color="grey" icon="mdi-information"></v-icon>
+          <v-tooltip>
+            <template v-slot:activator="{props}">
+              <v-icon
+                  color="grey"
+                  icon="mdi-information"
+                  v-bind="props"
+              ></v-icon>
+            </template>
+            <div class="content_msg">
+              <span v-for="(e) in btn_info_ask[column]">{{e}}<br></span>
+            </div>
+          </v-tooltip>
+
         </v-col>
       </v-row>
       <div class="content_ask">
@@ -161,14 +179,17 @@ watch(inputValues, calculateMean, { deep: true });
             <v-col :cols="getColumnsSizeLabel()" class="names_activities names">
               <h4 v-if="index === 0" class="title title_descriptor">{{ block.title }} {{ (block.title.includes(activity)) ? '' : ' - ' }}</h4>
               <label class="pa-2 ma-2 label_name">{{ (block.title.includes(activity)) ? '' : activity }}</label>
-              <v-icon color="grey" icon="mdi-information"></v-icon>
+<!--              <v-icon color="grey" icon="mdi-information"></v-icon>-->
             </v-col>
             <v-col v-for="(column, indexColumn) in questions[route.name]" :cols="getColumnSize()" class="cell_input_number">
               <v-number-input v-if="checkInput(indexColumn, route.name)"
                 :reverse="false" class="selected" controlVariant="default"
                 :hideInput="false" inset :min="0" :max="3"
                 v-model="inputValues[route.name][active][block.title][activity][column]"
-                :disabled="checkDisable(indexColumn, column, activity, block.title)">
+                :disabled="checkDisable(indexColumn, column, activity, block.title)"
+                @update:focused="(e)=>onFocus (e, column,inputValues[route.name][active][block.title][activity][column])"
+                @update:modelValue="onChange(inputValues[route.name][active][block.title][activity][column])"
+              >
               </v-number-input>
               <v-number-input v-else
                 :reverse="false" class="selected" controlVariant="default"
@@ -195,7 +216,7 @@ watch(inputValues, calculateMean, { deep: true });
         </v-btn>
       </div>
     </div>
-  </div>
+
 </template>
 
 <style scoped>
@@ -227,12 +248,10 @@ watch(inputValues, calculateMean, { deep: true });
   width: 150px;
 }
 .content_block_scroll, .content_ask {
-  max-height: 275px;
+  max-height: calc(100vh - 58vh);
   overflow-y: scroll;
 }
-.content_select {
-  display: flex;
-  flex-direction: column;
+.content_msg {
 }
 .title_descriptor {
   margin-bottom: 3.5%;

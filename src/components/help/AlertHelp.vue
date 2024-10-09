@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from "vue";
+import {cluster_helps, legend} from "../../variables/helps.js";
 
 const props = defineProps({
   showAlert: Boolean
@@ -17,13 +18,27 @@ const props = defineProps({
       </div>
     </template>
     <div class="content_alert overflow-y-auto">
-      Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.Vivamus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      maurmus consectetuer hendrerit lacus. Sed mollis, eros et ultrices tempus,
-      mauris ipsum aliquam liosuere imperdiet, leo.
+      <v-expansion-panels multiple>
+        <v-expansion-panel  v-for="([name, value]) in Object.entries(cluster_helps)"
+                            class="panel_block" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
+          border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
+        >
+          <template #title>
+            <div class="title_block">
+              <h3 class="title">{{ name }}</h3>
+              <v-divider></v-divider>
+            </div>
+          </template>
+          <v-expansion-panel-text>
+            <p v-html="value"></p>
+            <br>
+            <p v-if="name.includes('7 DATA CLUSTER')" v-html="legend"></p>
+
+          </v-expansion-panel-text>
+          <v-spacer></v-spacer>
+        </v-expansion-panel>
+      </v-expansion-panels>
       <br></br>
-      wnkfnsk
     </div>
   </v-alert>
   </v-overlay>
@@ -36,7 +51,7 @@ const props = defineProps({
   margin: 5% auto;
   max-width: 65% !important;
   height: 70vh !important;
-  display: flex !important;
+  display: block !important;
 }
 .title_alert{
   display: flex;
@@ -46,7 +61,7 @@ const props = defineProps({
 
 }
 .content_alert{
-  min-width: 100%;
-  height: 90%;
+  height: 59vh;
+  overflow-y: scroll;
 }
 </style>

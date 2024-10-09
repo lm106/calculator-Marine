@@ -1,49 +1,21 @@
 <script setup>
-import {ref, watch} from "vue";
+import {ref, watch} from 'vue';
 import {useRoute} from "vue-router";
+import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
+import {btn_info_ask} from "@/variables/helps.js";
 
 const props=defineProps({
   columns:Array
 })
-const route=useRoute();
-const legends={
-  'Relevance for national MSP process':['Highly Relevant','Moderately Relevant','Low Relevance','Not Relevant'],
-  'Considered/used within MSP process':['Properly Applied','Used, but Not Properly Applied','Considered, but Not Used','Not Considered'],
-  'Data is Findable':['Data is described with metadata that are registered, indexed, and findable through international catalogues (e.g., INSPIRE, EU Open Data Portal, EMODnet)',
-    'Data is described with metadata, registered, indexed, and findable through national or local catalogues',
-    'Data is described with metadata but not registered or indexed in searchable resource catalogues',
-    'Metadata do not exist, and information is not discoverable (findable)'],
-  'Data is Accesible':['Data is publicly accessible through open protocol','Data is accessible on demand, not through open protocol',
-    'Data is existing, locked, and not available','Data not available'],
-  'Data is Interoperable':['Followed and harmonized data by international standards (e.g., INSPIRE, S-56, OGC)',
-    'Data set not harmonized but applied international standardized semantics (e.g., EUNIS, EU-NOMEN, WORMS, INSPIRE code lists, IUCN protected areas categories, CORINE classes)',
-    'National standards applied','Not harmonized'],
-  'Data is Reusable':'',
-  'Spatial coverage (extension) of the data set':['Complete spatial coverage of the area relevant for MSP (e.g., coastal waters or EEZ).',
-    'Partial coverage, somewhat relevant for MSP but not entirely adequate.',
-    'Sporadic coverage, inadequate for MSP purposes.','No spatial data component available.'],
-  'Spatial resolution of the data (level of details)':['Spatial resolution adequate for MSP.',
-    'Medium-level resolution, somewhat relevant but not entirely adequate for the MSP process.',
-    'Coarse resolution, insufficient for proper use in the MSP process but still possible to apply.',
-    'Inadequate spatial resolution for MSP planning area, making it difficult to apply for MSP.'],
-  'Temporal coverage':['Temporal resolution adequate for MSP.',
-    'Medium-level resolution, somewhat relevant but not entirely adequate for the MSP process.',
-    'Coarse resolution, insufficient for proper use in the MSP process but still possible to apply.',
-    'Inadequate temporal resolution for MSP planning area, making it difficult to apply for MSP.'],
-  'Temporal resolution':['Temporal resolution adequate for MSP.',
-    'Medium-level resolution, somewhat relevant but not entirely adequate for the MSP process.',
-    'Coarse resolution, insufficient for proper use in the MSP process but still possible to apply.',
-    'Inadequate temporal resolution for MSP planning area, making it difficult to apply for MSP.'],
-  'Data consistency with MSP input data':['High accuracy data, obtained by monitoring, observations or survey.',
-    'Medium accuracy data, obtained by modelling.','Low accuracy data (e.g obtained by proxy).',
-    'Accuracy information not available and difficult to assess.'],
-  'Data accuracy and possible margin of error':['High consistency – data has a logical uniformity with other spatial data used in the MSP process.',
-    'Medium consistency – data presents minor discrepancies with some spatial data used in the MSP process.',
-    'Low consistency - data presents significant contradictions with spatial data used in the MSP process.',
-    'Inconsistent data with spatial data used in the MSP process, or consistency cannot be assessed.'],
-  'Completeness and timeliness':''
-}
+const isVisible = ref(false);
+let isDragging = ref(false);
+let offsetX = ref(0);
+let offsetY = ref(0);
 const type= ref();
+const legend=useInputFocusLegend();
+
+const route=useRoute();
+
 const getColumns=()=>{
   if(route.name=='Fair'){
     return props.columns.filter((item)=> item != 'Data is Reusable');
@@ -56,31 +28,66 @@ const getColumns=()=>{
 watch(() => props.columns, () => {
   type.value = undefined;
 });
+
+
+
+// Función que inicia el arrastre
+const startDrag = (event) => {
+  const draggable = event.currentTarget;
+
+  const rect = draggable.getBoundingClientRect();
+  offsetX.value = event.clientX - rect.left;
+  offsetY.value = event.clientY - rect.top;
+
+  isDragging.value = true;
+
+  document.onmousemove = dragElement;
+  document.onmouseup = stopDrag;
+};
+
+// Función que mueve el elemento
+const dragElement = (event) => {
+  if (isDragging.value) {
+    const draggable = document.querySelector('.draggable');
+
+    draggable.style.left = `${event.clientX - offsetX.value}px`;
+    draggable.style.top = `${event.clientY - offsetY.value}px`;
+  }
+};
+
+// Función que detiene el arrastre
+const stopDrag = () => {
+  isDragging.value = false;
+  document.onmousemove = null;
+  document.onmouseup = null;
+};
 </script>
-
 <template>
-  <v-alert class="alert_legend" border="top" color="#DD6D45"
-           variant="outlined">
-    <template #title>
-      <v-icon size="25" id="icon_alert_title" icon="mdi-information"></v-icon>
-      <h6 class="title_legend">
-        Legend of Questions
-      </h6>
-    </template>
-    <template #text>
-    <v-select
-        label="Select"
-        v-model="type"
-        :items="getColumns()"
-        variant="solo-filled"
-    ></v-select>
-      <div class="content_alert_text">
-        <h5 v-for="(score, index) in legends[type]">Score {{  legends[type].length - index - 1  }}: <span class="type_score"> {{ score }}</span><br></h5>
-      </div>
-    </template>
-    </v-alert>
-</template>
+  <v-btn class="btn_legend" @click="isVisible = true">Legend</v-btn>
 
+  <div class="overlay" v-if="isVisible">
+    <div
+        class="draggable"
+        ref="draggable"
+        @mousedown="startDrag"
+        @mouseup="stopDrag"
+    >
+      <div class="header">
+        <span>Legend</span>
+        <v-btn class="icon_btn_close" @click="isVisible = false" icon="$close"></v-btn>
+      </div>
+      <div class="content_alert_text">
+        <h4 v-if="legend.focusedInput">{{ legend.focusedInput }}</h4>
+
+        <v-divider  v-if="legend.focusedInput"></v-divider>
+        <p v-else>On focus any input</p>
+        <h5 v-for="(score, index) in btn_info_ask[legend.focusedInput]">
+          <span :class="(legend.inputValue==(btn_info_ask[legend.focusedInput].length - 1 - index))? 'type_score_weight type_score':'type_score'"> {{ score }}</span><br>
+        </h5>
+      </div>
+    </div>
+  </div>
+</template>
 <style scoped>
 .alert_legend{
   width: 15%;
@@ -95,11 +102,68 @@ watch(() => props.columns, () => {
   margin-left: 5%;
   font-size: 16px ;
 }
+.btn_legend{
+  position: absolute;
+  top: 10%;
+  left: 2.5%;
+  background-color: var(--color-orange);
+  color: white;
+  text-transform: initial;
+  font-weight: 500;
+}
+.icon_btn_close{
+  background-color: transparent !important;
+  border-radius: none !important;
+  box-shadow: none !important;
+  color: white !important;
+  height: 30px;
+  width: 30px ;
+}
 .content_alert_text{
-  height: 150px;
+  max-height: 450px;
+  min-height: 100px;
   overflow-y: auto;
+  padding: 0% 1.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-wrap: nowrap;
 }
 .type_score{
   font-weight: normal;
+}
+.type_score_weight{
+  font-weight: bolder;
+}
+.draggable {
+  position: absolute;
+  width: 300px;
+  top: 50%; /* Posición inicial */
+  left: 10px; /* Posición inicial */
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Asegura que esté sobre otros elementos */
+  border-radius: 10px;
+}
+
+.header {
+  background-color:var(--color-btn-dark-blue);
+  padding: 10px;
+  color: white;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.content {
+  padding: 20px;
+}
+
+button {
+  margin-top: 10px;
 }
 </style>

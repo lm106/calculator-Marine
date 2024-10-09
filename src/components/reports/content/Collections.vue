@@ -13,6 +13,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
+  <div>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" readonly>
     <v-expansion-panel 
       v-for="(name, i) in list" 
@@ -27,6 +28,7 @@ onBeforeMount(() => {
       <v-spacer />
     </v-expansion-panel>
   </v-expansion-panels>
+  </div>
 </template>
 
 <style scoped>
