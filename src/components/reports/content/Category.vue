@@ -10,6 +10,7 @@ import {
 } from "@/modules/SeriesCharts.js";
 import {getOptionsClusterCategory, getOptionsClusterScoreCategory, getOptionsScoreClusters} from "@/modules/Charts.js";
 import {getNamesScore} from "@/modules/countRow.js";
+import {getAllClusters} from "@/modules/utils.js";
 
 const route = useRoute();
 const activePanel = ref([]);
