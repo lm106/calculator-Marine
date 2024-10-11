@@ -6,13 +6,13 @@ import ShareAlert from "@/components/reports/ShareAlert.vue";
 import DeleteAlert from "@/components/reports/DeleteAlert.vue";
 
 const list_items=[
-  {icon: 'mdi-shape', title:'Category', value:'Category'},
-  {icon: 'mdi-chart-box-outline', title:'Cluster', value:'Cluster'},
-  {icon: 'mdi-tune', title:'Filter of Collections', value:'Collections'},
+  {title:'Report'},
+  {icon: 'mdi-shape', title:'By Category', value:'Category'},
+  {icon: 'mdi-chart-box-outline', title:'By Cluster', value:'Cluster'},
+  {icon: 'mdi-tune', title:'By List Collections', value:'Collections'},
   {title:'Tools'},
   {icon: 'mdi-home-variant', title:'Welcome', value:'Welcome'},
   {icon: 'mdi-view-dashboard', title:'Dashboard', value:'Results'},
-
   {icon: 'mdi-share-variant', title:'Share', value:'share'},
   {icon: 'mdi-download', title:'Download', value:'download'},
   {icon: 'mdi-file-plus-outline', title:'New form', value:'new_form'},
@@ -28,7 +28,7 @@ const drawer = ref(true);
 const dialog = ref(false);
 const share = ref(false);
 const deleteReport = ref(false);
-const rail = ref(true);
+const rail = ref(false);
 const activeItem = ref((route.name=='Help')? 'Help': 'Category');
 
 
@@ -64,10 +64,10 @@ const handleItemClick = (value) => {
   <v-navigation-drawer
         v-model="drawer"
         :rail="rail"
-        @click="rail = false"
+        @click="rail = !rail"
         class="navbar"
     >
-      <v-list-item title="Reports" nav >
+      <v-list-item title="Menu" nav >
         <template v-slot:append>
           <v-btn
               :icon="(!rail)?'mdi-chevron-left': 'mdi-chevron-right'"
@@ -82,7 +82,7 @@ const handleItemClick = (value) => {
       <v-list density="compact" nav>
         <template v-for="item in list_items.slice(0,-1)">
         <v-list-item
-            v-if="item.title !='Tools'"
+            v-if="item.title !='Tools' && item.title !='Report'"
             :prepend-icon="item.icon"
             :title="item.title"
             :value="item.value"
