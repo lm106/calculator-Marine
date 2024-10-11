@@ -22,7 +22,8 @@ import {
 import DashboardCluster from "@/components/reports/content/cluster/DashboardCluster.vue";
 
 const props=defineProps({
-  activeList:String
+  activeList:String,
+  mode:Boolean
 })
 
 const search = ref('');
@@ -103,53 +104,53 @@ const activeItems = computed(() => generateItems());
 </script>
 
 <template>
-<!--  <v-card flat>-->
-<!--    <v-card-title class="d-flex align-right pe-2 mb-5">-->
-<!--      <h4 class="title">{{ props.activeList }}</h4>-->
-<!--      <v-spacer class="w-75"></v-spacer>-->
-<!--      <v-text-field-->
-<!--          v-model="search"-->
-<!--          density="compact"-->
-<!--          label="Search"-->
-<!--          prepend-inner-icon="mdi-magnify"-->
-<!--          variant="solo-filled"-->
-<!--          flat-->
-<!--          hide-details-->
-<!--          single-line-->
-<!--          class="w-25"-->
-<!--      ></v-text-field>-->
-<!--    </v-card-title>-->
-<!--    <v-divider></v-divider>-->
-<!--    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>-->
-<!--      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">-->
-<!--        <tr class="header_tr">-->
-<!--          <template v-for="column in columns" :key="column.key">-->
-<!--            <td>-->
-<!--              <span class="mr-2 cursor-pointer" @click="() => toggleSort(column)">-->
-<!--                {{ column.title }}-->
-<!--              </span>-->
-<!--              <v-icon class="btn_info_table" color="grey" icon="mdi-information"></v-icon>-->
-<!--              <template v-if="isSorted(column)">-->
-<!--                <v-icon :icon="getSortIcon(column)"></v-icon>-->
-<!--              </template>-->
-<!--            </td>-->
-<!--          </template>-->
-<!--        </tr>-->
-<!--      </template>-->
-<!--      <template v-slot:item.name="{ item }">-->
-<!--        <div class="nameParameter">{{ item.name }}</div>-->
-<!--      </template>-->
-<!--      <template  v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">-->
-<!--        <div class="text-center">-->
-<!--          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'"-->
-<!--              size="small" :color="item[header.value] ? 'green' : 'red'">-->
-<!--&lt;!&ndash;              {{ item[header.value] ? '' : 'Out' }}&ndash;&gt;-->
-<!--          </v-icon>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </v-data-table>-->
-<!--  </v-card>-->
-  <v-expansion-panels class="panels panels_report" multiple>
+  <v-card v-if="!props.mode" flat>
+    <v-card-title class="d-flex align-right pe-2 mb-5">
+      <h4 class="title">{{ props.activeList }}</h4>
+      <v-spacer class="w-75"></v-spacer>
+      <v-text-field
+          v-model="search"
+          density="compact"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          variant="solo-filled"
+          flat
+          hide-details
+          single-line
+          class="w-25"
+      ></v-text-field>
+    </v-card-title>
+    <v-divider></v-divider>
+    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>
+      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
+        <tr class="header_tr">
+          <template v-for="column in columns" :key="column.key">
+            <td>
+              <span class="mr-2 cursor-pointer" @click="() => toggleSort(column)">
+                {{ column.title }}
+              </span>
+              <v-icon class="btn_info_table" color="grey" icon="mdi-information"></v-icon>
+              <template v-if="isSorted(column)">
+                <v-icon :icon="getSortIcon(column)"></v-icon>
+              </template>
+            </td>
+          </template>
+        </tr>
+      </template>
+      <template v-slot:item.name="{ item }">
+        <div class="nameParameter">{{ item.name }}</div>
+      </template>
+      <template  v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
+        <div class="text-center">
+          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'"
+              size="small" :color="item[header.value] ? 'green' : 'red'">
+<!--              {{ item[header.value] ? '' : 'Out' }}-->
+          </v-icon>
+        </div>
+      </template>
+    </v-data-table>
+  </v-card>
+  <v-expansion-panels v-else class="panels panels_report" multiple>
     <v-expansion-panel v-for="(name_list, i) in headers.slice(1)" :key="i" class="panel_block panel_report"
                        style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
                               border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
