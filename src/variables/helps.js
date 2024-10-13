@@ -67,6 +67,10 @@ export const cluster_helps={
         'the <strong>competences distribution of the different levels of the public administration within the area of ' +
         'planning.</strong><br>The second component of the Governance cluster refers to the varied regulation that applies to ' +
         'the area of planning, including the marine, but also coastal areas.',
+    'ASSESSMENT OF INPUT DATA: 4 TOPICS/CATEGORIES':'&nbsp;&nbsp;- Relevance' +
+        '<br>&nbsp;&nbsp;- Fair' +
+        '<br>&nbsp;&nbsp;- Spatial and temporal coverage & resolution' +
+        '<br>&nbsp;&nbsp;- SDQF',
     'Relevance and application within the MSP process':'The goal is to determine the suitability of spatial data ' +
         'within each of the seven data clusters of the MSPdF. Additionally, this topic aims to identify the actual ' +
         'consideration/use of the data within the MSP process and its potential impact on decision-making.<br>'+
