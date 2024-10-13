@@ -59,7 +59,7 @@ watch([()=>router.currentRoute.value.name], ()=>{
     <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn btn_weight" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
     <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-1" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
     <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
-    <LegendForm  v-if="checkStepNow() && checkPageReports()" class="ma-2 text-none" :columns="list_questions"></LegendForm>
+    <LegendForm  v-if="checkStepNow() && checkPageReports()" ></LegendForm>
   </div>
 </template>
 

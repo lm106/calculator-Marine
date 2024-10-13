@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import { currentCollection } from '@/variables/store';
 
 const props = defineProps({
   showModal: Boolean
@@ -11,6 +12,23 @@ const router = useRouter();
 const textos = ref([]);
 
 const items = ref(['']);
+
+const saveCollectionName = () => {
+  if (textos.value.length > 0 && textos.value[0]) {
+    const collectionName = textos.value[0];
+    currentCollection.value = collectionName;
+    localStorage.setItem('currentCollection', collectionName);
+    
+    // Obtener colecciones existentes o inicializar un array vacío
+    const existingCollections = JSON.parse(localStorage.getItem('collections') || '[]');
+    
+    // Añadir la nueva colección si no existe
+    if (!existingCollections.includes(collectionName)) {
+      existingCollections.push(collectionName);
+      localStorage.setItem('collections', JSON.stringify(existingCollections));
+    }
+  }
+};
 
 const updateInputs = () => {
   const itemsCount = items.value.length;
@@ -28,6 +46,7 @@ const updateInputs = () => {
 };
 
 const navigateToNewPage = () => {
+  saveCollectionName();
   router.push({name:'Relevance'});
 };
 

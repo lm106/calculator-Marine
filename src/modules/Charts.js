@@ -3,12 +3,12 @@ import {getAllClusters, getCopy} from "@/modules/utils.js";
 import {nameAllQuestions, nameClusters, nameQuestions, title} from "@/variables/clusters.js";
 import {
     chartOptionsClusterCategory,
-    chartOptionsClusterScoreCategory,
+    chartOptionsClusterScoreCategory, colorsCluster,
     optionsChartClusters,
     optionsStepClusters
 } from "@/variables/chartOptions.js";
 import {getValuesPercent} from "@/modules/countRow.js";
-import {getCategories, getCategoriesCluster} from "@/modules/utilsCharts.js"
+import {getAllScore, getCategories, getCategoriesCluster} from "@/modules/utilsCharts.js"
 import {getSeries, getSeriesClusters, getSeriesScores} from "@/modules/SeriesCharts.js";
 
 const chartOptionsScore = {
@@ -160,24 +160,67 @@ export async function generateChartsCluster(){
 export function getOptionsClusterCategory(nameTitle){
     let options=getCopy(chartOptionsClusterCategory.value);
     options.xaxis.categories=getAllClusters();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     options.title.text=nameTitle;
     return options;
 }
 export function getOptionsClusterScoreCategory(nameTitle){
     let options=getCopy(chartOptionsClusterScoreCategory.value);
     options.xaxis.categories=getAllClusters();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     options.title.text=nameTitle;
     return options;
 }
 
+export function getOptionsScoreClusters(nameCluster){
+    let options=getCopy(chartOptionsClusterCategory.value);
+    options.xaxis.categories=getAllScore();
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    };
+    options.plotOptions.bar={...options.plotOptions.bar, distributed:true};
+    options.colors= colorsCluster;
+    options.title.text=nameCluster+' Scores';
+    options.legend={show:false}
+
+    return options;
+}
 export function getOptionsClusters(namecluster){
     let options=getCopy(optionsChartClusters.value);
     options.xaxis.categories=getCategoriesCluster();
+    options.plotOptions.bar={...options.plotOptions.bar, distributed:true};
+    options.colors= options.xaxis.categories.map((category, i) => {
+        if (i < 2) return colorsCluster[0];
+        else if (i < 6) return colorsCluster[1];
+        else if (i < 10) return colorsCluster[2];
+        else return colorsCluster[3];
+    });
+    options.legend={show:false}
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     return options;
 }
 
 export function getOptionsStepClusters(step){
     let options= getCopy(optionsStepClusters.value);
     options.xaxis.categories=getCategories(step);
+    options.xaxis.labels= {
+        formatter: function (val) {
+            return val + "%"
+        }
+    }
     return options;
 }

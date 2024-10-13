@@ -16,8 +16,9 @@
     flex-wrap: nowrap !important;
     justify-content: center;
     flex-direction: column !important;
-    max-width: 80% !important;
+    max-width: 95% !important;
     margin: auto;
+    align-content: center;
 }
 .panels_report{
     /*margin: 2.5% auto !important;*/
@@ -28,6 +29,7 @@
     border-radius: 10px !important;
     box-shadow: none !important;
     border: 1px solid #00000019;
+    width: 95%;
 }
 .panel_report{
     max-width: 90% !important;
