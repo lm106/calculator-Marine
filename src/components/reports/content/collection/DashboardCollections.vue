@@ -21,10 +21,12 @@ import {
   getRelevantFulfilling,
   getResolution
 } from "@/rules/rulesList.js";
+import DashboardCluster from "@/components/reports/content/cluster/DashboardCluster.vue";
 
-const props = defineProps({
-  activeList: String
-});
+const props=defineProps({
+  activeList:String,
+  mode:Boolean
+})
 
 const search = ref('');
 
@@ -105,14 +107,13 @@ const activeItems = computed(() => generateItems());
 </script>
 
 <template>
-  <v-card flat>
+  <v-card v-if="!props.mode" flat>
     <v-card-title class="d-flex align-right pe-2 mb-5">
       <h4 class="title">{{ props.activeList }}</h4>
       <v-spacer class="w-75"></v-spacer>
       <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
         variant="solo-filled" flat hide-details single-line class="w-25"></v-text-field>
     </v-card-title>
-
     <v-divider></v-divider>
     <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header
       fixed-footer>
@@ -144,6 +145,29 @@ const activeItems = computed(() => generateItems());
       </template>
     </v-data-table>
   </v-card>
+  <v-expansion-panels v-else class="panels panels_report" multiple>
+    <v-expansion-panel v-for="(name_list, i) in headers.slice(1)" :key="i" class="panel_block panel_report"
+                       style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
+                              border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
+    >
+      <template #title>
+        <div class="title_block">
+          <h3 class="title">{{ name_list.text}}</h3>
+          <v-divider></v-divider>
+        </div>
+      </template>
+      <v-expansion-panel-text>
+        <div class="content_block">
+          <v-container class="item_activity">
+            <ul>
+            <template v-for="(item,i) in activeItems" ><li v-if="item[name_list.value]">{{ item.name }}</li></template>
+            </ul>
+          </v-container>
+        </div>
+      </v-expansion-panel-text>
+      <v-spacer></v-spacer>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <style scoped>

@@ -7,7 +7,7 @@ import { getCalculateFairReusable, getCalculateSDQFCompleteness, getValueRelevan
 import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.js";
 import { inputValues } from "@/variables/store.js";
 import {btn_info_ask} from "../../../variables/helps.js";
-import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
+import {useInputFocusLegend} from "@/stores/legendFocusStore.js";
 
 const props = defineProps({
   active: String

@@ -1,7 +1,7 @@
 <script setup>
 import {ref, watch} from 'vue';
 import {useRoute} from "vue-router";
-import {useInputFocusLegend} from "@/components/stores/legendFocusStore.js";
+import {useInputFocusLegend} from "@/stores/legendFocusStore.js";
 import {btn_info_ask} from "@/variables/helps.js";
 
 const props=defineProps({
