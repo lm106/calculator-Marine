@@ -1,81 +1,40 @@
 <script setup>
-import { values, currentCollection, inputValues } from '@/variables/store';
+import { values, currentCollection, inputValues, selectedCollection } from '@/variables/store';
 import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getAll, getOne } from '@/services/firestoreService';
-import { useAuth } from '@/composables/useAuth';
+import { getAllByAnalysis, getById } from '@/services/collectionService';
 import { useCollectionEvent } from '@/composables/useCollectionEvent';
 import ShareCollectionDialog from '@/components/shareModal/ShareModal.vue';
-// import { loadValuesFromLocalStorage, getStoredCollections } from '@/services/localStorageService';
-import { getCurrentCollectionName } from '@/services/localStorageService';
-const { user, isLoggedIn } = useAuth();
+import { useAuthStore } from '@/components/stores/authStore';
+import { useLoadingStore } from '@/components/stores/loadingStore';
+import NewCollectionModal from '@/components/form/NewCollectionModal.vue';
+
+const authStore = useAuthStore();
+const loadingStore = useLoadingStore();
 const router = useRouter();
 const route = useRoute();
 const collections = ref([]);
-const selectedCollection = ref('');
 const showShareDialog = ref(false);
+const showModal = ref(false);
 const { collectionCreated, resetCollectionCreated } = useCollectionEvent()
 
 onMounted(async () => {
-  watch(collectionCreated, async(newCollection) => {
+  await updateCollections();
+  watch(collectionCreated, async (newCollection) => {
     if (newCollection) {
-      await Promise.all([
-        updateCollections(),
-        loadCollectionData(getCurrentCollectionName())
-      ]);
+      currentCollection.value = newCollection.id;
+      await updateCollections();
       resetCollectionCreated();
     }
   });
-  watch(isLoggedIn, async (newValue) => {
-    if (newValue) {
-      await Promise.all([
-        updateCollections(),
-        loadCollectionData(getCurrentCollectionName())
-      ]);
-    }
-  });
-
-  if (route.query.shared) {
-    await handleSharedLink(route.query.shared);
-  }
 });
 
-const handleSharedLink = async (hash) => {
-  try {
-    const decodedData = await decodeHash(hash);
-    const { userId, collectionName, shareMode } = decodedData;
+const show = () => {
+  showModal.value = true;
+}
 
-    await loadSharedCollection(userId, collectionName);
-
-    if (shareMode === 'read') {
-    }
-  } catch (error) {
-    console.error('Error al manejar el enlace compartido:', error);
-  }
-};
-
-// TODO: Lock for this hash in a table in firestore and get the values
-const decodeHash = async (hash) => {
-
-  try {
-    const decodedString = atob(hash);
-    const [userId, collectionName, shareMode] = decodedString.split('|');
-    if (!userId || !collectionName || !shareMode) {
-      throw new Error('Hash inválido: faltan componentes');
-    }
-
-    if (shareMode !== 'read' && shareMode !== 'edit') {
-      throw new Error('Modo de compartir inválido');
-    }
-    return {
-      userId,
-      collectionName,
-      shareMode
-    };
-  } catch (error) {
-    console.error('Error al decodificar el hash:', error);
-    throw new Error('No se pudo decodificar el hash del enlace compartido');
-  }
+const hideModal = () => {
+  showModal.value = false;
 };
 
 const openShareDialog = () => {
@@ -83,21 +42,37 @@ const openShareDialog = () => {
 };
 
 const updateCollections = async () => {
-  if (user.value) {
-    // collections.value = getStoredCollections();
-    const allCollections = await getAll('collections', user.value.uid);
-    collections.value = allCollections.map(collection => collection.name);
-    collections.value.push('Crear nueva');
-    selectedCollection.value = getCurrentCollectionName();
+  if (!authStore.isLoggedIn || !route.query.analysis) {
+    await router.push({ name: 'Welcome' });
+    return;
+  }
+  loadingStore.setLoading(true);
+  try {
+    const allCollections = await getAllByAnalysis(route.query.analysis);
+    if (allCollections.length) {
+      if (!currentCollection.value) {
+        currentCollection.value = allCollections?.find(collection => collection.isDefault)?.id || allCollections[0]?.id;
+      }
+      collections.value = allCollections.map(collection => ({
+        id: collection.id,
+        name: collection.name
+      }));
+      selectedCollection.value = currentCollection.value;
+      await loadCollectionData(currentCollection.value);
+    } else {
+      inputValues.value = [];
+      values.value = {};
+      selectedCollection.value = null;
+    }
+  } catch (error) {
+    throw error;
+  } finally {
+    loadingStore.setLoading(false);
   }
 };
 
 watch(selectedCollection, async (newValue) => {
-  if (newValue === 'Crear nueva') {
-    selectedCollection.value = '';
-    router.push({ name: 'Welcome' });
-  } else if (newValue && newValue !== getCurrentCollectionName()) {
-    // loadValuesFromLocalStorage(newValue);
+  if (newValue && newValue !== currentCollection.value.id) {
     await loadCollectionData(newValue);
   }
 });
@@ -106,21 +81,21 @@ watch(currentCollection, (newValue) => {
   selectedCollection.value = newValue;
 });
 
-const loadCollectionData = async (collectionName) => {
+const loadCollectionData = async (selectedCollection) => {
   try {
-    if (!user.value) {
-      console.error('User not logged in');
-      return;
+    if (authStore.isLoggedIn && selectedCollection && selectedCollection !== 'new') {
+      loadingStore.setLoading(true);
+      const collection = await getById(selectedCollection);
+      if (!collection) {
+        console.error('Collection not found');
+        return;
+      }
+      values.value = collection.data;
+      inputValues.value = collection.data;
+      currentCollection.value = selectedCollection;
+      loadingStore.setLoading(false);
     }
-    const collection = await getOne('collections', collectionName, user.value.uid);
-    if (!collection) {
-      console.error('Collection not found');
-      return;
-    }
-    values.value = collection.data;
-    inputValues.value = collection.data;
-    currentCollection.value = collection.name;
-    localStorage.setItem('currentCollection', collectionName);
+
   } catch (error) {
     console.error('Error loading collection data:', error);
   }
@@ -134,35 +109,29 @@ const navigateToHome = () => {
 
 <template>
   <header class="header_form">
-      <div class="logo" @click="navigateToHome">
-        <img alt="Vue logo" class="logo" src="@/assets/logoRemap.png" width="145" height="45" />
-      </div>
-      <div class="nav-links">
-        <v-select
-          v-model="selectedCollection"
-          :items="collections"
-          label="Colección actual"
-          dense
-          outlined
-          class="collection-select"
-        ></v-select>
-        <v-btn
-          v-if="selectedCollection && selectedCollection !== 'Crear nueva'"
-          icon
-          @click="openShareDialog"
-        >
-          <v-icon>mdi-share</v-icon>
-        </v-btn>
-      </div>
-      <ShareCollectionDialog
-        v-model="showShareDialog"
-        :collection-name="selectedCollection"
-      />
+    <div class="logo" @click="navigateToHome">
+      <img alt="Vue logo" class="logo" src="@/assets/logoRemap.png" width="145" height="45" />
+    </div>
+    <div v-if="collections.length" class="nav-links">
+      <v-btn @click="navigateToHome" size="small">
+        Change analysis
+      </v-btn>
+      <v-select v-model="selectedCollection" :items="collections" item-title="name" item-value="id"
+        label="Colección actual" dense outlined class="collection-select"></v-select>
+      <v-btn icon @click="show" size="small">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-btn size="small" v-if="selectedCollection" icon @click="openShareDialog">
+        <v-icon>mdi-share</v-icon>
+      </v-btn>
+    </div>
+    <ShareCollectionDialog v-model="showShareDialog" :collection-name="selectedCollection" />
   </header>
+  <NewCollectionModal :showModal="showModal" @hide-modal="hideModal" />
 </template>
 
 <style scoped>
-.header_form{
+.header_form {
   width: 100%;
   border-bottom: 5px solid var(--color-header-border);
   height: var(--header-heigth);
@@ -171,18 +140,20 @@ const navigateToHome = () => {
   align-items: center;
   padding: 10px 20px;
 }
-.logo{
+
+.logo {
   margin-top: 5px;
   cursor: pointer;
 }
+
 .collection-select {
   width: 200px;
-  margin-right: 20px;
-  margin-top: 10px;
-}
-.nav-links{
-  display: flex;
-  align-items: center;
+  margin-top: 20px;
 }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 </style>

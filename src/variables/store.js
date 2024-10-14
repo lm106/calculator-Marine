@@ -7,4 +7,5 @@ export const transformValues = ref({});
 export const countRow = ref({});
 export const scoreGlobal = ref({});
 export const listValues = ref({});
-export const currentCollection = ref('');
+export const currentCollection = ref(null);
+export const selectedCollection = ref(null);

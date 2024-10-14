@@ -1,11 +1,13 @@
 <script setup>
-import {computed, ref, watch} from 'vue';
+import {ref, watch} from 'vue';
 import Steps from "@/components/form/steps/Steps.vue";
 import Header from "@/components/header/Header.vue";
 import { useRouter } from "vue-router";
 import AlertHelp from "@/components/help/AlertHelp.vue";
 import LegendForm from "@/components/form/LegendForm.vue";
 import {questions} from "@/variables/clusters.js";
+import NewCollectionModal from "@/components/form/NewCollectionModal.vue";
+import { selectedCollection } from "@/variables/store";
 
 const showAlert =ref(false);
 const router=useRouter();
@@ -17,6 +19,15 @@ const steps = ref([
   { number: 5, name: 'Results', route:'Results', status: 'pending' }
 ]);
 const list_questions=ref([...questions.Relevance])
+const showModal = ref(false);
+
+const show = () =>{
+  showModal.value=true;
+}
+
+const hideModal = () => {
+  showModal.value = false;
+};
 
 const handleClick=(name)=>{
   router.push({name:name})
@@ -54,13 +65,25 @@ watch([()=>router.currentRoute.value.name], ()=>{
 <template>
   <div>
     <Header></Header>
-    <Steps :steps="steps" @contentName="handleClickStep"></Steps>
-    <router-view></router-view>
-    <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn btn_weight" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
-    <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-1" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
-    <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
-    <LegendForm  v-if="checkStepNow() && checkPageReports()" ></LegendForm>
+    <template v-if="selectedCollection">
+        <Steps :steps="steps" @contentName="handleClickStep"></Steps>
+        <router-view></router-view>
+        <v-btn v-if="checkStepNow() && checkPageReports()" @click="handleClickStep" class="ma-2 text-none btn btn_weight" id="btn_next" base-color="var(--color-btn-dark-blue)" append-icon="mdi-arrow-right">Next Step</v-btn>
+        <v-btn v-if="checkPageReports()" @click="handleClickHelp" class="ma-1" id="btn_help" color="#D76B42" icon="mdi-help"></v-btn>
+        <AlertHelp :showAlert="showAlert" @close-alert="handleCloseHelp"></AlertHelp>
+        <LegendForm  v-if="checkStepNow() && checkPageReports()" ></LegendForm>
+    </template>
+    <div class="not_found" v-else>
+      <div>
+        <span>Not available collection in this analysis</span>
+      </div>
+      <button @click="show" class="text-none btn btn_padding btn_weight btn-new-collection" append-icon="mdi-arrow-right">Create collection</button>
+    </div>
   </div>
+  <NewCollectionModal
+    :showModal="showModal"
+    @hide-modal="hideModal"
+  />
 </template>
 
 <style scoped>
@@ -75,5 +98,16 @@ watch([()=>router.currentRoute.value.name], ()=>{
   position: absolute;
   right: 1%;
   top: 110px;
+}
+.not_found{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: calc(100vh - 60px);
+}
+.btn-new-collection{
+  background-color: var(--color-btn-dark-blue);
+  color: white;
 }
 </style>

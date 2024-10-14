@@ -6,11 +6,10 @@ import ContentCluster from "@/components/form/content/ContentCluster.vue";
 import { values, currentCollection } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
-import { saveValuesToLocalStorage, getCurrentCollectionName } from '@/services/localStorageService';
-import { getAndUpdate } from '@/services/firestoreService.js';
-import { useAuth } from '@/composables/useAuth';
+import { update } from '@/services/collectionService';
+import { useAuthStore } from '@/components/stores/authStore';
 
-const { user } = useAuth();
+const authStore = useAuthStore();
 
 const clusters= ref([
     'MSFD GES','WFD GES',
@@ -48,9 +47,9 @@ const setCluster= async (data)=> {
   }else{
     processing(tokenStep,data);
   }
-  saveValuesToLocalStorage();
-  if(user.value && getCurrentCollectionName() && user.value.uid){
-    await getAndUpdate('collections', getCurrentCollectionName(), user.value.uid, values.value);
+  if(authStore.isLoggedIn){
+    console.log(currentCollection.value);
+    await update(currentCollection.value, values.value);
   }
 }
 watch([()=>route.name], ()=>{
