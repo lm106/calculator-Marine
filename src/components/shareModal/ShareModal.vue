@@ -1,9 +1,10 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { useAuth } from '@/composables/useAuth';
-import { saveSharedLink } from '@/services/firestoreService';
-
-const { user } = useAuth();
+import { saveSharedLink } from '@/services/sharedService';
+import { useAuthStore } from '@/components/stores/authStore';
+import { getAnalysisById } from '@/services/analysisService';
+import { useRoute } from 'vue-router';
+const authStore = useAuthStore();
 
 const props = defineProps({
   modelValue: Boolean,
@@ -12,10 +13,12 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const dialog = ref(props.modelValue);
+const route = useRoute();
 const shareMode = ref('read');
 const shareLink = ref('');
 const isGeneratingLink = ref(false);
-const collectionName = ref('');
+const analysisName = ref('');
+const hash = ref('');
 const isCopied = ref(false);
 
 watch(() => props.modelValue, (newValue) => {
@@ -30,8 +33,8 @@ watch(dialog, (newValue) => {
 });
 
 
-const generateHash = async (userId, collectionName, shareMode) => {
-  const data = `${userId}|${collectionName}|${shareMode}`;
+const generateHash = async (userId, analysisId, shareMode) => {
+  const data = `${userId}|${analysisId}|${shareMode}`;
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
   const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
@@ -40,47 +43,38 @@ const generateHash = async (userId, collectionName, shareMode) => {
 };
 
 const updateShareLink = async () => {
-  isGeneratingLink.value = true;
-  try {
-    collectionName.value = localStorage.getItem('currentCollection');
-    let userId = '';
-    if ( !user.value) {
-      console.error('User not logged in');
-      userId = 'AQEnexuAwGXYinwf4Qr2BZy7UBE3'
-    }else{
-        userId = user.value.uid;
+  if (authStore.isLoggedIn) {
+    isGeneratingLink.value = true;
+    try {
+      const analysisId = route.query.analysis;
+      const analysis = await getAnalysisById(analysisId);
+      analysisName.value = analysis.name;
+      hash.value = await generateHash(authStore.user.uid, analysisId, shareMode.value);
+      shareLink.value = `${import.meta.env.VITE_APP_URL}/inputdata/form?analysis=${analysisId}&shared=${hash.value}`;
+    } catch (error) {
+      shareLink.value = 'Error generating link';
+    } finally {
+      isGeneratingLink.value = false;
     }
-    const hash = await generateHash(userId, collectionName.value, shareMode.value);
-    // save this hash in firestorage with this values 
-    // collection name 'shared_links' and values are these
-    // hash , collectionName, userId, mode, createdAt
-    // call firestoreService to save this
-    await saveSharedLinkFn(hash, collectionName.value, userId, shareMode.value);
-    shareLink.value = `${import.meta.env.VITE_APP_URL}/inputdata/form?shared=${hash}`;
-  } catch (error) {
-    shareLink.value = 'Error generating link';
-  } finally {
-    isGeneratingLink.value = false;
   }
 };
 
-const saveSharedLinkFn = async (hash, collectionName, userId, mode) => {
-  const data = {
-    collectionName,
-    hash,
-    userId,
-    mode,
-    createdAt: new Date().toISOString()
-  };
-  await saveSharedLink('shared_links', userId, data);
-};
-
-const copyLink = () => {
-  navigator.clipboard.writeText(shareLink.value);
-  isCopied.value = true;
-  setTimeout(() => {
-    isCopied.value = false;
-  }, 2000);
+const copyLink = async () => {
+  try {
+    await saveSharedLink({
+      owner: authStore.user.uid,
+      hash: hash.value,
+      analysisId: route.query.analysis,
+      mode: shareMode.value
+    });
+    navigator.clipboard.writeText(shareLink.value);
+    isCopied.value = true;
+    setTimeout(() => {
+      isCopied.value = false;
+    }, 20000);
+  } catch (error) {
+    console.error('Error copying link:', error);
+  }
 };
 
 watch(shareMode, updateShareLink);
@@ -93,28 +87,27 @@ onMounted(updateShareLink);
     <div class="modal-content">
       <v-btn @click="dialog = false" class="close" density="comfortable" icon="$close" variant="plain"></v-btn>
       <div class="content_alert">
-        <h2 id="title_alert_welcome">Share Collection</h2>
+        <h2 id="title_alert_welcome">Share analysis "{{ analysisName }}"</h2>
         <p>Select the share mode:</p>
         <v-radio-group v-model="shareMode">
           <v-radio label="Read mode" value="read"></v-radio>
           <v-radio label="Edit mode" value="edit"></v-radio>
         </v-radio-group>
-        <p>Link to share the collection <span style="font-weight: bold;">{{ collectionName }}</span>:</p>
         <div class="link_container">
-          <v-text-field
-            :value="isGeneratingLink ? 'Generando enlace...' : shareLink"
-          readonly
-          :loading="isGeneratingLink"
-            append-outer-icon="mdi-content-copy"
-          >
-          </v-text-field>
           <v-btn
             class="copy_btn"
-            icon
             @click="copyLink"
-            :color="isCopied ? 'success' : ''"
           >
-            <v-icon>{{ isCopied ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
+            <template v-if="isGeneratingLink">
+              <v-progress-circular indeterminate color="white" size="20" />
+              Generating link...
+            </template>
+            <template v-if="!isGeneratingLink && !isCopied">
+              Copy link
+            </template>
+            <template v-if="isCopied">
+              Copied!
+            </template>
           </v-btn>
         </div>
       </div>
@@ -170,6 +163,10 @@ onMounted(updateShareLink);
   gap: 10px;
 }
 .copy_btn {
-  margin-top: -15px;
+  text-transform: capitalize;
+  width: 100%;
+  text-align: center;
+  background-color: #D76B42;
+  color: white;
 }
 </style>
