@@ -1,41 +1,35 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { RouterView, useRouter } from 'vue-router';
-import RecoveryModal from '@/components/recoveryModal/RecoveryModal.vue';
-import { hasStoredValues, shouldAutoLoadCollection, autoLoadCollection } from '@/services/localStorageService';
+import { ref, onBeforeMount } from 'vue';
+import { RouterView } from 'vue-router';
+import Ping from '@/components/loaders/Ping.vue';
+import { useAuthStore } from '@/components/stores/authStore';
+import { useLoadingStore } from '@/components/stores/loadingStore';
 
-const showRecoveryModal = ref(false);
-const router = useRouter();
+const authStore = useAuthStore();
+const loadingStore = useLoadingStore();
 const snackbar = ref(false);
 const snackbarText = ref('');
-onMounted(() => {
-  const currentUrl = window.location.href;
-  if (!currentUrl.endsWith('/inputdata/')) {
-    if (hasStoredValues()) {
-      if (shouldAutoLoadCollection()) {
-        if (autoLoadCollection()) {
-          snackbarText.value = "Datos recuperados de la memoria";
-          snackbar.value = true;
-        }
-      } else {
-        showRecoveryModal.value = true;
-      }
-    }
-  }
+const loading = ref(true);
+
+onBeforeMount(async () => {
+  await authStore.init();
+  loading.value = false;
 });
 </script>
 
 <template>
-  <RecoveryModal v-if="showRecoveryModal" :show="showRecoveryModal" @close="showRecoveryModal = false" />
-  <RouterView />
-  <v-snackbar v-model="snackbar" :timeout="3000">
+  <div v-if="!loading">
+    <RouterView />
+    <v-snackbar v-model="snackbar" :timeout="3000">
     {{ snackbarText }}
     <template v-slot:actions>
       <v-btn color="blue" variant="text" @click="snackbar = false">
         Cerrar
       </v-btn>
     </template>
-  </v-snackbar>
+    </v-snackbar>
+  </div>
+  <Ping v-if="loadingStore.isLoading" />
 </template>
 
 <style scoped>
