@@ -7,7 +7,7 @@ import { values, currentCollection } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
 import { update } from '@/services/collectionService';
-import { useAuthStore } from '@/components/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore();
 

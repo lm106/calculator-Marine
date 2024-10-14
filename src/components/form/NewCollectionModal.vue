@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import { create } from '@/services/collectionService';
 import { clusters, questions } from '@/variables/clusters';
 import { useCollectionEvent } from '@/composables/useCollectionEvent';
-import { useAuthStore } from '@/components/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const props = defineProps({
   showModal: Boolean

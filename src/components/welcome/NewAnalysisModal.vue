@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { useAuthStore } from '@/components/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { createAnalyses } from '@/services/analysisService';
 
 const props = defineProps({

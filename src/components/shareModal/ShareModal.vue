@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { saveSharedLink } from '@/services/sharedService';
-import { useAuthStore } from '@/components/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { getAnalysisById } from '@/services/analysisService';
 import { useRoute } from 'vue-router';
 const authStore = useAuthStore();

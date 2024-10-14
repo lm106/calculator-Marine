@@ -5,8 +5,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { getAllByAnalysis, getById } from '@/services/collectionService';
 import { useCollectionEvent } from '@/composables/useCollectionEvent';
 import ShareCollectionDialog from '@/components/shareModal/ShareModal.vue';
-import { useAuthStore } from '@/components/stores/authStore';
-import { useLoadingStore } from '@/components/stores/loadingStore';
+import { useAuthStore } from '@/stores/authStore';
+import { useLoadingStore } from '@/stores/loadingStore';
 import NewCollectionModal from '@/components/form/NewCollectionModal.vue';
 
 const authStore = useAuthStore();
@@ -112,14 +112,14 @@ const navigateToHome = () => {
     <div class="logo" @click="navigateToHome">
       <img alt="Vue logo" class="logo" src="@/assets/logoRemap.png" width="145" height="45" />
     </div>
-    <div v-if="collections.length" class="nav-links">
+    <div v-if="collections.length > 0" class="nav-links">
       <v-btn @click="navigateToHome" size="small">
         Change analysis
       </v-btn>
       <v-select v-model="selectedCollection" :items="collections" item-title="name" item-value="id"
         label="Colección actual" dense outlined class="collection-select"></v-select>
-      <v-btn icon @click="show" size="small">
-        <v-icon>mdi-plus</v-icon>
+        <v-btn v-if="collections.length < 4" icon @click="show" size="small">
+          <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-btn size="small" v-if="selectedCollection" icon @click="openShareDialog">
         <v-icon>mdi-share</v-icon>

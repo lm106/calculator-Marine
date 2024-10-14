@@ -2,8 +2,8 @@
 import { ref, onBeforeMount } from 'vue';
 import { RouterView } from 'vue-router';
 import Ping from '@/components/loaders/Ping.vue';
-import { useAuthStore } from '@/components/stores/authStore';
-import { useLoadingStore } from '@/components/stores/loadingStore';
+import { useAuthStore } from '@/stores/authStore';
+import { useLoadingStore } from '@/stores/loadingStore';
 
 const authStore = useAuthStore();
 const loadingStore = useLoadingStore();

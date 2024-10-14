@@ -4,8 +4,8 @@ import NewAnalysisModal from "@/components/welcome/NewAnalysisModal.vue";
 import { auth } from '@/config/firebase';
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { useToast } from 'vue-toastification';
-import { useAuthStore } from '@/components/stores/authStore';
-import { useLoadingStore } from '@/components/stores/loadingStore';
+import { useAuthStore } from '@/stores/authStore';
+import { useLoadingStore } from '@/stores/loadingStore';
 import { getAnalyses } from '@/services/analysisService';
 
 const email = ref('');
