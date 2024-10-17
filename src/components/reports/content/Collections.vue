@@ -23,12 +23,10 @@ const setMode=(token)=>{
     <v-btn @click="setMode(false)" class="btn_mode_filter" rounded="0" icon="mdi-table"></v-btn>
     </div>
   <v-expansion-panels class="panels panels_report" v-model="activePanel" readonly>
-    <v-expansion-panel 
-      v-for="(name, i) in list" 
-      :key="i"
-      class="panel_block panel_report panel_collections" 
-      style="border-radius: 10px !important;"
-      hide-actions
+    <v-expansion-panel v-for="(name, i) in list" :key="i"
+        class="panel_block panel_collections" style="border-top-left-radius: 10px !important; border-top-right-radius: 10px !important;
+        border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important;"
+        hide-actions
     >
       <v-expansion-panel-text>
         <DashboardCollections :activeList="name" :mode="mode"></DashboardCollections>
@@ -43,6 +41,8 @@ const setMode=(token)=>{
 .panel_collections {
   max-width: 100% !important;
   background-color: white !important;
+  margin-top: 2.5%;
+  margin-left: 3%;
 }
 .div_btn_mode{
   display: flex;

@@ -32,28 +32,28 @@ const search = ref('');
 
 const templateItem = {
   name: '',
-  "Highly/Moderately": false,
-  "High FAIR Score": false,
-  "Coverage": true,
-  "Resolution": true,
-  "Relevant and Fulfilling": true,
-  "Accurancy and Consistency": true,
+  "Highly/Moderately relevant and used with MSP process": false,
+  "Relevant data set with adequate transparency (high FAIR score)": false,
+  "Relevant data set and with an adequate spatial coverage for MSP": false,
+  "Relevant data set and with an adequate spatial resolution for MSP": false,
+  "Relevant data set and fulfilling monitoring & evaluation requirements with adequate temporal coverage": false,
+  "Relevant data set with sufficient curacy and consistency": false,
 };
 
 const templateItem2 = {
   name: '',
-  "Not used (not available)": false,
-  "Not used (available)": false,
-  "Not findable": true,
-  "Not available": true,
-  "Not interoperable": true,
-  "Not adequate spatial coverage": true,
-  "Not adequate spatial resolution": true,
-  "Not adequate temporal coverage": true,
-  "Not adequate temporal resolution": true,
-  "Inadequate accuracy": true,
-  "Inadequate consistency": true,
-  "Not fulfilling monitoring requirements": true
+    "Relevant for MSP, but not used, as not available": false,
+    "Relevant for MSP, not used, but available": false,
+    "Relevant for MSP, but not findable": true,
+    "Relevant for MSP, but not available": true,
+    "Relevant for MSP, but not interoperable": true,
+    "Relevant for MSP, but not adequate spatial coverage ": true,
+    "Relevant for MSP, but not adequate spatial resolution": true,
+    "Relevant for MSP, but not adequate temporal coverage": true,
+    "Relevant for MSP, but not adequate temporal resolution": true,
+    "Relevant for MSP, but inadequate accuracy": true,
+    "Relevant for MSP, but inadequate consistency": true,
+    "Relevant for MSP not fulfilling monitoring requirements (temporal coverage, availability, transparency and quality)": true
 };
 
 const generateItems = () => {
@@ -65,31 +65,31 @@ const generateItems = () => {
   return res;
 }
 
-const getValuesItem1 = (parameter) => {
-  let res = {
-    "Highly/Moderately": getHighlyModerately(parameter),
-    "High FAIR Score": getHighFairScore(parameter),
-    "Coverage": getCoverage(parameter),
-    "Resolution": getResolution(parameter),
-    "Relevant and Fulfilling": getRelevantFulfilling(parameter),
-    "Accurancy and Consistency": getAccurancyConsistency(parameter),
+const getValuesItem1=(parameter)=>{
+  let res={
+    "Highly/Moderately relevant and used with MSP process": getHighlyModerately(parameter),
+    "Relevant data set with adequate transparency (high FAIR score)": getHighFairScore(parameter),
+    "Relevant data set and with an adequate spatial coverage for MSP": getCoverage(parameter),
+    "Relevant data set and with an adequate spatial resolution for MSP": getResolution(parameter),
+    "Relevant data set and fulfilling monitoring & evaluation requirements with adequate temporal coverage": getRelevantFulfilling(parameter),
+    "Relevant data set with sufficient curacy and consistency": getAccurancyConsistency(parameter),
   };
   return res;
 }
-const getValuesItem2 = (parameter) => {
-  let res = {
-    "Not used (not available)": getNotUseNotAvailable(parameter),
-    "Not used (available)": getNotUseAvailable(parameter),
-    "Not findable": getNotFindable(parameter),
-    "Not available": getNotAvailable(parameter),
-    "Not interoperable": getNotInteroperable(parameter),
-    "Not adequate spatial coverage": getNotAdequateSpatialCoverage(parameter),
-    "Not adequate spatial resolution": getNotAdequateSpatialResolution(parameter),
-    "Not adequate temporal coverage": getNotAdequateTemporalCoverage(parameter),
-    "Not adequate temporal resolution": getNotAdequateTemporalResolution(parameter),
-    "Inadequate accuracy": getInadequateAccuracy(parameter),
-    "Inadequate consistency": getInadequateConsistency(parameter),
-    "Not fulfilling monitoring requirements": getNotFulfillingMonitoringRequirements(parameter)
+const getValuesItem2=(parameter)=>{
+  let res={
+    "Relevant for MSP, but not used, as not available": getNotUseNotAvailable(parameter),
+    "Relevant for MSP, not used, but available": getNotUseAvailable(parameter),
+    "Relevant for MSP, but not findable": getNotFindable(parameter),
+    "Relevant for MSP, but not available": getNotAvailable(parameter),
+    "Relevant for MSP, but not interoperable": getNotInteroperable(parameter),
+    "Relevant for MSP, but not adequate spatial coverage ": getNotAdequateSpatialCoverage(parameter),
+    "Relevant for MSP, but not adequate spatial resolution": getNotAdequateSpatialResolution(parameter),
+    "Relevant for MSP, but not adequate temporal coverage": getNotAdequateTemporalCoverage(parameter),
+    "Relevant for MSP, but not adequate temporal resolution": getNotAdequateTemporalResolution(parameter),
+    "Relevant for MSP, but inadequate accuracy": getInadequateAccuracy(parameter),
+    "Relevant for MSP, but inadequate consistency": getInadequateConsistency(parameter),
+    "Relevant for MSP not fulfilling monitoring requirements (temporal coverage, availability, transparency and quality)": getNotFulfillingMonitoringRequirements(parameter)
   };
   return res;
 }
@@ -107,9 +107,18 @@ const activeItems = computed(() => generateItems());
 </script>
 
 <template>
+  <p class="description_list" v-if="props.activeList=='List 1'">
+    These Report pages collect the assessment metrics used to provide the evaluation results for the MSP data and
+    area for which you have filled in the previous forms organized by 4 Categories and 7 Data Framework Clusters.<br>
+    Following are presented the different assessment lists for each Cluster’s datasets that are relevant for the MSP
+    process and have the specific characteristics:
+  </p>
+  <p class="description_list" v-else>These Report pages collect the assessment metrics used to provide the evaluation results for the MSP data and
+    area for which you have filled in the previous forms organized by 4 Categories and 7 Data Framework Clusters.<br>
+    Following are presented the different assessment lists for each Cluster’s datasets that are relevant for the MSP
+    process and have the specific characteristics:</p>
   <v-card v-if="!props.mode" flat>
     <v-card-title class="d-flex align-right pe-2 mb-5">
-      <h4 class="title">{{ props.activeList }}</h4>
       <v-spacer class="w-75"></v-spacer>
       <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
         variant="solo-filled" flat hide-details single-line class="w-25"></v-text-field>
@@ -181,5 +190,9 @@ const activeItems = computed(() => generateItems());
 
 .header_tr {
   background-color: white;
+}
+.description_list{
+  width: 90%;
+  margin: 1.5% 2.5% auto;
 }
 </style>
