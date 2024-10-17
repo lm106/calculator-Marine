@@ -9,3 +9,4 @@ export const scoreGlobal = ref({});
 export const listValues = ref({});
 export const currentCollection = ref(null);
 export const selectedCollection = ref(null);
+export const shared = ref(null);

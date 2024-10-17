@@ -18,11 +18,12 @@ export const getAll = async (owner) => {
   }
 };
 
-export const getAllByAnalysis = async (analysisId) => {
+export const getAllByAnalysis = async (analysisId, owner) => {
   try {
     const q = query(
       collection(db, "colletions"),
-      where("analysisId", "==", analysisId)
+      where("analysisId", "==", analysisId),
+      where("owner", "==", owner)
     );
     const querySnapshot = await getDocs(q);
     const collections = [];

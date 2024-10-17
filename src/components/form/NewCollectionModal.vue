@@ -5,6 +5,7 @@ import { create } from '@/services/collectionService';
 import { clusters, questions } from '@/variables/clusters';
 import { useCollectionEvent } from '@/composables/useCollectionEvent';
 import { useAuthStore } from '@/stores/authStore';
+import { shared } from '@/variables/store';
 
 const props = defineProps({
   showModal: Boolean
@@ -46,7 +47,7 @@ const saveCollectionName = async () => {
     });
 
     data.isDefault = false;
-    data.owner = userId;
+    data.owner = shared.value && shared.value.owner ? shared.value.owner : userId;
     data.analysisId = route.query.analysis;
     data.name = name;
 

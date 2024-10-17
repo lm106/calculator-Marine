@@ -20,6 +20,7 @@ const isGeneratingLink = ref(false);
 const analysisName = ref('');
 const hash = ref('');
 const isCopied = ref(false);
+const copyLoading = ref(false);
 
 watch(() => props.modelValue, (newValue) => {
   dialog.value = newValue;
@@ -47,7 +48,7 @@ const updateShareLink = async () => {
     isGeneratingLink.value = true;
     try {
       const analysisId = route.query.analysis;
-      const analysis = await getAnalysisById(analysisId);
+      const analysis = await getAnalysisById(analysisId, authStore.user.uid);
       analysisName.value = analysis.name;
       hash.value = await generateHash(authStore.user.uid, analysisId, shareMode.value);
       shareLink.value = `${import.meta.env.VITE_APP_URL}/inputdata/form?analysis=${analysisId}&shared=${hash.value}`;
@@ -61,6 +62,7 @@ const updateShareLink = async () => {
 
 const copyLink = async () => {
   try {
+    copyLoading.value = true;
     await saveSharedLink({
       owner: authStore.user.uid,
       hash: hash.value,
@@ -74,6 +76,8 @@ const copyLink = async () => {
     }, 20000);
   } catch (error) {
     console.error('Error copying link:', error);
+  } finally {
+    copyLoading.value = false;
   }
 };
 
@@ -97,15 +101,20 @@ onMounted(updateShareLink);
           <v-btn
             class="copy_btn"
             @click="copyLink"
+            :disabled="isGeneratingLink || copyLoading"
           >
             <template v-if="isGeneratingLink">
               <v-progress-circular indeterminate color="white" size="20" />
               Generating link...
             </template>
-            <template v-if="!isGeneratingLink && !isCopied">
+            <template v-if="!isGeneratingLink && !isCopied && !copyLoading">
               Copy link
             </template>
-            <template v-if="isCopied">
+            <template v-if="copyLoading">
+              <v-progress-circular indeterminate color="white" size="20" />
+              Copying link...
+            </template>
+            <template v-if="isCopied ">
               Copied!
             </template>
           </v-btn>

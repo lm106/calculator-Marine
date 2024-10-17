@@ -1,8 +1,9 @@
 <script setup>
-import { values, currentCollection, inputValues, selectedCollection } from '@/variables/store';
+import { values, currentCollection, inputValues, selectedCollection, shared } from '@/variables/store';
 import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getAllByAnalysis, getById } from '@/services/collectionService';
+import { getAnalysisById } from '@/services/analysisService';
 import { useCollectionEvent } from '@/composables/useCollectionEvent';
 import ShareCollectionDialog from '@/components/shareModal/ShareModal.vue';
 import { useAuthStore } from '@/stores/authStore';
@@ -48,7 +49,17 @@ const updateCollections = async () => {
   }
   loadingStore.setLoading(true);
   try {
-    const allCollections = await getAllByAnalysis(route.query.analysis);
+    let owner = authStore.user.uid;
+    if (shared && shared.value) {
+      owner = shared.value.owner;
+    }
+    const [allCollections, analysis] = await Promise.all([
+      getAllByAnalysis(route.query.analysis, owner),
+      getAnalysisById(route.query.analysis, owner)
+    ]);
+    if (!analysis || analysis.owner != owner) {
+      return router.push({ name: 'Welcome' });
+    }
     if (allCollections.length) {
       if (!currentCollection.value) {
         currentCollection.value = allCollections?.find(collection => collection.isDefault)?.id || allCollections[0]?.id;
@@ -93,17 +104,21 @@ const loadCollectionData = async (selectedCollection) => {
       values.value = collection.data;
       inputValues.value = collection.data;
       currentCollection.value = selectedCollection;
-      loadingStore.setLoading(false);
     }
-
   } catch (error) {
     console.error('Error loading collection data:', error);
+  } finally {
+    loadingStore.setLoading(false);
   }
 };
 
 const navigateToHome = () => {
   router.push({ name: 'Welcome' });
 };
+
+const canBeShared = () => {
+  return !shared.value ? true : shared.value?.owner == authStore.user.uid;
+}
 
 </script>
 
@@ -121,7 +136,7 @@ const navigateToHome = () => {
         <v-btn v-if="collections.length < 4" icon @click="show" size="small">
           <v-icon>mdi-plus</v-icon>
       </v-btn>
-      <v-btn size="small" v-if="selectedCollection" icon @click="openShareDialog">
+      <v-btn size="small" v-if="selectedCollection && canBeShared()" icon @click="openShareDialog">
         <v-icon>mdi-share</v-icon>
       </v-btn>
     </div>

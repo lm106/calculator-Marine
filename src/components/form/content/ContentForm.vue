@@ -3,7 +3,7 @@ import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values, currentCollection } from '@/variables/store.js'
+import { values, currentCollection, shared } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
 import { update } from '@/services/collectionService';
@@ -40,6 +40,13 @@ const processing=(tokenStep,data)=>{
     values.value[nameStep][nameCluster]=copy[nameStep][nameCluster];
   }
 }
+
+const checkDisableEdit = () => {
+  if (!shared.value) return false;
+  if (shared.value.mode == "read" && authStore.user.uid != shared.value.owner) return true;
+  return false;
+};
+
 const setCluster= async (data)=> {
   let tokenStep=checkQuestionsStepValues(getKey(data));
   if(!tokenStep) {
@@ -47,8 +54,7 @@ const setCluster= async (data)=> {
   }else{
     processing(tokenStep,data);
   }
-  if(authStore.isLoggedIn){
-    console.log(currentCollection.value);
+  if(authStore.isLoggedIn && !checkDisableEdit()){
     await update(currentCollection.value, values.value);
   }
 }

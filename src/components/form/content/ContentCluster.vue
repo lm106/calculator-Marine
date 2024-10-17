@@ -8,6 +8,8 @@ import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.j
 import { inputValues } from "@/variables/store.js";
 import {btn_info_ask} from "../../../variables/helps.js";
 import {useInputFocusLegend} from "@/stores/legendFocusStore.js";
+import { shared } from "@/variables/store.js";
+import { useAuthStore } from '@/stores/authStore';
 
 const props = defineProps({
   active: String
@@ -21,6 +23,7 @@ const emit = defineEmits(['updateCluster']);
 const activePanel = ref([]);
 const tokenInit = ref(false);
 const windowWidth = ref(window.innerWidth);
+const authStore = useAuthStore();
 
 const isDevelopment = computed(() => {
   return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -59,6 +62,7 @@ const initForm = () => {
 };
 
 const checkDisable = (index, column, activity, blockTitle) => {
+  if (checkDisableEdit()) return true;
   if (index > 0 && route.name === 'Relevance') {
     const firstColumnValue = inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][0]];
     if (firstColumnValue < 2) {
@@ -74,6 +78,12 @@ const checkDisable = (index, column, activity, blockTitle) => {
     }
     return valueFirstColumnRelevance;
   }
+  return false;
+};
+
+const checkDisableEdit = () => {
+  if (!shared.value) return false;
+  if (shared.value.mode == "read" && authStore.user.uid != shared.value.owner) return true;
   return false;
 };
 
@@ -156,21 +166,24 @@ watch(inputValues, calculateMean, { deep: true });
         <v-col :cols="getColumnsSizeLabel()">
           <label class="pa-2 ma-2 label_name"></label>
         </v-col>
-        <v-col v-for="(column, index) in questions[route.name]" class="names_activities" :cols="getColumnSize()" :key="index">
-          <label class="pa-2 ma-2 label_name">{{ column }}</label>
-          <v-tooltip>
-            <template v-slot:activator="{props}">
-              <v-icon
-                  color="grey"
-                  icon="mdi-information"
-                  v-bind="props"
-              ></v-icon>
-            </template>
-            <div class="content_msg">
-              <span v-for="(e) in btn_info_ask[column]">{{e}}<br></span>
-            </div>
-          </v-tooltip>
+        <v-col v-for="(column, index) in questions[route.name]" :cols="getColumnSize()" class="cells_name_columns" :key="index">
+          <v-col class="names_activities">
+            <label class="pa-2 ma-2 label_name">{{ column }}</label>
 
+            <v-tooltip>
+              <template v-slot:activator="{props}">
+                <v-icon
+                    color="grey"
+                    icon="mdi-information"
+                    v-bind="props"
+                ></v-icon>
+              </template>
+              <div class="content_msg">
+                <span v-for="(e) in btn_info_ask[column]">{{e}}<br></span>
+              </div>
+            </v-tooltip>
+          </v-col>
+          <h4 v-if="column=='Data is Reusable' || column=='Completeness and timeliness'" class="automatic_field"><pre>*</pre>Automatic calculation</h4>
         </v-col>
       </v-row>
       <div class="content_ask">
@@ -202,7 +215,7 @@ watch(inputValues, calculateMean, { deep: true });
           <v-divider></v-divider>
         </template>
       </div>
-      <div v-if="isDevelopment" class="fill-buttons">
+      <div v-if="isDevelopment && !checkDisableEdit() " class="fill-buttons">
         <v-btn
           v-for="n in 4"
           :key="n"
@@ -251,7 +264,19 @@ watch(inputValues, calculateMean, { deep: true });
   max-height: calc(100vh - 58vh);
   overflow-y: scroll;
 }
-.content_msg {
+.cells_name_columns{
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.automatic_field {
+  color: red;
+  font-weight: normal;
+  font-size: 12px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
 }
 .title_descriptor {
   margin-bottom: 3.5%;

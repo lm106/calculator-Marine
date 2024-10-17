@@ -55,3 +55,6 @@ a,.green {
   font-size: 7px;
   float: right;
 }
+.ask_step{
+  text-decoration: underline;
+}

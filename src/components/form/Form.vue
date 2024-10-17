@@ -29,8 +29,9 @@ const hideModal = () => {
   showModal.value = false;
 };
 
-const handleClick=(name)=>{
-  router.push({name:name})
+const handleClick = (name) => {
+  const currentQuery = router.currentRoute.value.query;
+  router.push({ name: name, query: currentQuery });
 }
 const handleClickStep=(step)=>{
   let now = (step.name!=undefined)?

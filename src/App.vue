@@ -1,20 +1,41 @@
 <script setup>
-import { ref, onBeforeMount } from 'vue';
-import { RouterView } from 'vue-router';
+import { ref, onBeforeMount, watch } from 'vue';
+import { RouterView, useRoute, useRouter } from 'vue-router';
 import Ping from '@/components/loaders/Ping.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useLoadingStore } from '@/stores/loadingStore';
+import { shared } from '@/variables/store';
+import { getSharedLink } from '@/services/sharedService';
 
 const authStore = useAuthStore();
 const loadingStore = useLoadingStore();
 const snackbar = ref(false);
 const snackbarText = ref('');
 const loading = ref(true);
+const route = useRoute();
+const router =useRouter();
 
 onBeforeMount(async () => {
   await authStore.init();
+  await checkSharedParam();
   loading.value = false;
 });
+
+const checkSharedParam = async () => {
+  try {
+    if (route.query.shared) {
+      const sharedLink = await getSharedLink(route.query.shared);
+      shared.value = sharedLink;
+    }
+  } catch (error) {
+    router.push({ name: 'Welcome' });
+  }
+};
+
+watch(() => route.fullPath, async () => {
+  await checkSharedParam();
+});
+
 </script>
 
 <template>

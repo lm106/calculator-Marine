@@ -33,15 +33,20 @@ export const getAnalyses = async (owner) => {
   }
 }
 
-export const getAnalysisById = async (id) => {
+export const getAnalysisById = async (id, owner) => {
   try {
     const docRef = doc(db, 'analyses', id);
+
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() };
+      const data = docSnap.data();
+      if (data.owner == owner) {
+        return { id: docSnap.id, ...data };
+      } else {
+        return null;
+      }
     } else {
-      console.log("NOT FOUND");
       return null;
     }
   } catch (error) {
