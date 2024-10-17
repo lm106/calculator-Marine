@@ -1,9 +1,8 @@
 <script setup>
-import {onBeforeMount, ref} from 'vue';
-
+import { onBeforeMount, ref } from 'vue';
 import DashboardCollections from "@/components/reports/content/collection/DashboardCollections.vue";
-import {setInitListValues, setListValues} from "@/modules/ListsValues.js";
-import {listValues} from "@/variables/store.js";
+import { setInitListValues, setListValues } from "@/modules/ListsValues.js";
+import { listValues } from "@/variables/store.js";
 
 const list=ref(['List 1', "List 2"])
 const activePanel = ref([0,1]);
@@ -32,14 +31,14 @@ const setMode=(token)=>{
       <v-expansion-panel-text>
         <DashboardCollections :activeList="name" :mode="mode"></DashboardCollections>
       </v-expansion-panel-text>
-      <v-spacer></v-spacer>
+      <v-spacer />
     </v-expansion-panel>
   </v-expansion-panels>
   </div>
 </template>
 
 <style scoped>
-.panel_collections{
+.panel_collections {
   max-width: 100% !important;
   background-color: white !important;
   margin-top: 2.5%;

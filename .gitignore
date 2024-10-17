@@ -31,3 +31,5 @@ coverage
 .aidigestignore
 codebase.md
 .cursorignore
+.env
+src/config/.env.production

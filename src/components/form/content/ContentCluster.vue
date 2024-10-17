@@ -8,6 +8,8 @@ import { checkStepValues, getValuesClusterValues } from "@/modules/ValuesValue.j
 import { inputValues } from "@/variables/store.js";
 import {btn_info_ask} from "../../../variables/helps.js";
 import {useInputFocusLegend} from "@/stores/legendFocusStore.js";
+import { shared } from "@/variables/store.js";
+import { useAuthStore } from '@/stores/authStore';
 
 const props = defineProps({
   active: String
@@ -21,6 +23,7 @@ const emit = defineEmits(['updateCluster']);
 const activePanel = ref([]);
 const tokenInit = ref(false);
 const windowWidth = ref(window.innerWidth);
+const authStore = useAuthStore();
 
 const isDevelopment = computed(() => {
   return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -59,6 +62,7 @@ const initForm = () => {
 };
 
 const checkDisable = (index, column, activity, blockTitle) => {
+  if (checkDisableEdit()) return true;
   if (index > 0 && route.name === 'Relevance') {
     const firstColumnValue = inputValues.value[route.name][props.active][blockTitle][activity][questions[route.name][0]];
     if (firstColumnValue < 2) {
@@ -74,6 +78,12 @@ const checkDisable = (index, column, activity, blockTitle) => {
     }
     return valueFirstColumnRelevance;
   }
+  return false;
+};
+
+const checkDisableEdit = () => {
+  if (!shared.value) return false;
+  if (shared.value.mode == "read" && authStore.user.uid != shared.value.owner) return true;
   return false;
 };
 
@@ -205,7 +215,7 @@ watch(inputValues, calculateMean, { deep: true });
           <v-divider></v-divider>
         </template>
       </div>
-      <div v-if="isDevelopment" class="fill-buttons">
+      <div v-if="isDevelopment && !checkDisableEdit() " class="fill-buttons">
         <v-btn
           v-for="n in 4"
           :key="n"

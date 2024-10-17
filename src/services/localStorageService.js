@@ -22,6 +22,10 @@ export function loadValuesFromLocalStorage(collectionName) {
   }
 }
 
+export function getCurrentCollectionName() {
+  return localStorage.getItem('currentCollection');
+} 
+
 export function getStoredCollections() {
   const collectionData = JSON.parse(localStorage.getItem('collectionData') || '{}');
   return Object.keys(collectionData);

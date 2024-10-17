@@ -1,11 +1,13 @@
 <script setup>
-import {ref, computed} from 'vue';
-import {listValues} from "@/variables/store.js";
+import { ref, computed } from 'vue';
+import { listValues } from "@/variables/store.js";
 import {
   getAccurancyConsistency,
   getCoverage,
   getHighFairScore,
-  getHighlyModerately, getInadequateAccuracy, getInadequateConsistency,
+  getHighlyModerately,
+  getInadequateAccuracy,
+  getInadequateConsistency,
   getNotAdequateSpatialCoverage,
   getNotAdequateSpatialResolution,
   getNotAdequateTemporalCoverage,
@@ -28,7 +30,7 @@ const props=defineProps({
 
 const search = ref('');
 
-const templateItem=  {
+const templateItem = {
   name: '',
   "Highly/Moderately relevant and used with MSP process": false,
   "Relevant data set with adequate transparency (high FAIR score)": false,
@@ -37,7 +39,8 @@ const templateItem=  {
   "Relevant data set and fulfilling monitoring & evaluation requirements with adequate temporal coverage": false,
   "Relevant data set with sufficient curacy and consistency": false,
 };
-const templateItem2={
+
+const templateItem2 = {
   name: '',
     "Relevant for MSP, but not used, as not available": false,
     "Relevant for MSP, not used, but available": false,
@@ -53,11 +56,11 @@ const templateItem2={
     "Relevant for MSP not fulfilling monitoring requirements (temporal coverage, availability, transparency and quality)": true
 };
 
-const generateItems=()=>{
-  let res=[];
-  Object.keys(listValues.value).forEach((keyParameter)=>{
-    let values=(props.activeList=='List 1')?getValuesItem1(keyParameter):getValuesItem2(keyParameter);
-    res.push({name:keyParameter,...values});
+const generateItems = () => {
+  let res = [];
+  Object.keys(listValues.value).forEach((keyParameter) => {
+    let values = (props.activeList == 'List 1') ? getValuesItem1(keyParameter) : getValuesItem2(keyParameter);
+    res.push({ name: keyParameter, ...values });
   })
   return res;
 }
@@ -91,7 +94,7 @@ const getValuesItem2=(parameter)=>{
   return res;
 }
 const generateHeaders = () => {
-  let data=(props.activeList=='List 1')? templateItem: templateItem2;
+  let data = (props.activeList == 'List 1') ? templateItem : templateItem2;
   if (data.length === 0) return [];
   return Object.keys(data).map(key => ({
     text: key,
@@ -117,20 +120,12 @@ const activeItems = computed(() => generateItems());
   <v-card v-if="!props.mode" flat>
     <v-card-title class="d-flex align-right pe-2 mb-5">
       <v-spacer class="w-75"></v-spacer>
-      <v-text-field
-          v-model="search"
-          density="compact"
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-          variant="solo-filled"
-          flat
-          hide-details
-          single-line
-          class="w-25"
-      ></v-text-field>
+      <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
+        variant="solo-filled" flat hide-details single-line class="w-25"></v-text-field>
     </v-card-title>
     <v-divider></v-divider>
-    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header fixed-footer>
+    <v-data-table v-model:search="search" :items="activeItems" :header="headers" height="600px" fixed-header
+      fixed-footer>
       <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
         <tr class="header_tr">
           <template v-for="column in columns" :key="column.key">
@@ -149,11 +144,11 @@ const activeItems = computed(() => generateItems());
       <template v-slot:item.name="{ item }">
         <div class="nameParameter">{{ item.name }}</div>
       </template>
-      <template  v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
+      <template v-for="header in headers.slice(1)" v-slot:[`item.${header.value}`]="{ item }">
         <div class="text-center">
-          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'"
-              size="small" :color="item[header.value] ? 'green' : 'red'">
-<!--              {{ item[header.value] ? '' : 'Out' }}-->
+          <v-icon :icon="item[header.value] ? 'mdi-check-circle' : 'mdi-close-circle'" size="small"
+            :color="item[header.value] ? 'green' : 'red'">
+            <!--              {{ item[header.value] ? '' : 'Out' }}-->
           </v-icon>
         </div>
       </template>
@@ -185,13 +180,15 @@ const activeItems = computed(() => generateItems());
 </template>
 
 <style scoped>
-.nameParameter{
+.nameParameter {
   font-weight: bold;
 }
-.btn_info_table{
+
+.btn_info_table {
   float: right;
 }
-.header_tr{
+
+.header_tr {
   background-color: white;
 }
 .description_list{

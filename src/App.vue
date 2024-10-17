@@ -1,41 +1,56 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { RouterView, useRouter } from 'vue-router';
-import RecoveryModal from '@/components/recoveryModal/RecoveryModal.vue';
-import { hasStoredValues, shouldAutoLoadCollection, autoLoadCollection } from '@/services/localStorageService';
+import { ref, onBeforeMount, watch } from 'vue';
+import { RouterView, useRoute, useRouter } from 'vue-router';
+import Ping from '@/components/loaders/Ping.vue';
+import { useAuthStore } from '@/stores/authStore';
+import { useLoadingStore } from '@/stores/loadingStore';
+import { shared } from '@/variables/store';
+import { getSharedLink } from '@/services/sharedService';
 
-const showRecoveryModal = ref(false);
-const router = useRouter();
+const authStore = useAuthStore();
+const loadingStore = useLoadingStore();
 const snackbar = ref(false);
 const snackbarText = ref('');
-onMounted(() => {
-  const currentUrl = window.location.href;
-  if (!currentUrl.endsWith('/inputdata/')) {
-    if (hasStoredValues()) {
-      if (shouldAutoLoadCollection()) {
-        if (autoLoadCollection()) {
-          snackbarText.value = "Datos recuperados de la memoria";
-          snackbar.value = true;
-        }
-      } else {
-        showRecoveryModal.value = true;
-      }
-    }
-  }
+const loading = ref(true);
+const route = useRoute();
+const router =useRouter();
+
+onBeforeMount(async () => {
+  await authStore.init();
+  await checkSharedParam();
+  loading.value = false;
 });
+
+const checkSharedParam = async () => {
+  try {
+    if (route.query.shared) {
+      const sharedLink = await getSharedLink(route.query.shared);
+      shared.value = sharedLink;
+    }
+  } catch (error) {
+    router.push({ name: 'Welcome' });
+  }
+};
+
+watch(() => route.fullPath, async () => {
+  await checkSharedParam();
+});
+
 </script>
 
 <template>
-  <RecoveryModal v-if="showRecoveryModal" :show="showRecoveryModal" @close="showRecoveryModal = false" />
-  <RouterView />
-  <v-snackbar v-model="snackbar" :timeout="3000">
+  <div v-if="!loading">
+    <RouterView />
+    <v-snackbar v-model="snackbar" :timeout="3000">
     {{ snackbarText }}
     <template v-slot:actions>
       <v-btn color="blue" variant="text" @click="snackbar = false">
         Cerrar
       </v-btn>
     </template>
-  </v-snackbar>
+    </v-snackbar>
+  </div>
+  <Ping v-if="loadingStore.isLoading" />
 </template>
 
 <style scoped>
