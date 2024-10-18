@@ -90,11 +90,12 @@ const handleAnalysisCreated = (newAnalysis) => {
       <div class="list-container" v-if="authStore.isLoggedIn">
         <h2 class="title">Welcome</h2>
         <div class="content">
-          <p id="description_content">
-            The analysis of “input” data will be based on the MSP data framework.
-            including all seven defined clusters: (i) marine coastal & environment; (ii) marine & coastal
-            conservation; (iii) oceanographic characteristics & climate; (iv) coastal land use and planning;
-            (v) maritime activities; (vi) socio-economic information and (vii) governance. &nbsp;
+          <p id="description_content"> This module is prepared to develop an exploratory analysis of the data considered
+            for the development of the MSP plans. After receiving the requested answers, it provides information on which
+            data has been used, what data is missing, and which one should be applied in monitoring, assessment and in the
+            next MSP cycle. <br>
+            If you are interested in undertaking this auto-assessment for a specific MSP plan or for your available input
+            data, we suggest that you follow the available tutorials <a><span style="text-decoration: underline;">here</span></a>.&nbsp;
           </p>
         </div>
         <h2>List of analyses</h2>
@@ -119,11 +120,12 @@ const handleAnalysisCreated = (newAnalysis) => {
       <div class="box" v-else>
         <h2 class="title">Welcome</h2>
         <div class="content">
-          <p id="description_content">
-            The analysis of “input” data will be based on the MSP data framework.
-            including all seven defined clusters: (i) marine coastal & environment; (ii) marine & coastal
-            conservation; (iii) oceanographic characteristics & climate; (iv) coastal land use and planning;
-            (v) maritime activities; (vi) socio-economic information and (vii) governance. &nbsp;
+          <p id="description_content"> This module is prepared to develop an exploratory analysis of the data considered
+            for the development of the MSP plans. After receiving the requested answers, it provides information on which
+            data has been used, what data is missing, and which one should be applied in monitoring, assessment and in the
+            next MSP cycle. <br>
+            If you are interested in undertaking this auto-assessment for a specific MSP plan or for your available input
+            data, we suggest that you follow the available tutorials <a><span style="text-decoration: underline;">here</span></a>.&nbsp;
           </p>
         </div>
         <p class="subtitle">Login with your email</p>
