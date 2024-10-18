@@ -18,29 +18,21 @@ import {
 
 
 const props = defineProps({
-  activeCluster:String
-})
+  activeCluster: String
+});
 
-onBeforeMount(()=>{
+const list_score = ref([]);
+const width = { score: 450, rest: 550 };
+const height = { score: 350, rest: 450 };
+
+onBeforeMount(() => {
   setScore();
-  // setSeriesClusters(props.activeCluster);
   setSeriesStepClusters(props.activeCluster);
-})
+});
 
-const list_score=ref([]);
-
-
-
-const width={score: 450, rest: 550};
-const heigth={score: 350, rest: 450};
-
-const setScore=()=>{
-  let res=[];
-  let namesScores=getNamesScore();
-  namesScores.forEach((nameStep)=>{
-    res.push(getValueScore(props.activeCluster, nameStep));
-  })
-  list_score.value=res;
+const setScore = () => {
+  const namesScores = getNamesScore();
+  list_score.value = namesScores.map(nameStep => getValueScore(props.activeCluster, nameStep));
 };
 
 const updateTypeChart = (chart, event) => {
@@ -48,13 +40,14 @@ const updateTypeChart = (chart, event) => {
   chart.updateOptions(barOptions.value);
 };
 </script>
+
 <template>
   <v-row class="row_first">
     <v-container class="content_score">
       <v-row class="row sparkboxes">
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
-            <apexchart :width="width.score" :height="heigth.rest" type="bar" :options="getOptionsScoreClusters(props.activeCluster)" :series="getSeriesScoreClusters(props.activeCluster)"></apexchart>
+            <apexchart :width="width.score" :height="height.rest" type="bar" :options="getOptionsScoreClusters(props.activeCluster)" :series="getSeriesScoreClusters(props.activeCluster)"></apexchart>
           </div>
         </v-col>
       </v-row>
@@ -63,7 +56,14 @@ const updateTypeChart = (chart, event) => {
       <v-row class="row sparkboxes">
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
-            <apexchart :height="heigth.rest" :width="width.score" ref="barChart" type="bar" :options="getOptionsClusters(props.activeCluster)" :series="getSeriesClusters(props.activeCluster)"></apexchart>
+            <apexchart 
+              :height="height.rest" 
+              :width="width.score" 
+              ref="barChart" 
+              type="bar" 
+              :options="getOptionsClusters(props.activeCluster)" 
+              :series="getSeriesClusters(props.activeCluster)"
+            />
           </div>
         </v-col>
       </v-row>
@@ -76,67 +76,62 @@ const updateTypeChart = (chart, event) => {
   max-width: 1280px;
   margin: 0 auto;
 }
-.row_first{
+.row_first {
   display: flex;
 }
 .content_chart, .content_score {
   width: 50%;
-  margin: 0%;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.column{
+.column {
   max-width: 50%;
   display: flex;
 }
 .box {
-  /*background-color: #2B2D3E;*/
   background-color: white;
-  padding: 0px 20px 25px 20px;
+  padding: 0 20px 25px;
 }
-
 .shadow {
-  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  box-shadow: 0 1px 15px rgba(69, 65, 78, 0.08);
 }
-.sparkboxes{
+.sparkboxes {
   align-items: center;
   align-content: center;
 }
 .sparkboxes .box {
-  padding-top: 0px;
+  padding-top: 0;
   padding-bottom: 10px;
-  text-shadow: 0 1px 1px 1px #666;
-  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  text-shadow: 0 1px 1px #666;
+  box-shadow: 0 1px 15px rgba(69, 65, 78, 0.08);
   position: relative;
   border-radius: 5px;
   width: fit-content;
 }
-.boxChartCluster{
-  padding: 25px 25px 12.5px 25px !important;
+.boxChartCluster {
+  padding: 25px 25px 12.5px;
 }
-.box .details{
+.box .details {
   color: #127583;
 }
 .sparkboxes .box .details {
-  /* z-index: 50; */
   position: static;
-
   transform: scale(0.7) translate(-35px, 20px);
-  margin: 0% 0% 5% 0%;
+  margin: 0 0 5%;
   font-size: 16px;
   text-transform: initial;
   height: 70px;
   width: 225px;
 }
-.sparkboxes .box .details h1{
+.sparkboxes .box .details h1 {
   text-align: center;
   transform: translate(-22px, 20px);
 }
-.sparkboxes .box .details h3{
+.sparkboxes .box .details h3 {
   height: 75px;
-
 }
 .sparkboxes strong {
   position: relative;
@@ -144,40 +139,34 @@ const updateTypeChart = (chart, event) => {
   top: -8px;
   color: #fff;
 }
-
 .sparkboxes .boxchart {
   border-image-slice: 1;
   background-color: white;
-  /*border: 10px linear-gradient( 135deg, #daffff 10%, #d5dfdf 100%);*/
   width: 200px;
   height: 150px;
 }
-
-
 .sparkboxes .box2 {
-  background-image: linear-gradient( 135deg, #2AFADF 10%, #4C83FF 100%);
+  background-image: linear-gradient(135deg, #2AFADF 10%, #4C83FF 100%);
 }
-
 .sparkboxes .box3 {
-  background-image: linear-gradient( 135deg, #FFD3A5 10%, #FD6585 100%);
+  background-image: linear-gradient(135deg, #FFD3A5 10%, #FD6585 100%);
 }
-
 .sparkboxes .box4 {
-  background-image: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
+  background-image: linear-gradient(135deg, #EE9AE5 10%, #5961F9 100%);
 }
 #chart-type-select {
-  appearance: none; /* Oculta el valor seleccionado por defecto */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   text-indent: 1px;
   text-overflow: '';
-  width: 20px; /* Ajusta el ancho del select para mostrar solo la flecha */
-  height: 20px; /* Ajusta la altura del select */
-  border: none; /* Elimina el borde */
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" d="M2,7 L12,17 L22,7"/></svg>') no-repeat right center; /* Reemplaza la flecha por defecto */
-  background-color: transparent; /* Hace que el fondo sea transparente */
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" d="M2,7 L12,17 L22,7"/></svg>') no-repeat right center;
+  background-color: transparent;
 }
-#defa{
+#defa {
   display: none;
 }
 </style>

@@ -1,11 +1,7 @@
 <script setup>
 import { useRoute } from "vue-router";
-import {onBeforeMount, ref} from 'vue';
-import {nameAllQuestions, nameQuestions, title} from "@/variables/clusters.js";
-// import {getOutputValues} from "@/modules/utils.js";
-import {countRow, outputValues, scoreGlobal, transformValues} from "../../../variables/store.js";
-import {getAllClusters} from "@/modules/utils.js";
-
+import { onBeforeMount, ref } from 'vue';
+import { nameAllQuestions, nameQuestions, title } from "@/variables/clusters.js";
 import {
   getSeries, getSeriesScoreClusters,
   getSeriesScores,
@@ -14,19 +10,19 @@ import {
 } from "@/modules/SeriesCharts.js";
 import {getOptionsClusterCategory, getOptionsClusterScoreCategory, getOptionsScoreClusters} from "@/modules/Charts.js";
 import {getNamesScore} from "@/modules/countRow.js";
+import {getAllClusters} from "@/modules/utils.js";
 
-const route= useRoute();
+const route = useRoute();
 const activePanel = ref([]);
 
 const height=ref({heightCharScore:325, heightChar:325, rest:550});
 const width=ref({widthCharScore:425, score:450});
 const namesScore=getNamesScore();
 onBeforeMount(() => {
-  if(namesScore.length!=0){
-    setSeriesCategory()
+  if (namesScore.length !== 0) {
+    setSeriesCategory();
     setSeriesScoreCategory();
   }
-
 });
 </script>
 
@@ -40,7 +36,7 @@ onBeforeMount(() => {
         </div>
         <div>
           <v-container class="item_activity">
-            <v-row  no-gutters>
+            <v-row no-gutters>
               <v-col>
               <apexchart :width="width.widthCharScore" :height="height.heightChar" type="bar" :options="getOptionsClusterScoreCategory(title[i])" :series="getSeriesScores(nameQuestions[i])"></apexchart>
               </v-col>

@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
 import TheWelcome from "@/components/welcome/TheWelcome.vue";
-import ContentForm from "@/components/form/content/ContentForm.vue";
-import Help from "@/components/help/Help.vue";
+
 
 const router = createRouter({
   history: createWebHistory('/inputdata/'),
@@ -79,6 +78,11 @@ const router = createRouter({
         // }
       ]
 
+    },
+    {
+      path: '/confirm',
+      name: 'Confirm',
+      component: () => import('../views/Confirm.vue'),
     }
   ]
 })

@@ -9,7 +9,8 @@ import {initReport} from "@/modules/InitialReport.js";
 const instance=getCurrentInstance();
 onBeforeMount(() => {
   if(getKey(values.value).length==0) {
-    router.push({name: 'Relevance'});
+    const currentQuery = router.currentRoute.value.query;
+    router.push({name: 'Relevance', query: currentQuery});
   }else{
     initReport(instance.type.__name);
   }
@@ -17,8 +18,14 @@ onBeforeMount(() => {
 
 const router= useRouter();
 const handleActiveSection = (value) => {
-  if(getKey(values.value).length==0) router.push({name:'Relevance'})
-  router.push({name:value});
+  const currentQuery = router.currentRoute.value.query;
+  if (value === 'Welcome') {
+    router.push({ name: value });
+  } else if (!getKey(values.value).length) {
+    router.push({ name: 'Relevance', query: currentQuery });
+  } else {
+    router.push({ name: value, query: currentQuery });
+  }
 };
 </script>
 

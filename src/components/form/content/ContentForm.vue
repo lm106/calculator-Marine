@@ -3,10 +3,13 @@ import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import ContentCluster from "@/components/form/content/ContentCluster.vue";
 
-import { values } from '@/variables/store.js'
+import { values, currentCollection, shared } from '@/variables/store.js'
 import {getCopy, getKey} from "../../../modules/utils.js";
 import {checkClusterValues, checkQuestionsStepValues} from "../../../modules/ValuesValue.js";
-import { saveValuesToLocalStorage } from '@/services/localStorageService';
+import { update } from '@/services/collectionService';
+import { useAuthStore } from '@/stores/authStore';
+
+const authStore = useAuthStore();
 
 const clusters= ref([
     'MSFD GES','WFD GES',
@@ -37,17 +40,23 @@ const processing=(tokenStep,data)=>{
     values.value[nameStep][nameCluster]=copy[nameStep][nameCluster];
   }
 }
-const setCluster=(data)=>{
-  // console.log('formform')
-  // let key=Object.keys(cluster)[0];
-  console.log(data)
+
+const checkDisableEdit = () => {
+  if (!shared.value) return false;
+  if (shared.value.mode == "read" && authStore.user.uid != shared.value.owner) return true;
+  return false;
+};
+
+const setCluster= async (data)=> {
   let tokenStep=checkQuestionsStepValues(getKey(data));
   if(!tokenStep) {
     values.value={...getCopy(values.value),...getCopy(data)};
   }else{
     processing(tokenStep,data);
   }
-  saveValuesToLocalStorage();
+  if(authStore.isLoggedIn && !checkDisableEdit()){
+    await update(currentCollection.value, values.value);
+  }
 }
 watch([()=>route.name], ()=>{
   if(route.name=='Results'){

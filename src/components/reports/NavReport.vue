@@ -1,26 +1,44 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import {useRoute, useRouter} from "vue-router";
 import DownloadAlert from "@/components/reports/DownloadAlert.vue";
-import ShareAlert from "@/components/reports/ShareAlert.vue";
+// import ShareAlert from "@/components/reports/ShareAlert.vue";
 import DeleteAlert from "@/components/reports/DeleteAlert.vue";
+import ShareCollectionDialog from '@/components/shareModal/ShareModal.vue';
+import { shared } from '@/variables/store';
+import { useAuthStore } from '@/stores/authStore';
 
-const list_items=[
-  {title:'Report'},
-  {icon: 'mdi-shape', title:'By Category', value:'Category'},
-  {icon: 'mdi-chart-box-outline', title:'By Cluster', value:'Cluster'},
-  {icon: 'mdi-tune', title:'By List Collections', value:'Collections'},
-  {title:'Tools'},
-  {icon: 'mdi-home-variant', title:'Welcome', value:'Welcome'},
-  {icon: 'mdi-view-dashboard', title:'Dashboard', value:'Results'},
-  {icon: 'mdi-share-variant', title:'Share', value:'share'},
-  {icon: 'mdi-download', title:'Download', value:'download'},
-  {icon: 'mdi-file-plus-outline', title:'New form', value:'new_form'},
-  {icon: 'mdi-delete-outline', title:'Delete', value:'delete'},
-  {icon: 'mdi-tune-variant', title:'Edit Form', value:'edit_form'},
+const authStore = useAuthStore();
 
-  {icon: 'mdi-help-circle-outline', title:'Help', value:'Help'}
-];
+const checkDisableEdit = () => {
+  if (!shared.value) return false;
+  if (shared.value.mode === "read" && authStore.user.uid !== shared.value.owner) return true;
+  return false;
+};
+
+const list_items = computed(() => {
+  const items = [
+    { title: 'Report' },
+    { icon: 'mdi-shape', title: 'By Category', value: 'Category' },
+    { icon: 'mdi-chart-box-outline', title: 'By Cluster', value: 'Cluster' },
+    { icon: 'mdi-tune', title: 'By List Collections', value: 'Collections' },
+    { title: 'Tools' },
+    { icon: 'mdi-home-variant', title: 'Welcome', value: 'Welcome' },
+    { icon: 'mdi-view-dashboard', title: 'Dashboard', value: 'Results' },
+    { icon: 'mdi-share-variant', title: 'Share', value: 'share' },
+    { icon: 'mdi-download', title: 'Download', value: 'download' },
+    { icon: 'mdi-file-plus-outline', title: 'New form', value: 'new_form' },
+    { icon: 'mdi-delete-outline', title: 'Delete', value: 'delete' },
+    { icon: 'mdi-tune-variant', title: 'Edit Form', value: 'edit_form' },
+    { icon: 'mdi-help-circle-outline', title: 'Help', value: 'Help' }
+  ];
+
+  if (checkDisableEdit()) {
+    return items.filter(item => !['share', 'delete', 'new_form'].includes(item.value));
+  }
+  return items;
+});
+
 const emit=defineEmits(['updateActiveSection']);
 const route= useRoute();
 const router= useRouter();
@@ -32,25 +50,26 @@ const rail = ref(false);
 const activeItem = ref((route.name=='Help')? 'Help': 'Category');
 
 
-const handleItemClick = (value) => {
-  activeItem.value = value;
-  switch (value) {
+const handleItemClick = (itemValue) => {
+  activeItem.value = itemValue;
+  switch (itemValue) {
     case 'Category':
     case 'Cluster':
     case 'Collections':
     case 'Welcome':
     case 'Help':
     case 'Results':
-      emit('updateActiveSection', value);
+      emit('updateActiveSection', itemValue);
       break;
     case 'download':
       dialog.value=!dialog.value
       break;
     case 'share':
-      share.value=!share.value
+      share.value = !share.value;
       break;
     case 'edit_form':
-      router.push({name:'Relevance'});
+      const currentQuery = router.currentRoute.value.query;
+      router.push({name:'Relevance', query: currentQuery});
       break;
     case 'delete':
       deleteReport.value=!deleteReport.value;
@@ -108,7 +127,8 @@ const handleItemClick = (value) => {
       </v-list>
     </v-navigation-drawer>
   <DownloadAlert v-if="dialog" @close="handleItemClick('download')"></DownloadAlert>
-  <ShareAlert v-if="share" @close="handleItemClick('share')"></ShareAlert>
+  <!-- <ShareAlert v-if="share" @close="handleItemClick('share')"></ShareAlert> -->
+   <ShareCollectionDialog v-model="share" @close="handleItemClick('share')" />
   <DeleteAlert v-if="deleteReport" @close="handleItemClick('delete')"></DeleteAlert>
 </template>
 

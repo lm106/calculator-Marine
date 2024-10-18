@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "start:dev": "copy .\\src\\config\\.env.development .env && vite",
+    "start:prod": "copy .\\src\\config\\.env.production .env && vite",
+    "start:dev-mac": "cp ./src/config/.env.development .env && vite",
+    "start:prod-mac": "cp ./src/config/.env.production .env && vite",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -14,12 +18,14 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "apexcharts": "^3.49.1",
+    "firebase": "^10.14.0",
     "jspdf": "^2.5.1",
     "pdf-lib": "^1.17.1",
     "pinia": "^2.2.4",
     "vee-validate": "^4.12.8",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue3-apexcharts": "^1.5.3"
   },
   "devDependencies": {

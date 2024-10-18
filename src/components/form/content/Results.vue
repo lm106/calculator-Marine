@@ -6,7 +6,8 @@ import {tokenReport} from "@/modules/InitialReport.js";
 import {useInputFocusLegend} from "@/stores/legendFocusStore.js";
 const router = useRouter();
 const generateReport =()=>{
-  router.push({name:'Category'});
+  const currentQuery = router.currentRoute.value.query;
+  router.push({name:'Category', query: currentQuery});
 }
 const legendInput=useInputFocusLegend();
 onBeforeMount(()=>{

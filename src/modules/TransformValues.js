@@ -18,7 +18,7 @@ export function getNamesClusterTransformValues(){
 
 export function setFilterTransformValues(){
     transformValues.value ={};
-    // console.log(outputValues.value)
+    console.log(outputValues.value)
     let data_relevance={...getCopy(outputValues.value)};
     const filteredRelevance = filterRelevance(data_relevance.Relevance);
 
@@ -27,6 +27,7 @@ export function setFilterTransformValues(){
         if(filteredRelevance != undefined || filteredRelevance != null) {
             let newStep = {};
             if (keyStep != 'Relevance') {
+                console.log(keyStep, '---------------------')
                 let contentCluster = filterOtherSections(cluster_content || [], filteredRelevance);
                 if (contentCluster != undefined && contentCluster != null) {
                     newStep[keyStep] = contentCluster;
@@ -55,8 +56,9 @@ function filterRelevance(relevance) {
 
         if (Object.keys(filteredDescriptors).length > 0) {
             acc[key] = filteredDescriptors;
-            return acc;
         }
+        return acc;
+
     },{});
     // console.log(res)
     return res;
@@ -100,8 +102,9 @@ function filterOtherSections(cluster, filteredRelevance) {
 
         if (Object.keys(filteredDescriptors).length > 0) {
             acc[key] = filteredDescriptors;
-            return acc;
         }
+        return acc;
+
     },{});
     // console.log(res)
     return res;
