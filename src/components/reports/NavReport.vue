@@ -50,7 +50,8 @@ const handleItemClick = (value) => {
       share.value=!share.value
       break;
     case 'edit_form':
-      router.push({name:'Relevance'});
+      const currentQuery = router.currentRoute.value.query;
+      router.push({name:'Relevance', query: currentQuery});
       break;
     case 'delete':
       deleteReport.value=!deleteReport.value;

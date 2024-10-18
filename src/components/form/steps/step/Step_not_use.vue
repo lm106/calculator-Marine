@@ -8,7 +8,8 @@ const props = defineProps({
 });
 const router=useRouter();
 const clickStep=(name)=>{
-  router.push({name:name})
+  const currentQuery = router.currentRoute.value.query;
+  router.push({name:name, query: currentQuery})
 }
 </script>
 
