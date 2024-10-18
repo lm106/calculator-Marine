@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "start:dev": "cp ./src/config/.env.development .env && vite",
-    "start:prod": "cp ./src/config/.env.production .env && vite",
+    "start:dev": "copy .\\src\\config\\.env.development .env && vite",
+    "start:prod": "copy .\\src\\config\\.env.production .env && vite",
+    "start:dev-mac": "cp ./src/config/.env.development .env && vite",
+    "start:prod-mac": "cp ./src/config/.env.production .env && vite",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
