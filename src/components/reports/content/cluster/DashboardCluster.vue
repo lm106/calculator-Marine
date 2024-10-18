@@ -47,7 +47,7 @@ const updateTypeChart = (chart, event) => {
       <v-row class="row sparkboxes">
         <v-col class="v-col-5">
           <div class="box shadow boxChartCluster">
-            <apexchart :width="width.score" :height="heigth.rest" type="bar" :options="getOptionsScoreClusters(props.activeCluster)" :series="getSeriesScoreClusters(props.activeCluster)"></apexchart>
+            <apexchart :width="width.score" :height="height.rest" type="bar" :options="getOptionsScoreClusters(props.activeCluster)" :series="getSeriesScoreClusters(props.activeCluster)"></apexchart>
           </div>
         </v-col>
       </v-row>
